@@ -13,4 +13,4 @@ Generating the documentation
 
 > mvn clean site:stage
 
-This will generate the documentation web site in the 'target/stage' location.
+This will generate the documentation web site in the 'target/staging' location.
