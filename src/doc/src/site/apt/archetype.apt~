@@ -1,0 +1,43 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+  {{{./doc.html}Documentation}} >
+
+
+Archetype specification
+
+  Work in progress… The documentation will be available as soon as possible.
+
+
+* Example
+
++--------------------------------+
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo" name="Demo Application" version="1.0">
+
+    <types>
+      <core:node id="Gateway"/>
+      <core:component id="TemeratureMeter"/>
+    </types>
+
+    <constraints>
+      <variables>
+        <var id="g" type="Gateway"/>
+        <var id="tm" type="TemperatureMeter"/>
+      </variables>
+      <core:on-node c="tm" n="g"/>
+      <medical:charge-cpu n="g" max="80"/>
+    </constraints>
+
+    <global-configs>
+      <core:topscopeleader url="cube://localhost:38000"/>
+    </global-configs>
+
+  </archetype>
+</cube>
++--------------------------------+

@@ -1,0 +1,20 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial" version="1.0">
+
+    <types>
+      <core:component id="A"/>
+      <core:component id="B"/>
+    </types>
+
+    <constraints>
+      <variables>
+        <var id="va" type="A"/>
+        <var id="vb" type="B"/>
+      </variables>
+      <core:connect v1="va" v2="vb"/>
+      <core:find-locally v="vb" priority="1"/>
+      <core:self-create-locally v="vb" priority="2"/>
+    </constraints>
+
+  </archetype>
+</cube>

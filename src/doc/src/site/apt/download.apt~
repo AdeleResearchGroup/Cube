@@ -1,0 +1,32 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+Download
+
+[./images/download.png] download
+
+  {{{https://github.com/AdeleResearchGroup/cube/zipball/master}Download}} the <<<zip>>> file containing all the source code of the latest Cube framework as well as the binary distribution and the different {{{./getting_started.html}demos}}.
+
+----------------
+actual development version: 1.2.0-SNAPSHOT
+----------------
+
+  The downloaded zip file contains the following directories:
+
+---------------------
++ bin............ the Cube project binaries
++ demo........... the different demos
++ lib............ third-party libraries used by Cube
++ src............ the source code of Cube project and its sub-projects 
+---------------------
+
+  You can start testing Cube by trying the following {{{./getting_started.html}getting started tutorials}}.
+
+  More information for users and developers is found in the {{{./doc.html}documentation}} section.
+
+  You can navigate the source code online {{{https://github.com/AdeleResearchGroup/cube}here}}. You can clone (checkout) the entire project and build it locally on your machine. We use Git Version Control System to manage the project's source code.

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright Adele Team LIG
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+--><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.liglab.adele.cube</groupId>
+	<artifactId>cube-project</artifactId>
+	<packaging>pom</packaging>
+	<name>Cube Project</name>
+	<version>1.2.0</version>
+	<url>http://cube.imag.fr</url>	        
+
+	<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+	<modules>
+		<module>cube-core</module>
+		<module>extensions</module>
+		<module>tools</module>
+		<!--<module>usecases</module>-->
+    <module>doc</module>
+  </modules>
+
+	<distributionManagement>		
+		<repository>
+			<id>cube</id>
+			<name>cube</name>
+			<url>scp://debbabi@cube.imag.fr/repo</url>
+		</repository>	
+		<site>
+			<id>cube.website</id>
+			<url>https://cube.imag.fr/docs/1.2/</url>
+		</site>	
+	</distributionManagement>	
+
+	<repositories>
+		<repository>
+			<id>cilia-repo</id>
+			<name>Cilia Repository</name>
+			<url>http://cilia.ligforge.imag.fr/repo</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>apache-maven</id>
+			<name>Apache Maven Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<name>Java.net Repository for Maven</name>
+			<url>http://download.java.net/maven/2/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+</project>

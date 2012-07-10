@@ -1,0 +1,56 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+Overview
+
+  Cube is a framework for the self-management of large-scale, distributed  
+  applications, running on dynamic and heterogeneous environments.
+
+
+Learning about Cube
+
+  Here are some useful links to get you started:
+
+	* {{{./1.2/getting_started.html}Getting started}}
+
+	* {{{./1.2/doc.html}Documentation}}
+
+Download
+
+  Download the latest version {{{./download.html}here}}.
+
+  You can get the source code from {{{https://github.com/AdeleResearchGroup/cube}here}}.
+
+Scientific Publications
+
+  Here is a list of the related scientific publications.
+
+  * {{{http://adadiaconescu.there-you-are.com/Papers/OC-SSCI2011/cube_OS-2011_diacones.pdf}Self-growing applications from abstract architectures an application to data-mediation systems}}. A. Diaconescu and P. Lalanda, . IEEE Workshop on Organic Computing, 2011.
+
+  * {{{http://adadiaconescu.there-you-are.com/Papers/MEW-ECAL2011/diacones_cube_MEW-ECAL_2011.pdf}Self-growing software from architectural blueprints}}. A. Diaconescu, D. Bassem, and P. Lalanda. Morphogenetic Engineering Workshop MEW, 2011.
+
+  * {{{http://adadiaconescu.there-you-are.com/Papers/ICAC2009/icac2605-diaconescu.pdf}A decentralized, architecture-based framework for self-growing applications}}. A. Diaconescu and P. Lalanda. International conference on Autonomic computing ICAC, 2009.
+
+Project Members
+
+* Actual Members
+ 
+  * {{{http://adadiaconescu.there-you-are.com/}Ada Diaconescu}} Lecturer, Telecom ParisTech
+
+  * {{{http://membres-liglab.imag.fr/lalanda/}Philippe Lalanda}} Professor, University of Grenoble
+
+  * {{{http://debbabi.net}Bassem Debbabi}} PhD Student, University of Grenoble
+
+  * Hoa Dung Ha Duong, Post-doc, Telecom ParisTech
+
+* Old Members
+
+  * Rodmar Conde Marquez, Master student University of Grenoble  
+
+  * Quentin Berard, Master student University of Grenoble
+

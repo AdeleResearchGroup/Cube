@@ -1,0 +1,19 @@
+<cube>
+  <agent>
+    <host value="localhost"/>
+    <port value="38004"/>
+    <archetypeUrl value="file:../demo.arch"/>
+    <debug value="false"/>
+
+		<extensions>
+			<extension id="fr.liglab.adele.cube.core">
+				<configurations>
+					<initializer>				  
+				  	<set-node id="node4" type="PC"/>
+						<set-scope id="bvs1" type="BlueVirtualScope"/>
+					</initializer>
+				</configurations>
+			</extension>			
+		</extensions>
+  </agent>
+</cube>

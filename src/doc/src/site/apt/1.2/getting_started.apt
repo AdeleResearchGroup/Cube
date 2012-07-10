@@ -1,0 +1,23 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+Getting started
+
+  The different demos are located on the {{{../download.html}cube distribution}} within the <<<demo/getting_started>>> directory.
+
+  []
+
+  * {{{./getting_started_connect.html}Connecting components}} (within a single node)
+
+  * {{{./getting_started_scopes.html}Scopes constitution}}
+
+
+
+
+
+

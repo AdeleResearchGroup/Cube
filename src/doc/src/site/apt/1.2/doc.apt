@@ -1,0 +1,61 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+Documentation
+
+
+
+* Core
+
+  * {{{./concepts.html}Main Concepts}}
+
+  * {{{./agent.html}Cube Agent}}
+
+  * {{{./archetype.html}Archetype Specification}}
+
+  * Catalog
+
+    * {{{./types.html}Model Types}}
+
+    * {{{./constraints.html}Constraints}}
+
+* Extensions
+
+  * {{{./extensions.html}About cube extensions}}
+
+  * {{{./using_extensions.html}Using extensions}}
+
+  * Catalog
+
+    * {{{./monitoring_extension.html}Internal monitoring}}
+
+    * {{{./cilia_extension.html}Cilia mediation framework}}
+
+* Tools
+
+  * {{{./eclipse_plugin.html}Eclipse Plugin}}
+
+  * {{{./commandline.html}CommandLine}}
+
+  * {{{./webmonitor.html}Web Monitor}}
+
+* Use cases
+
+  * {{{./usecase1.html}Home Resource Monitoring data-mediation system}}
+
+* Developer corner
+
+  * {{{./dev_extensions.html}Implement your extension}}
+
+  * {{{./dev_resolver.html}Implement a new Resolver}}
+
+  * {{{./dev_comm.html}Implement a new Communication channel}}
+
+  * {{{./sourcecode.html}Source Code explained}}
+
+  * {{{}Javadoc}}
