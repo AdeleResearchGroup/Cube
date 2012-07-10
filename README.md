@@ -11,6 +11,8 @@ Go to the 'src' directory and type:
 Generating the documentation
 ----------------------------
 
-> mvn clean site:stage
+Go to the doc directory and run:
 
-This will generate the documentation web site in the 'target/staging' location.
+> mvn clean site
+
+This will generate the documentation web site in the 'target/site' location.
