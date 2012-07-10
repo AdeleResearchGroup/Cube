@@ -8,7 +8,7 @@ Go to the 'src' directory and type:
 
 > mvn clean install
 
-Generating the documentation
+Generate the documentation
 ----------------------------
 
 Go to the doc directory and run:
