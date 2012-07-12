@@ -1,5 +1,5 @@
 <cube xmlns:core="fr.liglab.adele.cube.core">
-  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial" version="1.0">
+  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 3" version="1.0">
 
     <types>
       <core:component id="A"/>

@@ -206,11 +206,11 @@ g! newi A
 
 ** The Archetype
 
-  Now, We update the last archetype definition by adding constraint on the B instances. This constraints (<<<in-components>>>) will ensure that any instance of component B should have at max a given number of input component instances. (see <<<demo3.arch>>>):
+  Now, we update the last archetype definition by adding constraint on the B instances. This constraints (<<<in-components>>>) will ensure that any instance of component B should have at max a given number of input component instances. (see <<<demo3.arch>>>):
 
 +---------------------------+
 <cube xmlns:core="fr.liglab.adele.cube.core">
-  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial" version="1.0">
+  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 3" version="1.0">
 
     <types>
       <core:component id="A"/>
@@ -246,6 +246,59 @@ g! newi A
 
   The differnce regarding the test case 2, is after the creating of the third instance of component A. Whith this new archetype, even that cube finds the already created instance of B, if this third instance of A is connected to it, the constraint <<<in-components>>> will not be satisfied. Hence, cube resolver tries with the next constraint <<<self-create-locally>>> to find the instance B, and this is why this third instance of A is connected to a new instance of B.
  
+
+* Test case 4
+
+** The Archetype
+
+  Finally, we will test the creation of a chain of components by just creating the first one (see <<<demo4.arch>>>).
+
++---------------------------+
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 4" version="1.0">
+
+    <types>
+      <core:component id="A"/>
+      <core:component id="B"/>
+      <core:component id="C"/>
+      <core:component id="D"/>
+    </types>
+
+    <constraints>
+      <variables>
+        <var id="va" type="A"/>
+        <var id="vb" type="B"/>
+        <var id="vc" type="C"/>
+        <var id="vd" type="D"/>
+      </variables>
+      <core:connect v1="va" v2="vb"/>
+      <core:connect v1="vb" v2="vc"/>
+      <core:connect v1="vc" v2="vd"/>
+
+      <core:self-create-locally v="vb"/>
+      <core:self-create-locally v="vc"/>
+      <core:self-create-locally v="vd"/>
+    </constraints>
+
+  </archetype>
+</cube>
++---------------------------+
+
+  when creating a component instance of type A, all the other components will be instantiated and connected as was specified on the archetype. 
+
+** Testing
+
+  Restart the execution node (<<<Ctrl-C>>>) and then update again the cube agent local configuration file to point to this new archetype file <<<demo4.arch>>>.
+
+  When starting the node, just create an instances of type A and see what hapens. 
+
+-----------
+g! newi A
+-----------
+
+[./images/getting_started_connect4.png] connect4
+
+  Each instance A will create a chain of the other connected instances (B, C and D).
 
   []
 

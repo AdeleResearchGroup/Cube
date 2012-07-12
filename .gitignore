@@ -1,1 +1,4 @@
 target/
+*~
+felix-cache/
+perf.csv
