@@ -26,7 +26,7 @@ public class ScopeInstance extends CInstance {
 	
 	List<CInstanceUID> nodeInstances = new ArrayList<CInstanceUID>();
 	
-	public ScopeInstance(ScopeType st) {
+	public ScopeInstance(Scope st) {
 		super(st);
 	}
 	

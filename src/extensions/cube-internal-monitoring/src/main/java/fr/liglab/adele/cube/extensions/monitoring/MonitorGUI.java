@@ -54,11 +54,11 @@ import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.ComponentInstance;
-import fr.liglab.adele.cube.extensions.core.model.ComponentType;
+import fr.liglab.adele.cube.extensions.core.model.Component;
 import fr.liglab.adele.cube.extensions.core.model.NodeInstance;
-import fr.liglab.adele.cube.extensions.core.model.NodeType;
+
 import fr.liglab.adele.cube.extensions.core.model.ScopeInstance;
-import fr.liglab.adele.cube.extensions.core.model.ScopeType;
+import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class MonitorGUI extends JFrame {
@@ -238,7 +238,7 @@ public class MonitorGUI extends JFrame {
 		nodes = new Hashtable();
 		graph.clear();
 
-		for (CInstance i : this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, ComponentType.NAME, CInstance.VALID)) {
+		for (CInstance i : this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, Component.NAME, CInstance.VALID)) {
 			this.addComponent(i);
 		}
 		
@@ -248,12 +248,12 @@ public class MonitorGUI extends JFrame {
 			String type="";
 			String sid="";
 			String stype="";
-			List<CInstance> nodes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, NodeType.NAME, CInstance.VALID);
+			List<CInstance> nodes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, fr.liglab.adele.cube.extensions.core.model.Node.NAME, CInstance.VALID);
 			if (nodes != null && nodes.size()>0 && nodes.get(0) instanceof NodeInstance) {
 				id = ((NodeInstance)nodes.get(0)).getLocalId();
 				type = ((NodeInstance)nodes.get(0)).getCType().getId();				
 			}
-			List<CInstance> scopes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, ScopeType.NAME, CInstance.VALID);
+			List<CInstance> scopes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, Scope.NAME, CInstance.VALID);
 			if (scopes != null && scopes.size()>0 && scopes.get(0) instanceof ScopeInstance) {
 				sid = ((ScopeInstance)scopes.get(0)).getLocalId();
 				stype = ((ScopeInstance)scopes.get(0)).getCType().getId();				
@@ -270,12 +270,12 @@ public class MonitorGUI extends JFrame {
 			String type="";
 			String sid="";
 			String stype="";
-			List<CInstance> nodes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, NodeType.NAME, CInstance.VALID);
+			List<CInstance> nodes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, fr.liglab.adele.cube.extensions.core.model.Node.NAME, CInstance.VALID);
 			if (nodes != null && nodes.size()>0 && nodes.get(0) instanceof NodeInstance) {
 				id = ((NodeInstance)nodes.get(0)).getLocalId();
 				type = ((NodeInstance)nodes.get(0)).getCType().getId();				
 			}
-			List<CInstance> scopes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, ScopeType.NAME, CInstance.VALID);
+			List<CInstance> scopes = this.cubeInstance.getRuntimeModel().getCInstances(CoreExtensionFactory.ID, Scope.NAME, CInstance.VALID);
 			if (scopes != null && scopes.size()>0 && scopes.get(0) instanceof ScopeInstance) {
 				sid = ((ScopeInstance)scopes.get(0)).getLocalId();
 				stype = ((ScopeInstance)scopes.get(0)).getCType().getId();				

@@ -20,17 +20,17 @@ import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 
-public class ComponentType extends ManagedElement {
+public class Component extends ManagedElement {
 	
 	public final static String NAME = "component";
 	
 	String parentId = null;
 	
-	public ComponentType(String id, String description, Archetype archtype) {
+	public Component(String id, String description, Archetype archtype) {
 		this(id, description, null, archtype);		
 	}
 	
-	public ComponentType(String id, String description, String parentId, Archetype archtype) {
+	public Component(String id, String description, String parentId, Archetype archtype) {
 		super(id, description, archtype);
 		this.parentId = parentId;
 	}

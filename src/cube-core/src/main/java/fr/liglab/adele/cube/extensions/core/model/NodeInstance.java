@@ -31,12 +31,12 @@ public class NodeInstance extends CInstance {
 	
 	List<CInstanceUID> componentInstances = new ArrayList<CInstanceUID>();
 	
-	public NodeInstance(NodeType n) {
+	public NodeInstance(Node n) {
 		super(n);		
 	}
 	
 	
-	public NodeInstance(NodeType n, String host, String port) {
+	public NodeInstance(Node n, String host, String port) {
 		super(n);	
 		if (host != null) {
 			setProperty(HOST, host);

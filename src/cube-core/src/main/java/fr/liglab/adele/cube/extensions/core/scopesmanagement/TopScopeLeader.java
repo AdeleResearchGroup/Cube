@@ -29,8 +29,8 @@ import fr.liglab.adele.cube.archetype.GlobalConfig;
 import fr.liglab.adele.cube.extensions.core.CoreExtension;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.TopScopeLeaderConfig;
-import fr.liglab.adele.cube.extensions.core.model.NodeType;
-import fr.liglab.adele.cube.extensions.core.model.ScopeType;
+import fr.liglab.adele.cube.extensions.core.model.Node;
+import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.util.id.InvalidIDException;
 
 /**

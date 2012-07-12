@@ -25,8 +25,8 @@ import fr.liglab.adele.cube.MessagesListener;
 import fr.liglab.adele.cube.TimeOutException;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.extensions.core.CoreExtension;
-import fr.liglab.adele.cube.extensions.core.model.NodeType;
-import fr.liglab.adele.cube.extensions.core.model.ScopeType;
+import fr.liglab.adele.cube.extensions.core.model.Node;
+import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.util.id.InvalidIDException;
 
 /**
@@ -225,7 +225,7 @@ public class ScopeLeader implements MessagesListener {
 					}
 				}
 			} else if (msg.getObject().equalsIgnoreCase(ScopeManagement.GET_SCOPE_RUNTIME_INSTANCE)) {
-				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), ScopeType.NAME);
+				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), Scope.NAME);
 				String scope = null;
 				if (tmps != null && tmps.size()>0) {
 					scope = tmps.get(0).getId().toString();
@@ -248,7 +248,7 @@ public class ScopeLeader implements MessagesListener {
 					e.printStackTrace();
 				}
 			} else if (msg.getObject().equalsIgnoreCase(ScopeManagement.GET_SCOPE_NODE_INSTANCE)) {
-				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), NodeType.NAME);
+				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), Node.NAME);
 				String node = null;
 				if (tmps != null && tmps.size()>0) {
 					node = tmps.get(0).getId().toString();
@@ -314,7 +314,7 @@ public class ScopeLeader implements MessagesListener {
 					}
 				}
 			} else if (msg.getObject().equalsIgnoreCase(ScopeManagement.GET_SCOPE_NODE)) {
-				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), NodeType.NAME);
+				List<CInstance> tmps = this.coreExtension.getCubeAgent().getRuntimeModel().getCInstances(this.coreExtension.getExtensionFactory().getExtensionId(), Node.NAME);
 				String node = null;
 				if (tmps != null && tmps.size()>0) {
 					node = tmps.get(0).getId().toString();

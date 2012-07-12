@@ -7,11 +7,56 @@
 	---
 
 
-  {{{./doc.html}Documentation}} >
+  {{{./doc.html}Documentation}} > {{{./extensions.html}Extensions Catalog}}
 
 
 Core Extension
 
-  The documentation will be available as soon as possible.
+-----------
+Namespace: fr.liglab.adele.cube.core
+-----------
+
+* Contributions to the Archetype
+
+** Managed Elements
+
+  * {{{./scope.html}Scope}}
+  
+  * {{{./node.html}Node}}
+  
+  * {{{./component.html}Component}}  
+  
+  []
+  
+  See {{{./managed_elements.html}Managed Elements Catalog}}
 
 
+** Constraints
+
+  * {{{./on-node.html}on-node}}
+  
+  * ...
+
+  []
+  
+  
+* Contributions to the Cube Agent
+  
+** Constraint Resolvers
+            
+  See {{{./constraints.html}Constraints Catalog}}
+  
+** Controllers
+
+  * Initializer
+  
+  * Scopes Management  
+
+
+* How to use it? 
+
+  Just add it to the list of extensions of the {{{./agent.html}Local Agent configuration file}}:
+
++--------------+
+<extension id="fr.liglab.adele.cube.core"/>
++--------------+

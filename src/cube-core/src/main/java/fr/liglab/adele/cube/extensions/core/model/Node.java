@@ -20,11 +20,11 @@ import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 
-public class NodeType extends ManagedElement {
+public class Node extends ManagedElement {
 
 	public final static String NAME = "node";
 	
-	public NodeType(String id, String description, Archetype archtype) {
+	public Node(String id, String description, Archetype archtype) {
 		super(id, description, archtype);
 	}
 		

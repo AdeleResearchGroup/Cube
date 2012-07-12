@@ -20,11 +20,11 @@ import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 
-public class ScopeType extends ManagedElement {
+public class Scope extends ManagedElement {
 	
 	public final static String NAME = "scope";
 	
-	public ScopeType(String id, String description, Archetype archtype) {
+	public Scope(String id, String description, Archetype archtype) {
 		super(id, description, archtype);		
 	}
 

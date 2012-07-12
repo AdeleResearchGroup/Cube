@@ -30,11 +30,11 @@ public class ComponentInstance extends CInstance {
 	List<CInstanceUID> inComponents = new ArrayList<CInstanceUID>();
 	List<CInstanceUID> outComponents = new ArrayList<CInstanceUID>();
 	
-	public ComponentInstance(ComponentType co) {
+	public ComponentInstance(Component co) {
 		super(co);
 		if (co != null) {	
 						
-			List<CInstance> nodes = co.getArchtype().getCubeAgent().getRuntimeModel().getCInstances(CoreExtensionFactory.ID, NodeType.NAME);
+			List<CInstance> nodes = co.getArchtype().getCubeAgent().getRuntimeModel().getCInstances(CoreExtensionFactory.ID, Node.NAME);
 			if (nodes != null && nodes.size() > 0) {
 				for (CInstance i : nodes) {
 					// set by defautl the node to the already created local node instance!

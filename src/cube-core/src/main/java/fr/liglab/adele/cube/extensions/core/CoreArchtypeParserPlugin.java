@@ -28,9 +28,9 @@ import fr.liglab.adele.cube.extensions.core.constraints.InScopeResolver;
 import fr.liglab.adele.cube.extensions.core.constraints.OnNode;
 import fr.liglab.adele.cube.extensions.core.constraints.OutComponents;
 import fr.liglab.adele.cube.extensions.core.constraints.SelfCreateLocally;
-import fr.liglab.adele.cube.extensions.core.model.ComponentType;
-import fr.liglab.adele.cube.extensions.core.model.NodeType;
-import fr.liglab.adele.cube.extensions.core.model.ScopeType;
+import fr.liglab.adele.cube.extensions.core.model.Component;
+import fr.liglab.adele.cube.extensions.core.model.Node;
+import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.util.parser.ArchetypeParserPlugin;
 import fr.liglab.adele.cube.util.parser.ParseException;
 import fr.liglab.adele.cube.util.xml.XMLElement;
@@ -75,31 +75,31 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 			if (name == null) {
 				throw new ParseException("name problem!");
 			} else {
-				if (name.equalsIgnoreCase(ComponentType.NAME)) {
+				if (name.equalsIgnoreCase(Component.NAME)) {
 					/*
 					 * Component
 					 */
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);						
 					String parentId = e.getAttribute(EXTENDS);
-					ComponentType c = new ComponentType(id, description, parentId, archtype);			
+					Component c = new Component(id, description, parentId, archtype);			
 					return c;
 
-				} else if (name.equalsIgnoreCase(NodeType.NAME)) {
+				} else if (name.equalsIgnoreCase(Node.NAME)) {
 					/*
 					 * Node
 					 */
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);			
-					NodeType n = new NodeType(id, description, archtype);
+					Node n = new Node(id, description, archtype);
 					return n;
-				} else if (name.equalsIgnoreCase(ScopeType.NAME)) {
+				} else if (name.equalsIgnoreCase(Scope.NAME)) {
 					/*
 					 * Scope
 					 */
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);			
-					ScopeType s = new ScopeType(id, description, archtype);
+					Scope s = new Scope(id, description, archtype);
 					return s;
 				}
 			}
