@@ -17,7 +17,7 @@ Cube Internal Monitoring Extension
 [./images/monitoring_example.png]  Monitoring Extension GUI
 
 
-* How to use?
+* How to use it?
 
   Just add it to the list of extensions of the {{{./agent.html}Local Agent configuration file}}:
 

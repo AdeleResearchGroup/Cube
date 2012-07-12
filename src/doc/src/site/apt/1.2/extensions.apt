@@ -6,8 +6,27 @@
 	09-Jul-2012
 	---
 
-About Cube Extensions
+Extensions Catalog
 
-  The documentation will be available as soon as possible.
 
+  Learn {{{./about_extensions.html}about cube extensions}}, and see how {{{./using_extensions.html}you use them}}.
+
+* {{{./core_extension.html}Core Extension}}
+
+-------
+Namecapce: fr.liglab.adele.cube.core
+-------
+
+* {{{./monitoring_extension.html}Cube Internal Monitoring Extension}}
+
+-------
+Namecapce: fr.liglab.adele.cube.monitoring
+-------
+
+
+* {{{./cilia_extension.html}Cilia Extension}}
+
+-------
+Namecapce: fr.liglab.adele.cube.cilia
+-------
 

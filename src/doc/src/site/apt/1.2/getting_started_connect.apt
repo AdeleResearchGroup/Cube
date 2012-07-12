@@ -8,7 +8,7 @@
 
   {{{./getting_started.html}Getting started}} >
 
-Connecting components
+Self-Connecting Components
 
   In this tutorial, we will show you how to specify constraints and goals on how the components should be connected.
 

@@ -25,8 +25,9 @@
 		</menu>				
 
 		<menu name="Catalog">
-			<item name="Model Types" href="1.2/types.html"/>
+			<item name="Managed Elements" href="1.2/managed_elements.html"/>
 			<item name="Constraints" href="1.2/constraints.html"/>
+			<item name="Extensions" href="1.2/extensions.html"/>
 		</menu>
 
 		<menu name="Other Links">

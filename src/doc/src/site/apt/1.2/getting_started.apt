@@ -12,7 +12,7 @@ Getting started
 
   []
 
-  * {{{./getting_started_connect.html}Connecting components}} (within a single node)
+  * {{{./getting_started_connect.html}Self-Connecting Components}} (within a single node)
 
   * {{{./getting_started_scopes.html}Scopes constitution}}
 

@@ -11,6 +11,22 @@
 Cube Agent
 
 
+* Internal Architecture
+
+  One cube agent is composed of the following modules:
+
+[./images/agent.png] cube agent
+
+  The detail of each module is given below.
+
+** Runtime Model
+
+  []
+
+[./images/archetype_3.png] archetype types instances
+
+  []
+
 * Agent Config
 
 +-----+

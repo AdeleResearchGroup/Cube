@@ -20,7 +20,7 @@ Documentation
 
   * Catalog
 
-    * {{{./types.html}Model Types}}
+    * {{{./managed_elements.html}Managed Elements}}
 
     * {{{./constraints.html}Constraints}}
 
@@ -30,11 +30,13 @@ Documentation
 
   * {{{./using_extensions.html}Using extensions}}
 
-  * Catalog
+  * {{{./extensions.html}Catalog}}
 
-    * {{{./monitoring_extension.html}Internal monitoring}}
+    * {{{./core_extension.html}Core Extension}}
 
-    * {{{./cilia_extension.html}Cilia mediation framework}}
+    * {{{./monitoring_extension.html}Internal Monitoring Extension}}
+
+    * {{{./cilia_extension.html}Cilia Mediation Framework Extension}}
 
 * Tools
 

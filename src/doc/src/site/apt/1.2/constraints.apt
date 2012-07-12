@@ -15,26 +15,38 @@ Constraints Catalog
 Namecapce: fr.liglab.adele.cube.core
 -------
 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| <<Predicate Name>> | <<Arity>>        | <<checking>>  | <<finding>> | <<performing>> | <<Small Description>> |
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./find-locally.html}find-locally}}   | Unary             | no          | yes        | no           | When specified for a given variable, it will help to find a value for it while resolving this constrained variable.  |
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./on-node.html}on-node}}	|  Binary	|  yes	|  yes	|  yes	|  Garanties that a Component is on a particular Node | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./in-scope.html}in-scope}}	|  Binary	|  yes	|  yes	|  yes	|  Garanties that a Node is on a particular Scope |  
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./connect.html}connect}}	|  Binary	|  yes	|  yes	|  yes	|  Garanties that a Component is Connected to another Component | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./in-components.html}in-components}}	|  Unary | 	 yes	|  no	|  no	|  Ensure that a component has at max the defined number of Input Components | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./out-components.html}out-components}}	|  Unary	|  yes	|  no	|  no	|  Ensure that a component has at max the defined number of Output Components | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./self-create-locally.html}self-create-locally}}	|  Unary	|  no	|  yes	|  no	|  Create a new instance locally of the same type as the provided variable | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./components-per-node.html}components-per-node}}	|  Unary	|  yes	|  no	|  no	|  Ensure that will be a max number of component instances on the given node | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./components-per-scope.html}components-per-scope}}	|  Unary	|  yes	|  yes	|  no	|  Ensure that will be a max number of component instances on the given scope | 
-*----------------:--------------:-----------:---------:------------:-------------------:
-| {{{./self-sizing.html}self-sizing}}	|  Binary	|  yes	|  yes	|  yes	|  increase the number of particular components per node when its in-components are saturated | 
-*----------------:--------------:-----------:---------:------------:-------------------:
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| <<Constraint Name>> | <<Arity>>        | <<checking>>  | <<finding>> | <<performing>> | <<Constraint Resolver>> | <<Small Description>> |
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./find-locally.html}find-locally}}   | Unary             | no          | yes        | no           | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/FindLocallyResolver.java}FindLocallyResolver}} | When specified for a given variable, it will help to find a value for it while resolving this constrained variable.  |
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./on-node.html}on-node}}	|  Binary	|  yes	|  yes	|  yes	|  {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/OnNodeResolver.java}OnNodeResolver}} | Garanties that a Component is on a particular Node | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./in-scope.html}in-scope}}	|  Binary	|  yes	|  yes	|  yes	|  {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/InScopeResolver.java}InScopeResolver}} | Garanties that a Node is on a particular Scope |  
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./connect.html}connect}}	|  Binary	|  yes	|  yes	|  yes	|  {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/ConnectResolver.java}ConnectResolver}} | Garanties that a Component is Connected to another Component | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./in-components.html}in-components}}	|  Unary | 	 yes	|  no	|  no	|  {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/InComponentsResolver.java}InComponentsResolver}} | Ensure that a component has at max the defined number of Input Components | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./out-components.html}out-components}}	|  Unary	|  yes	|  no	|  no	|  {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/OutComponentsResolver.java}OutComponentsResolver}} | Ensure that a component has at max the defined number of Output Components | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./self-create-locally.html}self-create-locally}}	|  Unary	|  no	|  yes	|  no	| {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/SelfCreateLocallyResolver.java}SelfCreateLocallyResolver}} | Create a new instance locally of the same type as the provided variable | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./components-per-node.html}components-per-node}}	|  Unary	|  yes	|  no	|  no	| {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/ComponentsPerNodeResolver.java}ComponentsPerNodeResolver}} | Ensure that will be a max number of component instances on the given node | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./components-per-scope.html}components-per-scope}}	|  Unary	|  yes	|  yes	|  no	| {{{}}} | Ensure that will be a max number of component instances on the given scope | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| {{{./self-sizing.html}self-sizing}}	|  Binary	|  yes	|  yes	|  yes	|  {{{}}} | increase the number of particular components per node when its in-components are saturated | 
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+
+* Cilia Constraints
+
+-------
+Namecapce: fr.liglab.adele.cube.cilia
+-------
+
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| <<Constraint Name>> | <<Arity>>        | <<checking>>  | <<finding>> | <<performing>> | <<Constraint Resolver>> | <<Small Description>> |
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+
+
