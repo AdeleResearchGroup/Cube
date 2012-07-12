@@ -15,7 +15,7 @@
 
 package fr.liglab.adele.cube.util.id;
 
-public class CInstanceID extends CubeID {
+public class CInstanceUID extends CubeID {
 
 	/**
 	 * 
@@ -24,13 +24,13 @@ public class CInstanceID extends CubeID {
 
 	private static long indexm=0;	
 	
-	public CInstanceID(CubeAgentID cubeinstance) {
+	public CInstanceUID(CubeAgentID cubeinstance) {
 		super();		
 		setHierarchicalPart(cubeinstance.getHost() + ":" + cubeinstance.getPort() + "/objects/" + indexm++);
 		setFilter(cubeinstance.getFilter());		
 	}
 	
-	public CInstanceID(String instanceID) {
+	public CInstanceUID(String instanceID) {
 		super();
 		if (instanceID != null) {
 			String uri = instanceID.replace("cube://", "");
@@ -73,8 +73,8 @@ public class CInstanceID extends CubeID {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj != null && obj instanceof CInstanceID) {
-			return ((CInstanceID)obj).getURI().equalsIgnoreCase(this.getURI());
+		if (obj != null && obj instanceof CInstanceUID) {
+			return ((CInstanceUID)obj).getURI().equalsIgnoreCase(this.getURI());
 		}
 		return false;
 	}

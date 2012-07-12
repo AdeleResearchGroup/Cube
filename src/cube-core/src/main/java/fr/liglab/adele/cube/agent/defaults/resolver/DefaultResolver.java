@@ -23,7 +23,7 @@ import fr.liglab.adele.cube.MessagesListener;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.agent.IResolver;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 import fr.liglab.adele.cube.util.perf.Measure;
 import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 
@@ -109,7 +109,7 @@ public class DefaultResolver implements IResolver, MessagesListener{
 						&& v.getRValue().getState() == CInstance.VALID						
 						&& v.getRValue().getInstance().isLocal(this.agent.getId())) {
 					//log.info("validating : " + v2.getCSPValue().toString() + "~" + v2.getCSPValue().getOriginalState());
-					CInstanceID instanceID = v.getRValue().getInstance();					
+					CInstanceUID instanceID = v.getRValue().getInstance();					
 					validateInstance(instanceID, m);
 				}
 			}
@@ -122,7 +122,7 @@ public class DefaultResolver implements IResolver, MessagesListener{
 
 	}
 	
-	private void validateInstance(CInstanceID instanceID) {
+	private void validateInstance(CInstanceUID instanceID) {
 		if (instanceID != null) {
 			//TODO check if it is local
 			CInstance instance = this.agent.getRuntimeModel().getCInstance(instanceID);
@@ -132,7 +132,7 @@ public class DefaultResolver implements IResolver, MessagesListener{
 		}
 	}
 	
-	private void validateInstance(CInstanceID instanceID, Measure m) {
+	private void validateInstance(CInstanceUID instanceID, Measure m) {
 		if (instanceID != null) {
 			//TODO check if it is local
 			CInstance instance = this.agent.getRuntimeModel().getCInstance(instanceID);

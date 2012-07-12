@@ -17,7 +17,7 @@ package fr.liglab.adele.cube.util.parser;
 
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.GlobalConfig;
 import fr.liglab.adele.cube.util.xml.XMLElement;
 
@@ -31,7 +31,7 @@ import fr.liglab.adele.cube.util.xml.XMLElement;
  */
 public interface ArchetypeParserPlugin {
 	
-	public Type parseType(XMLElement element, Archetype archtype) throws ParseException;
+	public ManagedElement parseType(XMLElement element, Archetype archtype) throws ParseException;
 	public Constraint parseConstraint(XMLElement element, Archetype archtype) throws ParseException;
 	public GlobalConfig parseGlobalConfig(XMLElement element, Archetype archtype) throws ParseException;
 	

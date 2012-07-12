@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import fr.liglab.adele.cube.archetype.Type;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.archetype.ManagedElement;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 import fr.liglab.adele.cube.util.id.CubeAgentID;
 
 public class CInstance implements Cloneable {
@@ -36,13 +36,13 @@ public class CInstance implements Cloneable {
 	
 	//private static int index = 0;
 	
-	private CInstanceID id;
+	private CInstanceUID id;
 	
 	private static int index=0;
 	
 	private String localId;
 	
-	private Type cObject; /* type */	
+	private ManagedElement cObject; /* type */	
 	
 	private RuntimeModel rm = null;
 	
@@ -62,11 +62,11 @@ public class CInstance implements Cloneable {
 		this(co, null, ci);
 	}*/	
 	
-	public CInstance(Type co) {
+	public CInstance(ManagedElement co) {
 		this(co, new Properties());		
 	}
 	
-	public CInstance(Type co, String localId) {
+	public CInstance(ManagedElement co, String localId) {
 		this(co, new Properties());
 		if (localId != null && localId.trim().length() > 0) {
 			this.localId = localId.trim();
@@ -79,14 +79,14 @@ public class CInstance implements Cloneable {
 		this.localId = localId;
 	}
 
-	public CInstance(Type co, Properties properties) {
+	public CInstance(ManagedElement co, Properties properties) {
 		this(co, null, null);
 	}
 	
-	public CInstance(Type co, Properties properties, RuntimeModel rm) {		
+	public CInstance(ManagedElement co, Properties properties, RuntimeModel rm) {		
 		this.state = UNRESOLVED;
 		this.localId = "" + index++;
-		setId(new CInstanceID(co.getArchtype().getCubeAgent().getId()));
+		setId(new CInstanceUID(co.getArchtype().getCubeAgent().getId()));
 		this.cObject = co;		
 		this.rm = rm;		
 		if (properties != null) {
@@ -104,7 +104,7 @@ public class CInstance implements Cloneable {
 		return false;
 	}
 	
-	public void setId(CInstanceID id) {
+	public void setId(CInstanceUID id) {
 		this.id = id;
 	}
 	
@@ -191,11 +191,11 @@ public class CInstance implements Cloneable {
 		return "";
 	}
 	
-	public Type getCType() {
+	public ManagedElement getCType() {
 		return cObject;
 	}
 
-	public CInstanceID getId() {
+	public CInstanceUID getId() {
 		return id;
 	}
 	

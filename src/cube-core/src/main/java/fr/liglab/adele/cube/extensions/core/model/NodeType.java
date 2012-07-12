@@ -17,10 +17,10 @@ package fr.liglab.adele.cube.extensions.core.model;
 
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.archetype.Archetype;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 
-public class NodeType extends Type {
+public class NodeType extends ManagedElement {
 
 	public final static String NAME = "node";
 	

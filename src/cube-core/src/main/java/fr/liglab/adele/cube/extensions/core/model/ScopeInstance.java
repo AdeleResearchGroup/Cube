@@ -19,18 +19,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.liglab.adele.cube.agent.CInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class ScopeInstance extends CInstance {
 
 	
-	List<CInstanceID> nodeInstances = new ArrayList<CInstanceID>();
+	List<CInstanceUID> nodeInstances = new ArrayList<CInstanceUID>();
 	
 	public ScopeInstance(ScopeType st) {
 		super(st);
 	}
 	
-	public void addNode(CInstanceID ci) {
+	public void addNode(CInstanceUID ci) {
 		if (ci != null) {
 			if (this.nodeInstances.contains(ci) == false) {
 				this.nodeInstances.add(ci);
@@ -43,7 +43,7 @@ public class ScopeInstance extends CInstance {
 	 * 
 	 * @return
 	 */
-	public List<CInstanceID> getNodes() {		
+	public List<CInstanceUID> getNodes() {		
 		/*
 		try {
 			throw new Exception("scope.getNode not yet implemented!");
@@ -58,8 +58,8 @@ public class ScopeInstance extends CInstance {
 	
 	public Object clone() {
 		Object clone = super.clone();
-		((ScopeInstance)clone).nodeInstances = new ArrayList<CInstanceID>();		
-		for (CInstanceID inC: this.nodeInstances) {
+		((ScopeInstance)clone).nodeInstances = new ArrayList<CInstanceUID>();		
+		for (CInstanceUID inC: this.nodeInstances) {
 			((ScopeInstance)clone).nodeInstances.add(inC);
 		}				
 		return clone;
@@ -71,7 +71,7 @@ public class ScopeInstance extends CInstance {
 		tmp += "\tlocalId:" + getLocalId();		
 		tmp += "\n";
 		tmp += "\tNODES:\n";
-		for (CInstanceID id : this.nodeInstances) {
+		for (CInstanceUID id : this.nodeInstances) {
 			tmp += "\t  * " + id + "\n";
 		}
 		return  tmp;

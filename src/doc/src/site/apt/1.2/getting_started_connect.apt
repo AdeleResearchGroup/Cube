@@ -296,6 +296,7 @@ g! newi A
 g! newi A
 -----------
 
+
 [./images/getting_started_connect4.png] connect4
 
   Each instance A will create a chain of the other connected instances (B, C and D).

@@ -59,7 +59,7 @@ import fr.liglab.adele.cube.extensions.core.model.NodeInstance;
 import fr.liglab.adele.cube.extensions.core.model.NodeType;
 import fr.liglab.adele.cube.extensions.core.model.ScopeInstance;
 import fr.liglab.adele.cube.extensions.core.model.ScopeType;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class MonitorGUI extends JFrame {
 	
@@ -99,7 +99,7 @@ public class MonitorGUI extends JFrame {
 				name = name.substring(name.lastIndexOf("/")+1);
 				N.set("name", ci.getCType().getId() + "(" + name + ")");
 				N.set("uri", ci.getId().toString());
-				for (CInstanceID id : ((ComponentInstance)ci).getOutComponents()) {
+				for (CInstanceUID id : ((ComponentInstance)ci).getOutComponents()) {
 					if (this.nodes.get(id.getURI()) != null) {
 						Node n2 = (Node) this.nodes.get(id.getURI());
 						graph.addEdge(N, n2);
@@ -114,7 +114,7 @@ public class MonitorGUI extends JFrame {
 						
 					}
 				}
-				for (CInstanceID id : ((ComponentInstance)ci).getInComponents()) {
+				for (CInstanceUID id : ((ComponentInstance)ci).getInComponents()) {
 					if (this.nodes.get(id.getURI()) != null) {
 						Node n1 = (Node) this.nodes.get(id.getURI());
 						graph.addEdge(n1, N);

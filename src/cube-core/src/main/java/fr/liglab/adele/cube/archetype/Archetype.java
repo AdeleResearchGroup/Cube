@@ -48,7 +48,7 @@ public class Archetype {
 	 */
 	private CubeAgent cubeAgent;
 	
-	List<Type> types = new ArrayList<Type>();
+	List<ManagedElement> types = new ArrayList<ManagedElement>();
 	List<Constraint> constraints = new ArrayList<Constraint>();
 	List<GlobalConfig> globalConfigs = new ArrayList<GlobalConfig>();
 	
@@ -117,23 +117,23 @@ public class Archetype {
 		this.namespaces = namespaces;
 	}
 	
-	public List<Type> getTypes() {
+	public List<ManagedElement> getTypes() {
 		return this.types;
 	}
 	
-	public void addType(Type cmo) {	
+	public void addType(ManagedElement cmo) {	
 		if (cmo != null) {
 			this.types.add(cmo);
 			addExtensionNamespace(cmo.getNamespace());
 		}
 	}
 	
-	public boolean removeType(Type cmo) {
+	public boolean removeType(ManagedElement cmo) {
 		return this.types.remove(cmo);
 	}
 	
-	public Type getType(String namespace, String name, String id) {
-		for (Type cmo : this.types) {
+	public ManagedElement getType(String namespace, String name, String id) {
+		for (ManagedElement cmo : this.types) {
 			if (cmo.getId().equalsIgnoreCase(id) && cmo.getName().equalsIgnoreCase(name) && cmo.getNamespace().equalsIgnoreCase(namespace)) {
 				return cmo;
 			}
@@ -141,9 +141,9 @@ public class Archetype {
 		return null;
 	}
 	
-	public Type getType(String id) {
+	public ManagedElement getType(String id) {
 		if (id != null) {
-			for (Type cmo : this.types) {
+			for (ManagedElement cmo : this.types) {
 				if (cmo.getId().equalsIgnoreCase(id)) {
 					return cmo;
 				}
@@ -152,9 +152,9 @@ public class Archetype {
 		return null;
 	}
 	
-	public List<Type> getTypes(String id) {
-		List<Type> result = new ArrayList<Type>();
-		for (Type cmo : this.types) {
+	public List<ManagedElement> getTypes(String id) {
+		List<ManagedElement> result = new ArrayList<ManagedElement>();
+		for (ManagedElement cmo : this.types) {
 			if (cmo.getId().equalsIgnoreCase(id)) {
 				result.add(cmo);
 			}
@@ -167,7 +167,7 @@ public class Archetype {
 		return this.constraints;
 	}
 
-	public List<Constraint> getConstraintsOnType(Type type) {
+	public List<Constraint> getConstraintsOnType(ManagedElement type) {
 		List<Constraint> result = new ArrayList<Constraint>();
 		for (Constraint cc: this.constraints) {
 			/*List<CVariable> vars = getCVariables(cot);
@@ -177,7 +177,7 @@ public class Archetype {
 		}
 		return result;
 	}
-	public List<Constraint> getConstraintsRelatedToType(Type cot) {
+	public List<Constraint> getConstraintsRelatedToType(ManagedElement cot) {
 		List<Constraint> result = new ArrayList<Constraint>();
 		for (Constraint cc: this.constraints) {
 			List<Variable> vars = getVariablesOfType(cot);
@@ -286,7 +286,7 @@ public class Archetype {
 		return null;
 	}
 	
-	public Variable getVariable(String id, Type cot) {
+	public Variable getVariable(String id, ManagedElement cot) {
 		for (String key : this.variables.keySet()) {
 			if (key.equalsIgnoreCase(id) && this.variables.get(key).getType().equals(cot)) {
 				return this.variables.get(key);
@@ -304,7 +304,7 @@ public class Archetype {
 		return null;
 	}
 	
-	public List<Variable> getVariablesOfType(Type cot) {
+	public List<Variable> getVariablesOfType(ManagedElement cot) {
 		List<Variable> result = new ArrayList<Variable>();
 		for (String key : this.variables.keySet()) {
 			if (this.variables.get(key).getType().equals(cot.getId())) {
@@ -324,7 +324,7 @@ public class Archetype {
 	
 	
 	
-	public Variable getCTypeVariable(Type cType) {
+	public Variable getCTypeVariable(ManagedElement cType) {
 		for (Variable v : getVariablesOfType(cType)) {
 			if (v.isTypeVariable() == true) {
 				return v;

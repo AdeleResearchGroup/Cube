@@ -28,7 +28,7 @@ import fr.liglab.adele.cube.agent.CubeAgent;
  * @author debbabi
  *
  */
-public abstract class Type {
+public abstract class ManagedElement {
 	
 	Archetype archtype;
 	
@@ -39,7 +39,7 @@ public abstract class Type {
 	
 	//Map<String, CInstance> instances = new HashMap<String, CInstance>();
 			
-	public Type(String id, String description, Archetype archtype) {
+	public ManagedElement(String id, String description, Archetype archtype) {
 		this.archtype = archtype;
 		if (id != null) {
 			this.id = id;
@@ -79,8 +79,8 @@ public abstract class Type {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (obj != null && obj instanceof Type) {
-			Type o2 = (Type)obj;
+		if (obj != null && obj instanceof ManagedElement) {
+			ManagedElement o2 = (ManagedElement)obj;
 			if (o2.getNamespace().equalsIgnoreCase(this.getNamespace()) && 
 					o2.getName().equalsIgnoreCase(this.getName()) &&
 					o2.getId().equalsIgnoreCase(this.getId())) {

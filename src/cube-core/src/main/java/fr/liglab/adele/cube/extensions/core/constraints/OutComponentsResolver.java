@@ -10,7 +10,7 @@ import fr.liglab.adele.cube.archetype.Constraint;
 import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.ComponentInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class OutComponentsResolver implements IConstraintResolver {
 
@@ -46,7 +46,7 @@ public class OutComponentsResolver implements IConstraintResolver {
 			int valuee = 0;			
 			CInstance instance = agent.getRuntimeModel().getCInstance(v12.getRValue().getInstance());		
 			if (instance != null && instance instanceof ComponentInstance) {
-				for (CInstanceID inComp : ((ComponentInstance)instance).getOutComponents()) {
+				for (CInstanceUID inComp : ((ComponentInstance)instance).getOutComponents()) {
 					//TODO verify remote components type!!
 					//CInstance inCompInst = getCubeInstance().getRuntimeModel().getCObjectInstance(inComp);
 					//if (inCompInst != null && inCompInst.getCObjectType().equals(inComponentsType)) {

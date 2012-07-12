@@ -35,7 +35,7 @@ import fr.liglab.adele.cube.ICubePlatform;
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ArchtypeParsingException;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.Variable;
 import fr.liglab.adele.cube.archetype.GlobalConfig;
 import fr.liglab.adele.cube.extensions.IExtensionFactory;
@@ -165,7 +165,7 @@ public class ArchetypeParser {
 									ArchetypeParserPlugin parser = c.getArchetypeParserPlugin();
 									if (parser != null) {
 										try {
-											Type cmo = parser.parseType(typeElement, archtype);
+											ManagedElement cmo = parser.parseType(typeElement, archtype);
 											archtype.addType(cmo);
 										} catch (ParseException e) {
 											// TODO Auto-generated catch block
@@ -547,8 +547,8 @@ public class ArchetypeParser {
 		out += ">\n";
 		
 		out += "<"+TYPES+">\n";
-		List<Type> cobjects = archetype.getTypes();
-		for (Type cmo : cobjects) {
+		List<ManagedElement> cobjects = archetype.getTypes();
+		for (ManagedElement cmo : cobjects) {
 			out += cmo.toXMLString(archetype.getNamespaces().get(cmo.getNamespace()));
 		}
 		out += "</"+TYPES+">\n";

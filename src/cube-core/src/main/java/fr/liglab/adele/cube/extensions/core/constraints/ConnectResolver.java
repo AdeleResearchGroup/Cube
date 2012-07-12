@@ -27,7 +27,7 @@ import fr.liglab.adele.cube.archetype.Constraint;
 import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.ComponentInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 
 /**
@@ -68,8 +68,8 @@ public class ConnectResolver implements IConstraintResolver {
 					CInstance ci1 = agent.getRuntimeModel().getCInstance(v12.getRValue().getInstance());					
 					if (ci1 != null && ci1 instanceof ComponentInstance) {
 						
-						List<CInstanceID> cmps = ((ComponentInstance)ci1).getOutComponents(v22.getType());
-						for (CInstanceID c : cmps) {
+						List<CInstanceUID> cmps = ((ComponentInstance)ci1).getOutComponents(v22.getType());
+						for (CInstanceUID c : cmps) {
 							if (!v12.isInHistory(c)) {
 								return new RValue(c, this);
 							}

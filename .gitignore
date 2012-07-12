@@ -2,3 +2,5 @@ target/
 *~
 felix-cache/
 perf.csv
+.settings
+.project

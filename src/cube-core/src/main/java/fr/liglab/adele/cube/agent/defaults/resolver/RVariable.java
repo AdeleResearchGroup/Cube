@@ -27,9 +27,9 @@ import fr.liglab.adele.cube.CMessage;
 import fr.liglab.adele.cube.TimeOutException;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.Variable;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 /**
  * Resolution Graph Variable.
@@ -45,7 +45,7 @@ public class RVariable {
 	/**
 	 * Variable Type
 	 */
-	Type type = null;
+	ManagedElement type = null;
 	/**
 	 * Variable Value
 	 */
@@ -75,7 +75,7 @@ public class RVariable {
 	 * @param type
 	 * @param initialValue
 	 */
-	public RVariable(ResolutionGraph graph, Type type, RValue initialValue) {
+	public RVariable(ResolutionGraph graph, ManagedElement type, RValue initialValue) {
 		this.graph = graph;
 		this.type = type;		
 		this.id = "x" + index++;
@@ -673,7 +673,7 @@ public class RVariable {
 	 * @param instance
 	 * @return true if already saved on the history list.
 	 */
-	public boolean isInHistory(CInstanceID instance) {
+	public boolean isInHistory(CInstanceUID instance) {
 		for (RValue v : this.valuesHistory) {
 			if (v.getInstance() != null && v.getInstance().equals(instance)) {
 				return true;
@@ -874,7 +874,7 @@ public class RVariable {
 	 * Get Archetype type.
 	 * @return
 	 */
-	public Type getType() {
+	public ManagedElement getType() {
 		return type;
 	}
 

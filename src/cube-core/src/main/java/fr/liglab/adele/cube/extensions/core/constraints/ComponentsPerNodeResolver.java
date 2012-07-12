@@ -7,11 +7,11 @@ import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.agent.defaults.resolver.RValue;
 import fr.liglab.adele.cube.agent.defaults.resolver.RVariable;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.NodeInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class ComponentsPerNodeResolver implements IConstraintResolver {
 
@@ -48,7 +48,7 @@ public class ComponentsPerNodeResolver implements IConstraintResolver {
 			if (type == null) {
 				CInstance instance = cpn.getArchtype().getCubeAgent().getRuntimeModel().getCInstance( v12.getRValue().getInstance() );							
 				if (instance != null && instance instanceof NodeInstance) {
-					for (CInstanceID inComp : ((NodeInstance)instance).getComponentInstances()) {					
+					for (CInstanceUID inComp : ((NodeInstance)instance).getComponentInstances()) {					
 						valuee = valuee + 1;					
 					}
 				} else {
@@ -61,11 +61,11 @@ public class ComponentsPerNodeResolver implements IConstraintResolver {
 					return false;
 				}	
 			} else {			
-				Type constrainedType = cpn.getArchtype().getType(type);				
+				ManagedElement constrainedType = cpn.getArchtype().getType(type);				
 				if (constrainedType != null) {
 					CInstance instance = cpn.getArchtype().getCubeAgent().getRuntimeModel().getCInstance( v12.getRValue().getInstance() );							
 					if (instance != null && instance instanceof NodeInstance) {
-						for (CInstanceID inComp : ((NodeInstance)instance).getComponentInstances(constrainedType)) {					
+						for (CInstanceUID inComp : ((NodeInstance)instance).getComponentInstances(constrainedType)) {					
 							valuee = valuee + 1;					
 						}
 					} else {

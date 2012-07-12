@@ -17,7 +17,7 @@ package fr.liglab.adele.cube.extensions.core;
 
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.GlobalConfig;
 import fr.liglab.adele.cube.extensions.core.constraints.ComponentsPerNode;
 import fr.liglab.adele.cube.extensions.core.constraints.Connect;
@@ -65,7 +65,7 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 	private static final String MAXINCOMP = "max-incomp";
 
 
-	public Type parseType(XMLElement e, Archetype archtype) throws ParseException {	
+	public ManagedElement parseType(XMLElement e, Archetype archtype) throws ParseException {	
 		if (e != null) {
 			String ns = e.getNameSpace();
 			if (ns == null || !ns.equalsIgnoreCase(CoreExtensionFactory.ID)) {

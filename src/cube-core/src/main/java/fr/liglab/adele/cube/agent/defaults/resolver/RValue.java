@@ -3,7 +3,7 @@ package fr.liglab.adele.cube.agent.defaults.resolver;
 import java.util.Date;
 
 import fr.liglab.adele.cube.agent.CInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class RValue {
 
@@ -16,21 +16,21 @@ public class RValue {
 	/**
 	 * Value
 	 */
-	private CInstanceID value = null;
+	private CInstanceUID value = null;
 	
 	private RVariable cspVariable = null;		
 	private Object generator = null;
 	private Date timestamp = null;
 	
 	
-	public RValue(RVariable v, CInstanceID value, Object generator) {
+	public RValue(RVariable v, CInstanceUID value, Object generator) {
 		this.cspVariable = v;
 		this.value = value;
 		this.generator = generator;
 		this.timestamp = new Date();	
 	}
 
-	public RValue(CInstanceID value, Object generator) {		
+	public RValue(CInstanceUID value, Object generator) {		
 		this.value = value;
 		this.state = CInstance.VALID;
 		this.originalState = this.state;
@@ -105,7 +105,7 @@ public class RValue {
 		
 	}
 	
-	public CInstanceID getInstance() {
+	public CInstanceUID getInstance() {
 		return value;
 	}
 

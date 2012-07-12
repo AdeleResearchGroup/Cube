@@ -26,7 +26,7 @@ import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.agent.defaults.resolver.RValue;
 import fr.liglab.adele.cube.agent.defaults.resolver.RVariable;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 
@@ -97,7 +97,7 @@ public class SelfCreateLocallyResolver implements IConstraintResolver {
 					if (index >= 1) {
 						return null;
 					}
-					Type cotype = v1.getType();
+					ManagedElement cotype = v1.getType();
 					CInstance minstance;
 								
 					try {

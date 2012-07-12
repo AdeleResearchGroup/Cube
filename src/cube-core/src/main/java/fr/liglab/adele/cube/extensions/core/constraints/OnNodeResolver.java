@@ -28,7 +28,7 @@ import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.ComponentInstance;
 import fr.liglab.adele.cube.extensions.core.model.NodeInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 /**
  * On-Node Constraint Resolver.
@@ -68,7 +68,7 @@ public class OnNodeResolver implements IConstraintResolver {
 					System.out.println("* " + v.getInstance());
 				}
 				if (v22 != null && v22.isNull() == false) {
-					CInstanceID nodeID = v22.getRValue().getInstance();
+					CInstanceUID nodeID = v22.getRValue().getInstance();
 					if (nodeID != null) {
 						if (!nodeID.isLocal(agent.getId())) {
 							//System.out.println("[CInstance] WARNING: this is not a local instance!.!.!.!.!.!.!.!.!.!.!.!.!.!.!.!.!.!");
@@ -77,11 +77,11 @@ public class OnNodeResolver implements IConstraintResolver {
 					}
 					CInstance ni = agent.getRuntimeModel().getCInstance(v22.getRValue().getInstance());
 					if (ni != null && ni instanceof NodeInstance && ni.getCType().equals(v22.getType())) {				
-						List<CInstanceID> result = ((NodeInstance)ni).getComponentInstances(v12.getType());
+						List<CInstanceUID> result = ((NodeInstance)ni).getComponentInstances(v12.getType());
 						if (result != null && result.size() > 0) {
 							//TODO warning, take other values for each call
 							//System.out.println("\n\n[OnNode] findValueForConstrainedVariable : there is " + result.size() + " instances!");
-							for (CInstanceID iii : result) {
+							for (CInstanceUID iii : result) {
 								if (!v12.isInHistory(iii)) {
 									return new RValue(iii, this);
 								}
@@ -95,7 +95,7 @@ public class OnNodeResolver implements IConstraintResolver {
 				if (v12 != null && v12.isNull() == false) {
 					CInstance ci = agent.getRuntimeModel().getCInstance(v12.getRValue().getInstance());
 					if (ci != null && ci instanceof ComponentInstance) {				
-						CInstanceID node = ((ComponentInstance)ci).getNode();				
+						CInstanceUID node = ((ComponentInstance)ci).getNode();				
 						if (node != null) {
 							//TODO warning, take other values for each call
 							RValue cspv = new RValue(node, this);

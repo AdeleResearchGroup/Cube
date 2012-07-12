@@ -28,7 +28,7 @@ import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.model.NodeInstance;
 import fr.liglab.adele.cube.extensions.core.model.ScopeInstance;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 /**
  * On-Node Constraint Resolver.
@@ -114,13 +114,13 @@ public class InScopeResolver implements IConstraintResolver {
 			if (ni != null && ni instanceof NodeInstance && si != null && si instanceof ScopeInstance) {
 				Boolean ok1 = false;
 				Boolean ok2 = false;
-				for (CInstanceID scop:((NodeInstance)ni).getScopes()) {
+				for (CInstanceUID scop:((NodeInstance)ni).getScopes()) {
 					if (scop.getURI().equalsIgnoreCase(si.getId().getURI())) {
 						ok1 = true;
 						break;
 					}
 				}
-				for (CInstanceID nod : ((ScopeInstance)si).getNodes()) {
+				for (CInstanceUID nod : ((ScopeInstance)si).getNodes()) {
 					if (nod.getURI().equalsIgnoreCase(ni.getId().getURI())) {
 						ok2 = true;
 						break;

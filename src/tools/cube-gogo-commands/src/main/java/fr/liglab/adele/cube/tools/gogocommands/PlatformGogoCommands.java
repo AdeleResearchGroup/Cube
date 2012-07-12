@@ -31,7 +31,7 @@ import fr.liglab.adele.cube.ICubePlatform;
 import fr.liglab.adele.cube.TypeNotDeclaredException;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.IExtension;
 import fr.liglab.adele.cube.util.id.CubeAgentID;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
@@ -104,7 +104,7 @@ public class PlatformGogoCommands {
 		for (String id : this.cps.getCubeAgents()) {
 			CubeAgent ci = cps.getCubeAgent(id);
 			if (ci != null) {								
-				Type t = ci.getArchetype().getType(tid);
+				ManagedElement t = ci.getArchetype().getType(tid);
 				if (t != null) {
 					CInstance instance;
 					try {

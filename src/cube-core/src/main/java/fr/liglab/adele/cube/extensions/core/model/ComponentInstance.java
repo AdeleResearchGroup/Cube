@@ -19,16 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.liglab.adele.cube.agent.CInstance;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class ComponentInstance extends CInstance {
 
-	private CInstanceID node = null;
+	private CInstanceUID node = null;
 	
-	List<CInstanceID> inComponents = new ArrayList<CInstanceID>();
-	List<CInstanceID> outComponents = new ArrayList<CInstanceID>();
+	List<CInstanceUID> inComponents = new ArrayList<CInstanceUID>();
+	List<CInstanceUID> outComponents = new ArrayList<CInstanceUID>();
 	
 	public ComponentInstance(ComponentType co) {
 		super(co);
@@ -47,43 +47,43 @@ public class ComponentInstance extends CInstance {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void setNode(CInstanceID node) {
+	public void setNode(CInstanceUID node) {
 		this.node = node;
 	}
 	
-	public CInstanceID getNode() {
+	public CInstanceUID getNode() {
 		return this.node;
 	}
 	
-	public void addInComponent(CInstanceID c) {
+	public void addInComponent(CInstanceUID c) {
 		if (!this.inComponents.contains(c)) {
 			this.inComponents.add(c);
 		}
 	}
 	
-	public void removeInComponent(CInstanceID c) {
+	public void removeInComponent(CInstanceUID c) {
 		this.inComponents.remove(c);
 	}
 	
-	public void addOutComponent(CInstanceID c) {
+	public void addOutComponent(CInstanceUID c) {
 		if (!outComponents.contains(c)) {
 			this.outComponents.add(c);
 		}
 	}
 	
-	public void removeOutComponent(CInstanceID c) {
+	public void removeOutComponent(CInstanceUID c) {
 		this.outComponents.remove(c);
 	}
 	
 	
 	
-	public List<CInstanceID> getInComponents() {
+	public List<CInstanceUID> getInComponents() {
 		return inComponents;
 	}
 
-	public List<CInstanceID> getInComponents(Type cObjectType) {
-		List<CInstanceID> result = new ArrayList<CInstanceID>();		
-		for (CInstanceID id : this.inComponents) {			
+	public List<CInstanceUID> getInComponents(ManagedElement cObjectType) {
+		List<CInstanceUID> result = new ArrayList<CInstanceUID>();		
+		for (CInstanceUID id : this.inComponents) {			
 			CInstance instance = getCubeAgent().getRuntimeModel().getCInstance(id);
 			if (instance != null && instance.getCType().equals(cObjectType)) {
 				result.add(id);
@@ -92,17 +92,17 @@ public class ComponentInstance extends CInstance {
 		return result;
 	}	
 	
-	public boolean hasInComponent(CInstanceID instance) {
+	public boolean hasInComponent(CInstanceUID instance) {
 		return this.inComponents.contains(instance);
 	}
 		
-	public List<CInstanceID> getOutComponents() {
+	public List<CInstanceUID> getOutComponents() {
 		return outComponents;
 	}
 
-	public List<CInstanceID> getOutComponents(Type cObjectType) {
-		List<CInstanceID> result = new ArrayList<CInstanceID>();		
-		for (CInstanceID id : this.outComponents) {			
+	public List<CInstanceUID> getOutComponents(ManagedElement cObjectType) {
+		List<CInstanceUID> result = new ArrayList<CInstanceUID>();		
+		for (CInstanceUID id : this.outComponents) {			
 			CInstance instance = getCubeAgent().getRuntimeModel().getCInstance(id);
 			if (instance != null && instance.getCType().equals(cObjectType)) {
 				result.add(id);
@@ -111,7 +111,7 @@ public class ComponentInstance extends CInstance {
 		return result;
 	}	
 	
-	public boolean hasOutComponent(CInstanceID instance) {
+	public boolean hasOutComponent(CInstanceUID instance) {
 		return this.outComponents.contains(instance);
 	}
 	
@@ -124,12 +124,12 @@ public class ComponentInstance extends CInstance {
 	@Override
 	public Object clone() {
 		Object clone = super.clone();
-		((ComponentInstance)clone).inComponents = new ArrayList<CInstanceID>();
-		((ComponentInstance)clone).outComponents  = new ArrayList<CInstanceID>();
-		for (CInstanceID inC: this.inComponents) {
+		((ComponentInstance)clone).inComponents = new ArrayList<CInstanceUID>();
+		((ComponentInstance)clone).outComponents  = new ArrayList<CInstanceUID>();
+		for (CInstanceUID inC: this.inComponents) {
 			((ComponentInstance)clone).inComponents.add(inC);
 		}		
-		for (CInstanceID outC: this.outComponents) {
+		for (CInstanceUID outC: this.outComponents) {
 			((ComponentInstance)clone).outComponents.add(outC);
 		}		
 		return clone;
@@ -140,11 +140,11 @@ public class ComponentInstance extends CInstance {
 		String tmp ="\tlocalId: " + getLocalId() + "\n";
 		tmp += "\tNode: " + getNode() + "\n";
 		tmp += "\tInComps:\n";
-		for (CInstanceID id: inComponents) {
+		for (CInstanceUID id: inComponents) {
 			tmp += "\t  * " + id +"\n";
 		}
 		tmp += "\tOutComps:\n";
-		for (CInstanceID id: outComponents) {
+		for (CInstanceUID id: outComponents) {
 			tmp += "\t  * " + id +"\n";
 		}
 		return tmp;

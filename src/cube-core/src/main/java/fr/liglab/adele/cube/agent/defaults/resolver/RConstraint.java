@@ -22,7 +22,7 @@ import java.util.List;
 
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.Variable;
 import fr.liglab.adele.cube.extensions.IConstraintResolver;
 import fr.liglab.adele.cube.extensions.IExtension;
@@ -74,7 +74,7 @@ public class RConstraint implements Comparable<RConstraint>{
 					this.v2 = rv2;
 				} else {
 					Variable v = constraint.getArchtype().getVariable(v2id);
-					Type t = constraint.getArchtype().getType(v.getType());
+					ManagedElement t = constraint.getArchtype().getType(v.getType());
 					if (t != null) {
 						RVariable cspvv = new RVariable(graph, t, null);
 						this.v2 = cspvv;

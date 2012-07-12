@@ -26,8 +26,8 @@ import prefuse.util.UpdateListener;
 import fr.liglab.adele.cube.CubeLogger;
 import fr.liglab.adele.cube.RuntimeModelListener;
 import fr.liglab.adele.cube.TypeNotDeclaredException;
-import fr.liglab.adele.cube.archetype.Type;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.archetype.ManagedElement;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class RuntimeModel {
 
@@ -224,7 +224,7 @@ public class RuntimeModel {
 		return result;
 	}
 	
-	public synchronized CInstance getCInstance(CInstanceID id) {
+	public synchronized CInstance getCInstance(CInstanceUID id) {
 		if (id != null) {
 			for (String key : this.coinstances.keySet()) {
 				if (this.coinstances.get(key).getId().equals(id)) {
@@ -247,7 +247,7 @@ public class RuntimeModel {
 		return null;
 	}
 	
-	public List<CInstance> getCInstances(Type cot) {
+	public List<CInstance> getCInstances(ManagedElement cot) {
 		List<CInstance> result = new ArrayList<CInstance>();
 		for (CInstance coi : coinstances.values()) {
 			if (coi.getCType().equals(cot)) {

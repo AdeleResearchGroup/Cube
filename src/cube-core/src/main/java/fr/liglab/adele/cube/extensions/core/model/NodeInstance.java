@@ -19,17 +19,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.liglab.adele.cube.agent.CInstance;
-import fr.liglab.adele.cube.archetype.Type;
-import fr.liglab.adele.cube.util.id.CInstanceID;
+import fr.liglab.adele.cube.archetype.ManagedElement;
+import fr.liglab.adele.cube.util.id.CInstanceUID;
 
 public class NodeInstance extends CInstance {
 
 	public static final String HOST = "host";
 	public static final String PORT = "port";	
 	
-	List<CInstanceID> scopeInstances = new ArrayList<CInstanceID>();
+	List<CInstanceUID> scopeInstances = new ArrayList<CInstanceUID>();
 	
-	List<CInstanceID> componentInstances = new ArrayList<CInstanceID>();
+	List<CInstanceUID> componentInstances = new ArrayList<CInstanceUID>();
 	
 	public NodeInstance(NodeType n) {
 		super(n);		
@@ -62,7 +62,7 @@ public class NodeInstance extends CInstance {
 		}
 	}
 	
-	public void addScope(CInstanceID si) {
+	public void addScope(CInstanceUID si) {
 		if (si != null) {
 			if (this.scopeInstances.contains(si) == false) {
 				this.scopeInstances.add(si);
@@ -70,7 +70,7 @@ public class NodeInstance extends CInstance {
 		}
 	}
 	
-	public void addComponentInstance(CInstanceID ci) {
+	public void addComponentInstance(CInstanceUID ci) {
 		if (ci != null) {
 			if (this.componentInstances.contains(ci) == false) {
 				this.componentInstances.add(ci);
@@ -78,7 +78,7 @@ public class NodeInstance extends CInstance {
 		}
 	}
 	
-	public boolean removeComponentInstance(CInstanceID ci) {
+	public boolean removeComponentInstance(CInstanceUID ci) {
 		if (ci != null) {
 			if (this.componentInstances.contains(ci) == true) {
 				return this.componentInstances.remove(ci);
@@ -87,15 +87,15 @@ public class NodeInstance extends CInstance {
 		return false;
 	}	
 	
-	public List<CInstanceID> getScopes() {
+	public List<CInstanceUID> getScopes() {
 		return this.scopeInstances;
 	}	
 	
-	public List<CInstanceID> getComponentInstances() {
+	public List<CInstanceUID> getComponentInstances() {
 		return this.componentInstances;
 	}
 	
-	public boolean hasComponentInstance(CInstanceID instance) {
+	public boolean hasComponentInstance(CInstanceUID instance) {
 		if (instance != null) {
 			return this.componentInstances.contains(instance);
 		} else {
@@ -103,10 +103,10 @@ public class NodeInstance extends CInstance {
 		}
 	}
 	
-	public List<CInstanceID> getComponentInstances(Type cot) {
+	public List<CInstanceUID> getComponentInstances(ManagedElement cot) {
 		
-		List<CInstanceID> result = new ArrayList<CInstanceID>();
-		for (CInstanceID instID : getComponentInstances()) {
+		List<CInstanceUID> result = new ArrayList<CInstanceUID>();
+		for (CInstanceUID instID : getComponentInstances()) {
 			CInstance inst = getCubeAgent().getRuntimeModel().getCInstance(instID);
 			if (inst != null && inst.getCType().equals(cot)) {
 				result.add(instID);
@@ -118,12 +118,12 @@ public class NodeInstance extends CInstance {
 		
 	public Object clone() {
 		Object clone = super.clone();
-		((NodeInstance)clone).scopeInstances = new ArrayList<CInstanceID>();
-		((NodeInstance)clone).componentInstances  = new ArrayList<CInstanceID>();
-		for (CInstanceID inC: this.scopeInstances) {
+		((NodeInstance)clone).scopeInstances = new ArrayList<CInstanceUID>();
+		((NodeInstance)clone).componentInstances  = new ArrayList<CInstanceUID>();
+		for (CInstanceUID inC: this.scopeInstances) {
 			((NodeInstance)clone).scopeInstances.add(inC);
 		}		
-		for (CInstanceID outC: this.componentInstances) {
+		for (CInstanceUID outC: this.componentInstances) {
 			((NodeInstance)clone).componentInstances.add(outC);
 		}		
 		return clone;
@@ -133,11 +133,11 @@ public class NodeInstance extends CInstance {
 	public String toString() {
 		String tmp = "\tlocalId:" + getLocalId() + "\n";								
 		tmp += "\tCOMPONENTS:\n";
-		for (CInstanceID id : this.componentInstances) {
+		for (CInstanceUID id : this.componentInstances) {
 			tmp += "\t  * " + id + "\n";
 		}
 		tmp += "\tSCOPES:\n";
-		for (CInstanceID id : this.scopeInstances) {
+		for (CInstanceUID id : this.scopeInstances) {
 			tmp += "\t  * " + id + "\n";
 		}
 		return  tmp;

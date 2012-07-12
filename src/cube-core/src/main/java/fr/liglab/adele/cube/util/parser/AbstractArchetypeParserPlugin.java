@@ -2,7 +2,7 @@ package fr.liglab.adele.cube.util.parser;
 
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.Constraint;
-import fr.liglab.adele.cube.archetype.Type;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.archetype.GlobalConfig;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.constraints.Connect;
@@ -13,7 +13,7 @@ import fr.liglab.adele.cube.util.xml.XMLElement;
 
 public class AbstractArchetypeParserPlugin implements ArchetypeParserPlugin {
 
-	public Type parseType(XMLElement element, Archetype archtype)
+	public ManagedElement parseType(XMLElement element, Archetype archtype)
 			throws ParseException {
 		// TODO Auto-generated method stub
 		return null;
