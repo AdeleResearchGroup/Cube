@@ -19,7 +19,7 @@
       <core:connect v1="vep" v2="vhc"/>
       <core:connect v1="vwp" v2="vhc"/>            
       <core:find-locally v="vhc" priority="1"/>
-      <core:self-create-locally v="vhc" priority="2"/>
+      <core:create-locally v="vhc" priority="2"/>
     </constraints>
 
   </archetype>

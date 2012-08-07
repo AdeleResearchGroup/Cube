@@ -389,10 +389,11 @@ public class Archetype {
 	 * @param v the constrained variable
 	 * @return
 	 */
-	public List<Constraint> getConstraintsOnVariable(Variable v) {
+	public List<Constraint> getConstraintsOnVariable(Variable v) {		
 		List<Constraint> result = new ArrayList<Constraint>();
 		for (Constraint c : this.getConstraints()) {
-			if (c.getParameter(0) != null && c.getParameter(0).equalsIgnoreCase(v.getId())) {
+			if (c.getParameter(0) != null 
+					&& c.getParameter(0).equalsIgnoreCase(v.getId())) {
 				result.add(c);
 			}			
 		}

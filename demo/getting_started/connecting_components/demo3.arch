@@ -13,7 +13,7 @@
       </variables>
       <core:connect v1="va" v2="vb"/>
       <core:find-locally v="vb" priority="1"/>
-      <core:self-create-locally v="vb" priority="2"/>
+      <core:create-locally v="vb" priority="2"/>
       <core:in-components v="vb" max="2"/>
     </constraints>
 
