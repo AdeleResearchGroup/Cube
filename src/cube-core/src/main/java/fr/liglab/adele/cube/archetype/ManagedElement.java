@@ -18,6 +18,8 @@
 
 package fr.liglab.adele.cube.archetype;
 
+import java.util.Properties;
+
 import fr.liglab.adele.cube.TypeNotDeclaredException;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
@@ -30,10 +32,15 @@ import fr.liglab.adele.cube.agent.CubeAgent;
  */
 public abstract class ManagedElement {
 	
+	public static final String PROPERTY = "property";
+	public static final String PROPERTY_NAME = "name";
+	public static final String PROPERTY_VALUE = "value";
+	
 	Archetype archtype;
 	
 	String id;
 	String description;		
+	Properties properties = new Properties();	
 	
 	static int index = 0;
 	
@@ -57,6 +64,32 @@ public abstract class ManagedElement {
 		return description;
 	}
 
+	/**
+	 * Add managed element property
+	 * @param key
+	 * @param value
+	 */
+	public void addProperty(Object key, Object value) {
+		this.properties.put(key, value);
+	}
+	
+	/**
+	 * Get managed element property
+	 * @param key
+	 * @return
+	 */
+	public Object getProperty(Object key) {
+		return this.properties.get(key);
+	}
+	
+	/**
+	 * get managed element properties
+	 * @return
+	 */
+	public Properties getProperties() {
+		return this.properties;
+	}
+	
 	public Archetype getArchtype() {
 		return this.archtype;
 	}

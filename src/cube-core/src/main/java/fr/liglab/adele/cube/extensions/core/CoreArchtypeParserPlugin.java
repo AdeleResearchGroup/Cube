@@ -65,6 +65,7 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 	private static final String MAXINCOMP = "max-incomp";
 
 
+
 	public ManagedElement parseType(XMLElement e, Archetype archtype) throws ParseException {	
 		if (e != null) {
 			String ns = e.getNameSpace();
@@ -82,7 +83,8 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);						
 					String parentId = e.getAttribute(EXTENDS);
-					Component c = new Component(id, description, parentId, archtype);			
+					Component c = new Component(id, description, parentId, archtype);
+					parseProperties(e, c);
 					return c;
 
 				} else if (name.equalsIgnoreCase(Node.NAME)) {
@@ -92,6 +94,7 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);			
 					Node n = new Node(id, description, archtype);
+					parseProperties(e, n);
 					return n;
 				} else if (name.equalsIgnoreCase(Scope.NAME)) {
 					/*
@@ -100,11 +103,27 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 					String id = e.getAttribute(ID);
 					String description = e.getAttribute(DESCRIPTION);			
 					Scope s = new Scope(id, description, archtype);
+					parseProperties(e, s);
 					return s;
 				}
 			}
 		}
 		return null;
+	}
+
+	private void parseProperties(XMLElement e, ManagedElement me) throws ParseException {
+		XMLElement[] xmlproperties = e.getElements(ManagedElement.PROPERTY);
+		if (xmlproperties != null) {
+			for (int i=0; i<xmlproperties.length; i++) {
+				String pname = xmlproperties[i].getAttribute(ManagedElement.PROPERTY_NAME);
+				String pvalue = xmlproperties[i].getAttribute(ManagedElement.PROPERTY_VALUE);
+				if (pname != null && pvalue != null) {
+					me.addProperty(pname, pvalue);
+				} else {
+					throw new ParseException("properties problem!");
+				}
+			}
+		}
 	}
 
 	public Constraint parseConstraint(XMLElement e, Archetype archtype)
