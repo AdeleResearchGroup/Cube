@@ -1,0 +1,14 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo.scopes" name="Scopes tutorial" version="1.0">
+
+    <types>
+      <core:scope id="BlueVirtualScope"/>
+      <core:scope id="GreenVirtualScope"/>
+      <core:node id="PC"/>
+    </types>
+
+    <constraints>
+    </constraints>
+
+  </archetype>
+</cube>

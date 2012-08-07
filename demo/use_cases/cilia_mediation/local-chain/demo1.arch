@@ -1,0 +1,26 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 2" version="1.0">
+
+    <types>
+      <core:component id="GasProbe"/>
+      <core:component id="ElectricityProbe"/>
+      <core:component id="WaterProbe"/>
+      <core:component id="HouseCalculator"/>
+    </types>
+
+    <constraints>
+      <variables>
+        <var id="vgp" type="GasProbe"/>
+        <var id="vep" type="ElectricityProbe"/>
+        <var id="vwp" type="WaterProbe"/>
+        <var id="vhc" type="HouseCalculator"/>        
+      </variables>
+      <core:connect v1="vgp" v2="vhc"/>
+      <core:connect v1="vep" v2="vhc"/>
+      <core:connect v1="vwp" v2="vhc"/>            
+      <core:find-locally v="vhc" priority="1"/>
+      <core:self-create-locally v="vhc" priority="2"/>
+    </constraints>
+
+  </archetype>
+</cube>
