@@ -1,0 +1,27 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+
+  {{{./doc.html}Documentation}} >
+
+
+Cube Internal Monitoring Extension
+
+  This extension creates a monitoring Gui that shows the local Runtime Model Component Instances.
+
+[./images/monitoring_example.png]  Monitoring Extension GUI
+
+
+* How to use?
+
+  Just add it to the list of extensions of the {{{./agent.html}Local Agent configuration file}}:
+
++--------------+
+<extension id="fr.liglab.adele.cube.monitoring"/>
++--------------+
+ 

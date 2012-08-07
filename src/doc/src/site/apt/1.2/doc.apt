@@ -12,9 +12,10 @@ Documentation
 
 * Core
 
-  * {{{./concepts.html}Main Concepts}}
 
   * {{{./agent.html}Cube Agent}}
+   
+    * {{{./default_resolver.html}Default Resolver}} 
 
   * {{{./archetype.html}Archetype Specification}}
 
@@ -26,7 +27,7 @@ Documentation
 
 * Extensions
 
-  * {{{./extensions.html}About cube extensions}}
+  * {{{./about_extensions.html}About cube extensions}}
 
   * {{{./using_extensions.html}Using extensions}}
 

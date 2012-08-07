@@ -23,8 +23,12 @@ Cube Agent
 
   []
 
-[./images/archetype_3.png] archetype types instances
+  []
 
+** Resolver
+
+  * See {{{./default_resolver.html}Default Resolver}} Implementation
+  
   []
 
 * Agent Config
@@ -98,4 +102,6 @@ public class MyClass {
   [[1]] Parse the archetype
 
   [[1]] run Extensions
+
+
 

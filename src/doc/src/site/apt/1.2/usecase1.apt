@@ -168,47 +168,7 @@ Home Resource Monitoring data-mediation system
 
 +----------------+
 <constraints>
- 
-<!-- ========= City.gateway =================================== -->
-<core:on-node c="GP" n="Gateway"  priority="4"/>
-<core:connect c1="GP" c2="HC"  priority="8"/>
- 
-<core:on-node c="WP" n="Gateway"  priority="4"/>
-<core:connect c1="WP" c2="HC"  priority="8"/>
- 
-<core:on-node c="EP" n="Gateway"  priority="4"/>
-<core:connect c1="EP" c2="HC"  priority="8"/>
- 
-<core:on-node c="HC" n="Gateway"  priority="4"/>
-<core:find-localy i="HC" priority="5"/>
-<core:self-create-localy i="HC" priority="6"/>
-<core:connect c1="HC" c2="CA"  priority="8"/>
-<core:in-scope n="Gateway" s="City"/>
-<core:managed-scope s="City" priority="5"/>
- 
-<!-- ========= City.server ============================ -->
-<core:on-node c="CA" n="Server"  priority="4"/>
-<core:find-localy i="CA" priority="5"/>
-<core:self-create-localy i="CA" priority="6"/>
-<core:connect c1="CA" c2="CC"  priority="8"/>
-<core:on-node c="CC" n="Server"  priority="4"/>
-<core:find-localy i="CC" priority="5"/>
-<core:self-create-localy i="CC" priority="6"/>
-<core:connect c1="CC" c2="NA"  priority="8"/>
-<core:components-per-scope c="CC" scopetype="City" min="0" max="1"/>
-<core:in-components c="CA" min="0" max="10" priority="0"/>
-<core:self-sizing n="Server" ctype="CA" max-incomp="10"/>
-<core:in-scope n="Server" s="City"/>
- 
-<!-- ========= Central ================================ -->
-<core:in-scope n="DataCenter" s="Central"/>
-<core:managed-scope s="Central" priority="5"/>
-<core:find-localy i="NA" priority="5"/>
-<core:self-create-localy i="NA" priority="7"/>
-<core:on-node c="NA" n="DataCenter"  priority="6"/>
-<core:in-components c="NA" min="0" max="5" priority="0"/>
-<core:self-sizing n="DataCenter" ctype="NA" max-incomp="5"/>
- 
+
 </constraints>
 +----------------+
 

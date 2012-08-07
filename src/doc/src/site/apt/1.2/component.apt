@@ -1,0 +1,32 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+
+  {{{./doc.html}Documentation}} > {{{./extensions.html}Extensions Catalog}} > {{{./core_extension.html}Core Extension}}
+
+
+Component
+
+  * <<Provided by>>: {{{./core_extension.html}Core Extension}}
+
+  * <<Inherits from>>: {{{./managedelement.html}ManagedElement}}
+  
+  * <<Instance>>: {{{./componentinstance.html}ComponentInstance}} 
+  
+
+* How to use it within the archetype?
+
++------------------+
+<core:component id="C" description="..."/>
++------------------+  
+
+* See also
+
+  * {{{./managed_elements.html}Managed Elements Catalog}}
+
+  * {{{./archetype.html}Archetype Specification}}

@@ -1,0 +1,16 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+
+  {{{./doc.html}Documentation}} > 
+
+
+ManagedElement
+
+  Top managed element. This element could not be used directly on the archetype. You should use its inherent elements (like {{{./component.html}Component}}, {{{./node.html}Node}} or {{{./scope.html}Scope}}).  
+

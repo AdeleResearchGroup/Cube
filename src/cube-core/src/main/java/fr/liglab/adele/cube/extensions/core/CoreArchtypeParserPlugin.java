@@ -27,7 +27,7 @@ import fr.liglab.adele.cube.extensions.core.constraints.InScope;
 import fr.liglab.adele.cube.extensions.core.constraints.InScopeResolver;
 import fr.liglab.adele.cube.extensions.core.constraints.OnNode;
 import fr.liglab.adele.cube.extensions.core.constraints.OutComponents;
-import fr.liglab.adele.cube.extensions.core.constraints.SelfCreateLocally;
+import fr.liglab.adele.cube.extensions.core.constraints.CreateLocally;
 import fr.liglab.adele.cube.extensions.core.model.Component;
 import fr.liglab.adele.cube.extensions.core.model.Node;
 import fr.liglab.adele.cube.extensions.core.model.Scope;
@@ -177,7 +177,7 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 					} 
 					FindLocally findLocaly = new FindLocally(i, id, description,  new Integer(priority).intValue(), archtype);									
 					return findLocaly;
-				}	else if (name.equalsIgnoreCase(SelfCreateLocally.NAME)) {
+				}	else if (name.equalsIgnoreCase(CreateLocally.NAME)) {
 					String id = null;
 					if (e.getAttribute(ID) != null) {id = e.getAttribute(ID);}
 					String description = null;
@@ -189,7 +189,7 @@ public class CoreArchtypeParserPlugin implements ArchetypeParserPlugin {
 					if (priority == null) {
 						priority="0";
 					} 
-					SelfCreateLocally selfCreateLocally = new SelfCreateLocally(i, id, description,  new Integer(priority).intValue(), archtype);									
+					CreateLocally selfCreateLocally = new CreateLocally(i, id, description,  new Integer(priority).intValue(), archtype);									
 					return selfCreateLocally;
 				}	else if (name.equalsIgnoreCase(InComponents.NAME)) {
 					String id = null;

@@ -1,0 +1,19 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+
+  {{{./doc.html}Documentation}} > {{{./extensions.html}Extensions Catalog}} > {{{./core_extension.html}Core Extension}}
+
+
+NodeInstance
+
+  * <<Provided by>>: {{{./core_extension.html}Core Extension}}
+ 
+  * <<Type>>: {{{./node.html}Node}} 
+  
+

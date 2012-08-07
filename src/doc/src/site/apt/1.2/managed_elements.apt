@@ -14,15 +14,15 @@ Managed Elements Catalog
 Namecapce: fr.liglab.adele.cube.core
 -------
 
-*------------------:----------------:----------------:-------------------------:------------------------:
-| <<XML Element tag>> | <<Java Class>> | <<Inherits from>>   | <<Related Instance>>    |  <<Small Description>> |
-*------------------:----------------:----------------:-------------------------:------------------------:
-| {{{}scope}}      | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/ScopeType.java}ScopeType}}  | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/archetype/ManagedElement.java}ManagedElement}}   | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/ScopeInstance.java}ScopeInstance}}     |                        |
-*------------------:----------------:----------------:-------------------------:------------------------:
-| {{{}node}}      | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/NodeType.java}NodeType}}  | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/archetype/ManagedElement.java}ManagedElement}}   | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/NodeInstance.java}NodeInstance}}     |                        |
-*------------------:----------------:----------------:-------------------------:------------------------:
-| {{{}component}}      | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/ComponentType.java}ComponentType}}  | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/archetype/ManagedElement.java}ManagedElement}}   | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/ComponentInstance.java}ComponentInstance}}     |                        |
-*------------------:----------------:----------------:-------------------------:------------------------:
+*------------------:----------------:----------------:-------------------------:
+| <<Element>> | <<Inherits from>>   | <<Related Instance>>    |  <<Small Description>> |
+*------------------:----------------:----------------:-------------------------:
+| {{{./scope.html}Scope}}      | {{{./managedelement.html}ManagedElement}}   | {{{./scopeinstance.html}ScopeInstance}}     |                        |
+*------------------:----------------:----------------:-------------------------:
+| {{{./node.html}Node}}      | {{{./managedelement.html}ManagedElement}}   | {{{./nodeinstance.html}NodeInstance}}     |                        |
+*------------------:----------------:----------------:-------------------------:
+| {{{./component.html}Component}}      | {{{./managedelement.html}ManagedElement}}   | {{{./componentinstance.html}ComponentInstance}}     |                        |
+*------------------:----------------:----------------:-------------------------:
 
 
 * Cilia Elements
@@ -31,11 +31,11 @@ Namecapce: fr.liglab.adele.cube.core
 Namecapce: fr.liglab.adele.cube.cilia
 -------
 
-*------------------:----------------:----------------:-------------------------:------------------------:
-| <<XML Element tag>> | <<Java Class>> | <<Inherits from>>   | <<Related Instance>>    |  <<Small Description>> |
-*------------------:----------------:----------------:-------------------------:------------------------:
-| mediator      | MediatorType  | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/model/ComponentType.java}ComponentType}}   | MediatorInstance     |                        |
-*------------------:----------------:----------------:-------------------------:------------------------:
-| binding      | BindingType  | {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/archetype/ManagedElement.java}ManagedElement}}   | BindingInstance     |                        |
-*------------------:----------------:----------------:-------------------------:------------------------:
+*------------------:----------------:----------------:-------------------------:
+| <<Element>> | <<Inherits from>>   | <<Related Instance>>    |  <<Small Description>> |
+*------------------:----------------:----------------:-------------------------:
+| Mediator      | {{{./component.html}Component}}   | MediatorInstance     |                        |
+*------------------:----------------:----------------:-------------------------:
+| Binding      | {{{./managedelement.html}ManagedElement}}   | BindingInstance     |                        |
+*------------------:----------------:----------------:-------------------------:
 

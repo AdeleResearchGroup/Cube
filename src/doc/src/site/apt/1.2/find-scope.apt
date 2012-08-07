@@ -1,0 +1,51 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	09-Jul-2012
+	---
+
+  {{{./constraints.html}Constraints Catalog}} >
+
+
+find-scope
+
+  * <<Namecapce>>: fr.liglab.adele.cube.core
+ 
+  * <<Arity>>: Unary
+  
+  * <<Capabilities>>: <<<find>>>
+  
+
+* Parameters  
+
+*----------------:--------------:-----------:---------:------------:
+| <<Param>> | <<Type>>        | <<Optional?>> | <<Default value>> | <<Comment>> |
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| v   | {{{./scope.html}Scope}}             | no           |   | Constrained Scope |
+*----------------:--------------:-----------:---------:------------:
+| priority   | Integer          | yes           | 1  | 1 is a higher priority than 2, and so on. |
+*----------------:--------------:-----------:---------:------------:
+
+* Constraint Resolver
+
+  * {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/FindScopeResolver.java}FindScopeResolver}}
+
+* Description
+
+  It helps to find a scope instance for the constrained scope variable
+
+* Example
+ 
++--------------+
+<core:find-scope v="S" piority="1"/>
++--------------+
+
+
+* See also
+
+  * {{{./constraints.html}Constraints Catalog}}
+
+  * {{{./archetype.html}Archetype Specification}}
+   

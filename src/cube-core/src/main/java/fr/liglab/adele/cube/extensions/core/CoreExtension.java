@@ -29,7 +29,7 @@ import fr.liglab.adele.cube.extensions.core.constraints.InComponentsResolver;
 import fr.liglab.adele.cube.extensions.core.constraints.InScopeResolver;
 import fr.liglab.adele.cube.extensions.core.constraints.OnNodeResolver;
 import fr.liglab.adele.cube.extensions.core.constraints.OutComponentsResolver;
-import fr.liglab.adele.cube.extensions.core.constraints.SelfCreateLocallyResolver;
+import fr.liglab.adele.cube.extensions.core.constraints.CreateLocallyResolver;
 import fr.liglab.adele.cube.extensions.core.model.ScopeInstance;
 import fr.liglab.adele.cube.extensions.core.scopesmanagement.ScopeLeader;
 import fr.liglab.adele.cube.extensions.core.scopesmanagement.TopScopeLeader;
@@ -83,7 +83,7 @@ public class CoreExtension extends AbstractExtension {
 		addConstraintResolver(new ConnectResolver());			
 		addConstraintResolver(new OnNodeResolver());
 		addConstraintResolver(new FindLocallyResolver());
-		addConstraintResolver(new SelfCreateLocallyResolver());
+		addConstraintResolver(new CreateLocallyResolver());
 		addConstraintResolver(new InComponentsResolver());
 		addConstraintResolver(new OutComponentsResolver());
 		addConstraintResolver(new InScopeResolver());

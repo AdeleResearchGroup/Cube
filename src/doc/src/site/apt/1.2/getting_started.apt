@@ -13,6 +13,8 @@ Getting started
   []
 
   * {{{./getting_started_connect.html}Self-Connecting Components}} (within a single node)
+  
+  * {{{./getting_started_components_per_node.html}Controlling the number of Components per Node}}
 
   * {{{./getting_started_scopes.html}Scopes constitution}}
 

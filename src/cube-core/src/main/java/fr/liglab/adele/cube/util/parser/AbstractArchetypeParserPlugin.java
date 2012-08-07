@@ -8,7 +8,7 @@ import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.constraints.Connect;
 import fr.liglab.adele.cube.extensions.core.constraints.FindLocally;
 import fr.liglab.adele.cube.extensions.core.constraints.OnNode;
-import fr.liglab.adele.cube.extensions.core.constraints.SelfCreateLocally;
+import fr.liglab.adele.cube.extensions.core.constraints.CreateLocally;
 import fr.liglab.adele.cube.util.xml.XMLElement;
 
 public class AbstractArchetypeParserPlugin implements ArchetypeParserPlugin {

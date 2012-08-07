@@ -1,0 +1,51 @@
+	---
+	Cube Project Home Page
+	---
+	Bassem Debbabi
+	---
+	12-Jul-2012
+	---
+
+  {{{./constraints.html}Constraints Catalog}} >
+
+
+create-local
+
+  * <<Namecapce>>: fr.liglab.adele.cube.core
+ 
+  * <<Arity>>: Unary
+  
+  * <<Capabilities>>: <<<find>>>
+  
+
+* Parameters  
+
+*----------------:--------------:-----------:---------:------------:
+| <<Param>> | <<Type>>        | <<Optional?>> | <<Default value>> | <<Comment>> |
+*----------------:--------------:-----------:---------:------------:-------------------:------------:
+| v   | {{{./managedelement.html}ManagedElement}}             | no           |   | Constrained Managed Element. All the managed elements inherits from the {{{./managedelement.html}ManagedElement}} super class can be used (e.g., {{{./component.html}Component}}, {{{./node.html}Node}}, {{{./scope.html}Scope}}, etc). |
+*----------------:--------------:-----------:---------:------------:
+| priority   | Integer          | yes           | 1  | 1 is a higher priority than 2, and so on. |
+*----------------:--------------:-----------:---------:------------:
+
+* Constraint Resolver
+
+  * {{{https://github.com/AdeleResearchGroup/cube/blob/master/src/cube-core/src/main/java/fr/liglab/adele/cube/extensions/core/constraints/SelfCreateLocallyResolver.java}SelfCreateLocallyResolver}}
+
+* Description
+
+  When specified for a given variable, it will help to find a value for it by creating a new instance locally of the same type as the provided variable.
+
+* Example
+ 
++--------------+
+<core:create-local v="A" piority="1"/>
++--------------+
+
+
+* See also
+
+  * {{{./constraints.html}Constraints Catalog}}
+
+  * {{{./archetype.html}Archetype Specification}}
+   
