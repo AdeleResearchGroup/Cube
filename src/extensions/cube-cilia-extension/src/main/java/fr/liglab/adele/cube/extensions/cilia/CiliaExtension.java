@@ -83,6 +83,9 @@ public class CiliaExtension extends AbstractExtension {
 	 */
 	private void createMediator(CInstance i, Architecture chain) throws CiliaException {		
 		String componentType = i.getCType().getId();
+		//if (i.getCType().getProperty("type").equals("adapter")) {
+			//create adapter
+		//}
 		// create mediator of componentType type and add it to the chain
 		chain.create().mediator().type(componentType).id(i.getLocalId());
 		//were are the properties??

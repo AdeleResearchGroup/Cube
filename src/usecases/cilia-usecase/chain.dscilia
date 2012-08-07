@@ -1,0 +1,23 @@
+<cilia>
+	<chain id="toto">
+		<adapters>
+			<adapter-instance id="gp" type="GasProbe" />
+			<adapter-instance id="ep" type="ElectricityProbe" />
+			<adapter-instance id="wp" type="WaterProbe" />
+		</adapters>
+		<mediators>
+			<mediator-instance id="ca" type="CityAggregator"/>
+			<mediator-instance id="cc" type="CityCalculator"/>
+			<mediator-instance id="hc" type="HouseCalculator"/>
+			<mediator-instance id="na" type="NationalAggregator"/>
+		</mediators>
+		<bindings>
+			<binding from="gp:unique" to="hc:unique"/>
+			<binding from="ep:unique" to="hc:unique"/>
+			<binding from="wp:unique" to="hc:unique"/>
+			<binding from="hc:unique" to="ca:unique"/>
+			<binding from="ca:unique" to="cc:unique"/>
+			<binding from="cc:unique" to="na:unique"/>
+		</bindings>
+	</chain>
+</cilia>

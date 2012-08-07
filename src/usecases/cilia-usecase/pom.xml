@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 
 	<parent>
@@ -7,17 +8,17 @@
 		<version>1.2.0</version>
 	</parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>fr.liglab.adele.cube.usecases</groupId>
-  <artifactId>cilia-usecase</artifactId>
-  <version>1.2.0-SNAPSHOT</version>
-  <packaging>bundle</packaging>
-  <name>Cilia Use Case</name>
- 
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.liglab.adele.cube.usecases</groupId>
+	<artifactId>cilia-usecase</artifactId>
+	<version>1.2.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+	<name>Cilia Use Case</name>
+
 	<properties>
 		<bin-dir>../../../bin</bin-dir>
 	</properties>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>fr.liglab.adele.cube</groupId>
@@ -34,6 +35,17 @@
 			<artifactId>org.apache.felix.gogo.runtime</artifactId>
 			<version>0.6.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>fr.liglab.adele.cilia</groupId>
+			<artifactId>cilia-core</artifactId>
+			<version>1.2.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>fr.liglab.adele.cilia</groupId>
+			<artifactId>cilia-runtime</artifactId>
+			<version>1.2.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -44,7 +56,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>						
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
 						<Private-Package>
 							fr.liglab.adele.cube.usecases.cilia
 						</Private-Package>
@@ -62,7 +74,7 @@
 						<goals>
 							<goal>ipojo-bundle</goal>
 						</goals>
-						<configuration>							
+						<configuration>
 						</configuration>
 					</execution>
 				</executions>
@@ -103,7 +115,7 @@
 				<configuration>
 				</configuration>
 			</plugin>
-		</plugins>		
-	</build>	
-	  
+		</plugins>
+	</build>
+
 </project>
