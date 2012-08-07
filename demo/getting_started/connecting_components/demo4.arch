@@ -19,9 +19,9 @@
       <core:connect v1="vb" v2="vc"/>
       <core:connect v1="vc" v2="vd"/>
 
-      <core:self-create-locally v="vb"/>
-      <core:self-create-locally v="vc"/>
-      <core:self-create-locally v="vd"/>
+      <core:create-locally v="vb"/>
+      <core:create-locally v="vc"/>
+      <core:create-locally v="vd"/>
     </constraints>
 
   </archetype>
