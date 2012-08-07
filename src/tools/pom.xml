@@ -23,7 +23,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.liglab.adele.cube</groupId>
-	<artifactId>cube-tools</artifactId>
+	<artifactId>tools</artifactId>
 	<packaging>pom</packaging>
 	<name>Cube Tools</name>
 	<version>1.2.0</version>	        

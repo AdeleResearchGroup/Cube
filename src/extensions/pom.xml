@@ -23,7 +23,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fr.liglab.adele.cube</groupId>
-	<artifactId>cube-extensions</artifactId>
+	<artifactId>extensions</artifactId>
 	<packaging>pom</packaging>
 	<name>Cube Extensions</name>
 	<version>1.2.0</version>

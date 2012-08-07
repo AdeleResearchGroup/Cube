@@ -3,7 +3,7 @@
 
 	<parent>
 		<groupId>fr.liglab.adele.cube</groupId>
-		<artifactId>cube-extensions</artifactId>
+		<artifactId>extensions</artifactId>
 		<version>1.2.0</version>
 	</parent>
 

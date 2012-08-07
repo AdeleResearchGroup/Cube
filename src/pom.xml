@@ -30,7 +30,7 @@
 		<module>cube-core</module>
 		<module>extensions</module>
 		<module>tools</module>
-		<!--<module>usecases</module>-->
+		<module>usecases</module>
     <module>doc</module>
   </modules>
 
