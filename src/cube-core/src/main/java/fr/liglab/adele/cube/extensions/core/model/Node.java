@@ -46,7 +46,15 @@ public class Node extends ManagedElement {
 		out += "<"+xmlns+":"+NAME+" id=\""+getId()+"\"";		
 		if (getDescription() !=null)
 			out += " description=\""+getDescription()+"\"";
-		out += "/>\n";	
+		if (this.getProperties().size() <= 0) {
+			out += "/>\n";
+		} else {
+			out += ">\n";			
+			for (Object key: this.getProperties().keySet()) {
+				out += "  <"+PROPERTY+" "+PROPERTY_NAME+"=\""+key+"\" value=\""+this.getProperties().getProperty(key.toString())+"\"/>\n";	
+			}			
+			out += "</"+xmlns+":"+NAME+">\n";
+		}	
 		return out;
 	}
 

@@ -2,10 +2,18 @@
   <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 2" version="1.0">
 
     <types>
-      <core:component id="GasProbe"/>
-      <core:component id="ElectricityProbe"/>
-      <core:component id="WaterProbe"/>
-      <core:component id="HouseCalculator"/>
+      <core:component id="GasProbe">
+        <property name="kind" value="adapter"/>
+      </core:component> 
+      <core:component id="ElectricityProbe">
+        <property name="kind" value="adapter"/>
+      </core:component> 
+      <core:component id="WaterProbe">
+        <property name="kind" value="adapter"/>
+      </core:component>       
+      <core:component id="HouseCalculator">
+        <property name="kind" value="mediator"/>
+      </core:component>       
     </types>
 
     <constraints>

@@ -57,13 +57,22 @@ public class Component extends ManagedElement {
 
 	@Override
 	public String toXMLString(String xmlns) {
-		String out = "";				
+		String out = "";
+		
 		out += "<"+xmlns+":"+NAME+" id=\""+getId()+"\"";
 		if (getParentId() != null)
 			out += " extends=\""+getParentId()+"\"";
 		if (getDescription() !=null)
 			out += " description=\""+getDescription()+"\"";
-		out += "/>\n";		
+		if (this.getProperties().size() <= 0) {
+			out += "/>\n";
+		} else {
+			out += ">\n";			
+			for (Object key: this.getProperties().keySet()) {
+				out += "  <"+PROPERTY+" "+PROPERTY_NAME+"=\""+key+"\" value=\""+this.getProperties().getProperty(key.toString())+"\"/>\n";	
+			}			
+			out += "</"+xmlns+":"+NAME+">\n";
+		}
 		return out;
 	}
 
