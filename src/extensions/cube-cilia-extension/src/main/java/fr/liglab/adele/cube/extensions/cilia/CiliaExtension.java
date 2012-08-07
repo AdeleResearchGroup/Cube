@@ -7,6 +7,7 @@ import fr.liglab.adele.cilia.exceptions.BuilderException;
 import fr.liglab.adele.cilia.exceptions.CiliaException;
 import fr.liglab.adele.cilia.exceptions.CiliaIllegalParameterException;
 import fr.liglab.adele.cilia.exceptions.CiliaIllegalStateException;
+import fr.liglab.adele.cilia.model.Chain;
 import fr.liglab.adele.cube.agent.AgentExtensionConfig;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
@@ -78,23 +79,40 @@ public class CiliaExtension extends AbstractExtension {
 	 * @param i
 	 * @throws BuilderException 
 	 * @throws BuilderConfigurationException 
+	 * @throws CiliaIllegalParameterException 
 	 */
-	private void createMediator(CInstance i, Architecture chain) throws BuilderConfigurationException, BuilderException {		
+	private void createMediator(CInstance i, Architecture chain) throws CiliaException {		
 		String componentType = i.getCType().getId();
 		// create mediator of componentType type and add it to the chain
 		chain.create().mediator().type(componentType).id(i.getLocalId());
 		//were are the properties??
 		for (CInstanceUID instanceUID : ((ComponentInstance)i).getOutComponents()) {
-			// TODO you can get the object instance of this UID from the runtime model
+			// you can get the object instance of this UID from the runtime model
 			CInstance inst = getCubeAgent().getRuntimeModel().getCInstance(instanceUID);
-			// this is the next mediator where the actual one is connected.
-			// TODO check if this next mediators is already created, if so, create binding between the two
-
+			Chain mchain = this.cfactory.getCiliaContext().getApplicationRuntime().getChain(chainId);
+			if(mchain.getMediator(inst.getLocalId()) != null) {
+				chain.bind().from(i.getLocalId()+":unique").to(inst.getLocalId()+":unique");
+			}
+			
 		}
-
+		for (CInstanceUID instanceUID : ((ComponentInstance)i).getInComponents()) {
+			// you can get the object instance of this UID from the runtime model
+			CInstance inst = getCubeAgent().getRuntimeModel().getCInstance(instanceUID);
+			Chain mchain = this.cfactory.getCiliaContext().getApplicationRuntime().getChain(chainId);
+			if(mchain.getMediator(inst.getLocalId()) != null) {
+				chain.bind().from(inst.getLocalId()+":unique").to(i.getLocalId()+":unique");
+			}
+		}
 	}
 
 	public void stop() {
+		try {
+			cfactory.getCiliaContext().getApplicationRuntime().stopChain(chainId);
+			Builder b = cfactory.getCiliaContext().getBuilder();
+			b.remove(chainId);
+		} catch (CiliaException e) {
+			e.printStackTrace();
+		}
 		// remove chain
 	}
 
