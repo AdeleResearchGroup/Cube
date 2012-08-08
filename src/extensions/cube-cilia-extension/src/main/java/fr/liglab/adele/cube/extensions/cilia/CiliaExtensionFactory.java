@@ -45,6 +45,7 @@ public class CiliaExtensionFactory implements IExtensionFactory {
 
 	public IExtension newExtension(CubeAgent agent, AgentExtensionConfig config) {		
 		return new CiliaExtension(agent, this, config);
+		
 	}
 	
 	protected CiliaContext getCiliaContext(){

@@ -11,6 +11,7 @@ import fr.liglab.adele.cilia.model.Chain;
 import fr.liglab.adele.cube.agent.AgentExtensionConfig;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
+import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.AbstractExtension;
 import fr.liglab.adele.cube.extensions.IExtensionFactory;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
@@ -56,6 +57,7 @@ public class CiliaExtension extends AbstractExtension {
 		} catch (CiliaIllegalStateException e) {
 			e.printStackTrace();
 		}
+		System.out.println("\n\n\nCreating CUBE Chain.\n\n"  );
 	}
 
 	public void validatedInstance(CInstance coi) {
@@ -83,11 +85,13 @@ public class CiliaExtension extends AbstractExtension {
 	 */
 	private void createMediator(CInstance i, Architecture chain) throws CiliaException {		
 		String componentType = i.getCType().getId();
-		//if (i.getCType().getProperty("type").equals("adapter")) {
-			//create adapter
-		//}
+		 
+		if (i.getCType().getProperty("kind") != null && i.getCType().getProperty("kind").equals("adapter")) {
+			chain.create().adapter().type(componentType).id(i.getLocalId());
+		} else {
+			chain.create().mediator().type(componentType).id(i.getLocalId());
+		}
 		// create mediator of componentType type and add it to the chain
-		chain.create().mediator().type(componentType).id(i.getLocalId());
 		//were are the properties??
 		for (CInstanceUID instanceUID : ((ComponentInstance)i).getOutComponents()) {
 			// you can get the object instance of this UID from the runtime model
