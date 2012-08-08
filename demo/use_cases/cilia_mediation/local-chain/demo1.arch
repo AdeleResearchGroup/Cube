@@ -14,6 +14,9 @@
       <core:component id="HouseCalculator">
         <property name="kind" value="mediator"/>
       </core:component>       
+      <core:component id="CityAggregator">
+        <property name="kind" value="mediator"/>
+      </core:component>  
     </types>
 
     <constraints>
@@ -22,13 +25,18 @@
         <var id="vep" type="ElectricityProbe"/>
         <var id="vwp" type="WaterProbe"/>
         <var id="vhc" type="HouseCalculator"/>        
+        <var id="vca" type="CityAggregator"/>          
       </variables>
       <core:connect v1="vgp" v2="vhc"/>
       <core:connect v1="vep" v2="vhc"/>
-      <core:connect v1="vwp" v2="vhc"/>            
+      <core:connect v1="vwp" v2="vhc"/>
+      <core:connect v1="vhc" v2="vca"/>                              
       <core:find-locally v="vhc" priority="1"/>
       <core:create-locally v="vhc" priority="2"/>
+      <core:find-locally v="vca" priority="1"/>
+      <core:create-locally v="vca" priority="2"/>      
     </constraints>
 
   </archetype>
 </cube>
+
