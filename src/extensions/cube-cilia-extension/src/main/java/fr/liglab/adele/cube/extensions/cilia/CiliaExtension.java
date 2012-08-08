@@ -11,6 +11,7 @@ import fr.liglab.adele.cilia.model.Chain;
 import fr.liglab.adele.cube.agent.AgentExtensionConfig;
 import fr.liglab.adele.cube.agent.CInstance;
 import fr.liglab.adele.cube.agent.CubeAgent;
+import fr.liglab.adele.cube.agent.RuntimeModel;
 import fr.liglab.adele.cube.archetype.ManagedElement;
 import fr.liglab.adele.cube.extensions.AbstractExtension;
 import fr.liglab.adele.cube.extensions.IExtensionFactory;
@@ -36,7 +37,7 @@ public class CiliaExtension extends AbstractExtension {
 	@Override
 	public void start() {
 		System.out.println("\n\n\nCILIA EXTENSION started.\n\n");
-
+		getCubeAgent().getRuntimeModel().addListener(this);
 		// 1. create cilia chain
 		Builder ciliaBuilder = cfactory.getCiliaContext().getBuilder();
 		try {
@@ -115,14 +116,14 @@ public class CiliaExtension extends AbstractExtension {
 	}
 
 	public synchronized void stop() {
-		try {
-			if (cfactory != null && cfactory.getCiliaContext()!=null && cfactory.getCiliaContext().getApplicationRuntime() != null){
-				cfactory.getCiliaContext().getApplicationRuntime().stopChain(chainId);
-				Builder b = cfactory.getCiliaContext().getBuilder();
-				b.remove(chainId);
-			}
-		} catch (CiliaException e) {
-		}
+//		try {
+//			if (cfactory != null && cfactory.getCiliaContext()!=null && cfactory.getCiliaContext().getApplicationRuntime() != null){
+//				cfactory.getCiliaContext().getApplicationRuntime().stopChain(chainId);
+//				Builder b = cfactory.getCiliaContext().getBuilder();
+//				b.remove(chainId);
+//			}
+//		} catch (CiliaException e) {
+//		}
 		// remove chain
 	}
 
