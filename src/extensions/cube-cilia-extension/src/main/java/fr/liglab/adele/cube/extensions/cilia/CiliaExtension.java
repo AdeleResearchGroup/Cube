@@ -61,6 +61,7 @@ public class CiliaExtension extends AbstractExtension {
 	}
 
 	public void validatedInstance(CInstance coi) {
+		System.out.println("Validating Instance");
 		if (coi != null) {			
 			if (coi.getCType().getNamespace().equalsIgnoreCase(CoreExtensionFactory.ID) && coi.getCType().getName().equalsIgnoreCase(Component.NAME)) {
 				Builder ciliaBuilder = cfactory.getCiliaContext().getBuilder();
@@ -83,7 +84,8 @@ public class CiliaExtension extends AbstractExtension {
 	 * @throws BuilderConfigurationException 
 	 * @throws CiliaIllegalParameterException 
 	 */
-	private void createMediator(CInstance i, Architecture chain) throws CiliaException {		
+	private void createMediator(CInstance i, Architecture chain) throws CiliaException {	
+		System.out.println("Creating Mediator Instance***");
 		String componentType = i.getCType().getId();
 		 
 		if (i.getCType().getProperty("kind") != null && i.getCType().getProperty("kind").equals("adapter")) {
@@ -112,13 +114,14 @@ public class CiliaExtension extends AbstractExtension {
 		}
 	}
 
-	public void stop() {
+	public synchronized void stop() {
 		try {
-			cfactory.getCiliaContext().getApplicationRuntime().stopChain(chainId);
-			Builder b = cfactory.getCiliaContext().getBuilder();
-			b.remove(chainId);
+			if (cfactory != null && cfactory.getCiliaContext()!=null && cfactory.getCiliaContext().getApplicationRuntime() != null){
+				cfactory.getCiliaContext().getApplicationRuntime().stopChain(chainId);
+				Builder b = cfactory.getCiliaContext().getBuilder();
+				b.remove(chainId);
+			}
 		} catch (CiliaException e) {
-			e.printStackTrace();
 		}
 		// remove chain
 	}
