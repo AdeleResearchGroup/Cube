@@ -36,8 +36,8 @@ public class CiliaExtension extends AbstractExtension {
 
 	@Override
 	public void start() {
+		
 		System.out.println("\n\n\nCILIA EXTENSION started.\n\n");
-		getCubeAgent().getRuntimeModel().addListener(this);
 		// 1. create cilia chain
 		Builder ciliaBuilder = cfactory.getCiliaContext().getBuilder();
 		try {
@@ -62,7 +62,6 @@ public class CiliaExtension extends AbstractExtension {
 	}
 
 	public void validatedInstance(CInstance coi) {
-		System.out.println("Validating Instance");
 		if (coi != null) {			
 			if (coi.getCType().getNamespace().equalsIgnoreCase(CoreExtensionFactory.ID) && coi.getCType().getName().equalsIgnoreCase(Component.NAME)) {
 				Builder ciliaBuilder = cfactory.getCiliaContext().getBuilder();
@@ -86,21 +85,21 @@ public class CiliaExtension extends AbstractExtension {
 	 * @throws CiliaIllegalParameterException 
 	 */
 	private void createMediator(CInstance i, Architecture chain) throws CiliaException {	
-		System.out.println("Creating Mediator Instance***");
+		System.out.println("Creating Mediator Instance: " + i.getLocalId() + ":" + i.getCType().getId());
 		String componentType = i.getCType().getId();
 		 
 		if (i.getCType().getProperty("kind") != null && i.getCType().getProperty("kind").equals("adapter")) {
+			
 			chain.create().adapter().type(componentType).id(i.getLocalId());
 		} else {
 			chain.create().mediator().type(componentType).id(i.getLocalId());
 		}
 		// create mediator of componentType type and add it to the chain
-		//were are the properties??
 		for (CInstanceUID instanceUID : ((ComponentInstance)i).getOutComponents()) {
 			// you can get the object instance of this UID from the runtime model
 			CInstance inst = getCubeAgent().getRuntimeModel().getCInstance(instanceUID);
 			Chain mchain = this.cfactory.getCiliaContext().getApplicationRuntime().getChain(chainId);
-			if(mchain.getMediator(inst.getLocalId()) != null) {
+			if(mchain.getMediator(inst.getLocalId()) != null || mchain.getAdapter(inst.getLocalId()) != null) {
 				chain.bind().from(i.getLocalId()+":unique").to(inst.getLocalId()+":unique");
 			}
 			
@@ -109,7 +108,7 @@ public class CiliaExtension extends AbstractExtension {
 			// you can get the object instance of this UID from the runtime model
 			CInstance inst = getCubeAgent().getRuntimeModel().getCInstance(instanceUID);
 			Chain mchain = this.cfactory.getCiliaContext().getApplicationRuntime().getChain(chainId);
-			if(mchain.getMediator(inst.getLocalId()) != null) {
+			if(mchain.getMediator(inst.getLocalId()) != null || mchain.getAdapter(inst.getLocalId()) != null) {
 				chain.bind().from(inst.getLocalId()+":unique").to(i.getLocalId()+":unique");
 			}
 		}
