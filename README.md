@@ -1,6 +1,8 @@
 Cube Project
 ============
 
+Website: http://cube.imag.fr
+
 Compile all the project
 -----------------------
 
