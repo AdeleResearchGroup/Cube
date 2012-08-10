@@ -6,14 +6,14 @@ Website: http://cube.imag.fr
 Compile all the project
 -----------------------
 
-Go to the 'src' directory and type:
+Go to the ''src'' directory and type:
 
 > mvn clean install
 
 Generate the documentation
 ----------------------------
 
-Go to the doc directory and run:
+Go to the ''doc'' directory and run:
 
 > mvn clean site
 
