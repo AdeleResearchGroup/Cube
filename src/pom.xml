@@ -48,10 +48,16 @@
 
 	<repositories>
 		<repository>
-			<id>cilia-repo</id>
-			<name>Cilia Repository</name>
-			<url>http://cilia.ligforge.imag.fr/repo</url>
-			<layout>default</layout>
+				<id>maven-cilia-repository-release</id>
+				<name>Cilia - Release</name>
+				<url>http://repository-cilia.forge.cloudbees.com/release/</url>
+				<layout>default</layout>
+		</repository>
+		<repository>
+				<id>maven-cilia-repository-snapshot</id>
+				<name>Cilia - Snapshot</name>
+				<url>http://repository-cilia.forge.cloudbees.com/snapshot/</url>
+				<layout>default</layout>
 		</repository>
 		<repository>
 			<id>apache-maven</id>
