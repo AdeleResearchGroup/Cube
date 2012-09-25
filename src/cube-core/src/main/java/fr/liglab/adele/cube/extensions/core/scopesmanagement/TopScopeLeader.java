@@ -357,8 +357,8 @@ public class TopScopeLeader implements MessagesListener {
 		if (msg != null) {
 			String to = msg.getTo();
 			msg.setCorrelation(++correlation);
-			this.waitingCorrelation = msg.getCorrelation();			
-			System.out.println("COOOOOORELATION:" + this.correlation);
+			setWaitingCorrelation(msg.getCorrelation());			
+			
 			try {
 				this.waitingMessage = null;
 				
@@ -389,15 +389,15 @@ public class TopScopeLeader implements MessagesListener {
 	
 	public void receiveMessage(CMessage msg) {
 		System.out.println("[INFO] TopScopeLeader : receiveMessage..\n" + msg.toString());
-		System.out.println("[INFO] TopScopeLeader : waiting correlation=" + waitingCorrelation);
-		if (msg.getCorrelation() == waitingCorrelation) {				
+		System.out.println("[INFO] TopScopeLeader : waiting correlation=" + getWaitingCorrelation());
+		if (msg.getCorrelation() == getWaitingCorrelation()) {				
 			this.waitingMessage = msg;
 			if (csplock != null) {
 				synchronized (csplock) {
 					csplock.notify();
 				}
 			}
-			waitingCorrelation = -1;												
+			setWaitingCorrelation(-1);												
 		}
 		
 		if (msg.getObject() != null) {
@@ -518,7 +518,17 @@ public class TopScopeLeader implements MessagesListener {
 	private long TIMEOUT = 3000;
 	private Object csplock = new Object();	
 	private static long correlation = 1;
+	
+	
 	private long waitingCorrelation = -1;
 
+	private void setWaitingCorrelation(long cor) {
+		System.out.println("COOOOOORELATION:" + this.waitingCorrelation);
+		this.waitingCorrelation = cor;
+	}
+	private long getWaitingCorrelation() {
+		return this.waitingCorrelation;		
+	}
+	
 	
 }
