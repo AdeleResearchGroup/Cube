@@ -357,8 +357,8 @@ public class TopScopeLeader implements MessagesListener {
 		if (msg != null) {
 			String to = msg.getTo();
 			msg.setCorrelation(++correlation);
-			waitingCorrelation = msg.getCorrelation();			
-			//System.out.println(msg.toString());
+			this.waitingCorrelation = msg.getCorrelation();			
+			System.out.println("COOOOOORELATION:" + this.correlation);
 			try {
 				this.waitingMessage = null;
 				
