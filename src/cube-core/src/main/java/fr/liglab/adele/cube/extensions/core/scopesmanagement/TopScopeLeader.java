@@ -389,6 +389,7 @@ public class TopScopeLeader implements MessagesListener {
 	
 	public void receiveMessage(CMessage msg) {
 		System.out.println("[INFO] TopScopeLeader : receiveMessage..\n" + msg.toString());
+		System.out.println("[INFO] TopScopeLeader : waiting correlation=" + waitingCorrelation);
 		if (msg.getCorrelation() == waitingCorrelation) {				
 			this.waitingMessage = msg;
 			if (csplock != null) {
