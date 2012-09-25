@@ -241,8 +241,11 @@ public class TopScopeLeader implements MessagesListener {
 					if (controller != null) {
 						return controller.toString();
 					} else {
+						System.out.println("[WARNING] controller == null!");
 						return null;
 					}
+				} else {
+					System.out.println("[WARNING] resmsg == null!");
 				}
 			} catch (TimeOutException e) {				
 				e.printStackTrace();
