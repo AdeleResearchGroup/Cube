@@ -46,18 +46,15 @@ public class CoreExtension extends AbstractExtension {
 	 * Logger
 	 */
 	private CubeLogger log;
-	/**
-	 * Top Scope Leader
-	 */
-	private TopScopeLeader topScopeLeader = null;
-	/**
-	 * Scope Leader
-	 */
-	private ScopeLeader scopeLeader = null;	
+	
 	/**
 	 * Initializer
 	 */
-	private Initializer initializer = null;
+	private Initializer initializer = null;	
+	/**
+	 * Scope Controller
+	 */
+	private ScopeController scopeController = null;
 	
 	/**
 	 * Constructor
@@ -88,11 +85,12 @@ public class CoreExtension extends AbstractExtension {
 		addConstraintResolver(new OutComponentsResolver());
 		addConstraintResolver(new InScopeResolver());
 		addConstraintResolver(new ComponentsPerNodeResolver());
-		
+								
 		//
-		// resigtering the scope leaders.
+		// register the scopes controller
 		//		
-		topScopeLeader = new TopScopeLeader(this);
+		scopeController = new ScopeController(this);
+		scopeController.run();
 		
 		//
 		// registering the initializer
@@ -100,7 +98,7 @@ public class CoreExtension extends AbstractExtension {
 		ExtensionConfiguration cc = getExtensionConfig().getConfiguration(InitializerConfiguration.NAME);				
 		initializer = new Initializer(this, (InitializerConfiguration) cc);
 		initializer.run();
-		
+				
 	}
 	
 	/**
@@ -124,30 +122,15 @@ public class CoreExtension extends AbstractExtension {
 	 */
 	public void validatedInstance(CInstance coi) {
 		if (coi != null && coi instanceof ScopeInstance) {
-			
-			this.scopeLeader = new ScopeLeader(this, coi.getCType().getName().toString(), coi.getLocalId());
-			
-			
-			String sleader = this.topScopeLeader.getScopeLeader(coi.getCType().getId().toString(), coi.getLocalId());
-			if (sleader == null) {
-				System.out.println("[INFO] CoreExtension: no scope leader for " + coi.getCType().getId().toString() +":"+ coi.getLocalId());
-				System.out.println("[INFO] CoreExtension: creating new scope leader! " + this.scopeLeader.getId().toString());
-				sleader = this.topScopeLeader.setScopeLeader(coi.getCType().getId(), coi.getLocalId(), this.scopeLeader.getId().toString());											
-			} 
-			System.out.println("[INFO] CoreExtension: scope.leader=" + sleader);
-						
-			this.scopeLeader.setScopeLeaderUrl(sleader);			
-			this.scopeLeader.addMember(this.scopeLeader.getId().getURI().toString());
+			/*
+			 * If there is a new scope instance created locally:
+			 * we should integrate it with its right scope group.
+			 */
+			scopeController.control((ScopeInstance)coi);
 		}
 	}
 
-	public TopScopeLeader getTopScopeLeader() {
-		return this.topScopeLeader;
-	}
 	
-	public ScopeLeader getScopeLeader() {
-		return this.scopeLeader;
-	}
 	
 	/**
 	 * Get Logger
@@ -162,19 +145,19 @@ public class CoreExtension extends AbstractExtension {
 		String out = "";
 		out += "+ CoreExtension\n";
 		
-		if (this.topScopeLeader != null) {
+		if (this.scopeController.getTopScopeLeader() != null) {
 			out += "  + scopes.management\n";
-			out += "    - top.scope.leader.url: " + this.topScopeLeader.getUrl() + "\n";
-			out += "    - is.top.scope.leader: " + this.topScopeLeader.ImTheTopScopeLeader() + "\n";
-			if (this.topScopeLeader.ImTheTopScopeLeader() == true) {
-				out += this.topScopeLeader.toString();
+			out += "    - top.scope.leader.url: " + this.scopeController.getTopScopeLeader().getUrl() + "\n";
+			out += "    - is.top.scope.leader: " + this.scopeController.getTopScopeLeader().ImTheTopScopeLeader() + "\n";
+			if (this.scopeController.getTopScopeLeader().ImTheTopScopeLeader() == true) {
+				out += this.scopeController.getTopScopeLeader().toString();
 			}
 		}
-		if (this.scopeLeader != null) {
-			out += "    - scope.leader.url: " + this.scopeLeader.getUrl() + "\n";
-			out += "    - is.scope.leader: " + this.scopeLeader.ImTheScopeLeader() + "\n";
-			if (this.scopeLeader.ImTheScopeLeader() == true) {
-				out += this.scopeLeader.toString();
+		if (this.scopeController.getScopeLeader() != null) {
+			out += "    - scope.leader.url: " + this.scopeController.getScopeLeader().getUrl() + "\n";
+			out += "    - is.scope.leader: " + this.scopeController.getScopeLeader().ImTheScopeLeader() + "\n";
+			if (this.scopeController.getScopeLeader().ImTheScopeLeader() == true) {
+				out += this.scopeController.getScopeLeader().toString();
 			}
 		}
 		return out;

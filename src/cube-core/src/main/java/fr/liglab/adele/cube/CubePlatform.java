@@ -42,6 +42,7 @@ import fr.liglab.adele.cube.util.id.CubeAgentID;
 public class CubePlatform implements ICubePlatform {
 
 	public static final String CUBE_VERSION = "1.2.0-SNAPSHOT";
+	
 	private static final String DEFAULT_AGENT_CONFIG_FILE_URL = "file:cubeagent.xml";
 
 	/**
