@@ -58,7 +58,7 @@ public class PlatformGogoCommands {
 	String m_scope;
 
 	@ServiceProperty(name = "osgi.command.function", value = "{}")
-	String[] m_function = new String[] { "version", "arch", "rm", "newi", "exts", "ext" /*, "cubes", "ctr", "sn","si","srti", "sm", "load", "stop", "destroy", "ex"*/};
+	String[] m_function = new String[] { "version", "arch", "rm", "newi", "extensions", "extension" /*, "cubes", "ctr", "sn","si","srti", "sm", "load", "stop", "destroy", "ex"*/};
 
 	@Descriptor("Show Cube Platform Version")
 	public void version() {	
@@ -123,13 +123,13 @@ public class PlatformGogoCommands {
 	}
 	
 	@Descriptor("Show the list of Extensions")
-	public void exts() {
+	public void extensions() {
 		for (String id : this.cps.getCubeAgents()) {
 			CubeAgent ci = cps.getCubeAgent(id);
 			if (ci != null) {
-				System.out.println("--------------------------------------------------------------------------");
-				for (IExtension ex : ci.getExtensions()) {						
-					System.out.println("- " + ex.getExtensionFactory().getExtensionId() + ":" + ex.getExtensionFactory().getExtensionVersion());					
+				System.out.println("--------------------------------------------------------------------------");				
+				for (IExtension ex : ci.getExtensions()) {											
+					System.out.println("["+ex.getLocalId()+"] " + ex.getExtensionFactory().getExtensionId() + ":" + ex.getExtensionFactory().getExtensionVersion());					
 				}
 				System.out.println("--------------------------------------------------------------------------");
 			}
@@ -137,22 +137,13 @@ public class PlatformGogoCommands {
 	}
 	
 	@Descriptor("Show Extension description")
-	public void ext(@Descriptor("extension id") String extension) {		
+	public void extension(@Descriptor("extension local id") String extension) {		
 		for (String id : this.cps.getCubeAgents()) {
 			CubeAgent ci = cps.getCubeAgent(id);
 			if (ci != null) {
-				System.out.println("--------------------------------------------------------------------------");
-				String[] tmp = extension.split(":");
-				if (tmp.length >=2) {
-					String exid = tmp[0];
-					String exversion = tmp[1];
-					IExtension ex = ci.getExtension(exid, exversion);
-					System.out.println(ex.toString());
-				} else {
-					IExtension ex = ci.getExtension(tmp[0]);
-					System.out.println(ex.toString());
-				}
-								
+				System.out.println("--------------------------------------------------------------------------");				
+				IExtension ex = ci.getExtensionByLocalID(extension);
+				System.out.println(ex.toString());								
 				System.out.println("--------------------------------------------------------------------------");
 			}
 		}

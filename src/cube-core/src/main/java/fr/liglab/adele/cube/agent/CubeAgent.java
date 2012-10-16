@@ -195,6 +195,20 @@ public class CubeAgent {
 	}
 	
 	/**
+	 * Get Cube Agent Extension by its local ID
+	 * @param localID
+	 * @return
+	 */
+	public IExtension getExtensionByLocalID(String localID) {
+		for (IExtension e : this.extensions) {
+			if (e.getLocalId().equalsIgnoreCase(localID)) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Get Cube Agent Extension.
 	 * @param id
 	 * @param version

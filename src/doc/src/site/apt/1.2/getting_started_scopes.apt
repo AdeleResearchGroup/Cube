@@ -106,7 +106,7 @@ demo/getting_started/scopes/node1/load/cube.agent
   To start a node, go to its corresponding directory and type the following command under linux (other OS launching scripts will be available {{{https://github.com/AdeleResearchGroup/cube/issues/1}as soon as possible}}) :
 
 --------
-  $ sh ./init.sh
+  $ sh start.sh
       _______              
      /|      |             
     | | CUBE |...Starting the CUBE Platform  
@@ -123,25 +123,25 @@ demo/getting_started/scopes/node1/load/cube.agent
 
   Start the different nodes progressivelly. The following commands help to understand what hapens and to see the different created scopes and affectation of the their scope leaders (see the list of all available {{{./commandline.html}commands}}).
 
-  * <<exts>>
+  * <<extensions>>
   
   This command shows the differents running extension of the cube agent. In this example it will shows only the core extension:
 
 --------------
-  g! exts
+  g! extensions
   --------------------------------------------------------------------------
-  - fr.liglab.adele.cube.core:1.2.0-SNAPSHOT
+  [1] fr.liglab.adele.cube.core:1.2.0-SNAPSHOT
   --------------------------------------------------------------------------
   g! 
 --------------
 
-  * <<ext extension_id>>
+  * <<extension id>>
 
   This commend shows the derail of the chosen extension. The core extension shows the different scopes.
   When running this command on the <<<node0>>>, it gives the following output:
 
 --------------
-  g! ext fr.liglab.adele.cube.core:1.2.0-SNAPSHOT
+  g! extension 1
 	--------------------------------------------------------------------------
 	+ CoreExtension
   + scopes.management
@@ -160,7 +160,7 @@ demo/getting_started/scopes/node1/load/cube.agent
   However, when running the previous command on the console of the <<<node3>>> for instance, it gives the following output:
 
 --------------
-  g! ext fr.liglab.adele.cube.core:1.2.0-SNAPSHOT
+  g! ext 1
 	--------------------------------------------------------------------------
 	+ CoreExtension
   + scopes.management

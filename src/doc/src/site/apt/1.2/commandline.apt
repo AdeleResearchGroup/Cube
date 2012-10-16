@@ -30,10 +30,10 @@ CommandLine
 	<<rm>>\
   show the Runtime Model content.
 
-	<<exts>>\
+	<<extensions>>\
   show the cube agent running extensions
 
-	<<ext extension_id>>\
+	<<extension id>>\
   show the detail of the selected extension.
 
 	<<newi typeid>>\

@@ -1,5 +1,4 @@
 <project xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd" name="Cube Project">
-
 	<bannerLeft>
 		<name>Cube Project</name>
 		<src>images/cube.png</src>
@@ -9,20 +8,26 @@
 	<publishDate position="right"/>
 	<version position="left"/>
 
+  
+
 	<body>
 
 		<!--breadcrumbs>
 			<item name="Home" href="index.html"/>
-		</breadcrumbs-->
-
-		<menu name="Project Links">
-			<item name="Home" href="index.html"/>
-			<!--item name="Features" href="features.html"/-->
-			<item name="Getting started" href="1.2/getting_started.html"/>			
+		</breadcrumbs-->		
+		<menu name="Home">
+			<item name="Overview" href="index.html"/> 
+		</menu>
+		<menu name="Documentation">
+			<item name="Getting started" href="1.2/getting_started.html"/>
 			<item name="Documentation" href="1.2/doc.html"/>
+		</menu>
+		<menu name="Download">
 			<item name="Download" href="download.html"/>
-			<item name="License" href="license.html"/>
-		</menu>				
+			<item name="From GitHub" href="https://github.com/AdeleResearchGroup/cube"/>
+		</menu>
+
+
 
 		<menu name="Catalog">
 			<item name="Managed Elements" href="1.2/managed_elements.html"/>
@@ -32,6 +37,7 @@
 
 		<menu name="Other Links">
 			<item name="Wiki" href="http://cube.imag.fr/wiki"/>
+			<item name="License" href="license.html"/>
 		</menu>		
 
 	</body>
@@ -50,4 +56,20 @@
 		<artifactId>fluido-skin</artifactId>
 		<version>1.3</version>
 	</skin-->
+	<custom>
+	  <fluidoSkin>
+			<topBarEnabled>true</topBarEnabled>
+      <sideBarEnabled>false</sideBarEnabled>
+	    <gitHub>
+	      <projectId>AdeleResearchGroup/cube</projectId>
+	      <ribbonOrientation>right</ribbonOrientation>
+	      <ribbonColor>black</ribbonColor>
+	    </gitHub>			
+			<!--navBarStyle>navbar-inverse</navBarStyle-->
+			<googleSearch>
+        <sitesearch/>
+      </googleSearch>
+			<sourceLineNumbersEnabled>true</sourceLineNumbersEnabled>
+	  </fluidoSkin>
+	</custom>
 </project>

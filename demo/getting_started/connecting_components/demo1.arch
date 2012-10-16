@@ -2,7 +2,7 @@
   <archetype id="net.debbabi.cube.demo.connect" name="Connecting Components Tutorial 1" version="1.0">
 
     <types>
-      <core:node id="PC"/>
+      <!--core:node id="PC"/-->
       <core:component id="A"/>
       <core:component id="B"/>
     </types>

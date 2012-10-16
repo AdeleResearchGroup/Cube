@@ -68,7 +68,7 @@ public class CoreExtension extends AbstractExtension {
 		super(agent, factory, config);
 		log = new CubeLogger(agent.getCubePlatform().getBundleContext(), CoreExtension.class.getSimpleName());
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */

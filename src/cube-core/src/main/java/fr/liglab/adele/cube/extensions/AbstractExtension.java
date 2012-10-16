@@ -32,11 +32,12 @@ import fr.liglab.adele.cube.agent.CubeAgent;
  */
 public abstract class AbstractExtension implements IExtension, RuntimeModelListener {
 	
-	
+	private static int index = 1;
+	private String localID = "0";
 	private IExtensionFactory factory;
 	private AgentExtensionConfig config;
 	private CubeAgent agent;
-	
+		
 	List<IMonitor> monitors = new ArrayList<IMonitor>();
 	List<IExecutor> executors = new ArrayList<IExecutor>();
 	List<IConstraintResolver> constraintResolvers = new ArrayList<IConstraintResolver>();
@@ -46,12 +47,20 @@ public abstract class AbstractExtension implements IExtension, RuntimeModelListe
 		this.factory = factory;
 		this.config = config;
 		this.agent.getRuntimeModel().addListener(this);
+		this.localID = "" + index++;
 	}
 
 	public CubeAgent getCubeAgent() {
 		return agent;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLocalId() {
+		return this.localID;
+	}
+	
 	public IExtensionFactory getExtensionFactory() {		
 		return factory;
 	}

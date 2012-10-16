@@ -91,7 +91,7 @@ demo/getting_started/connecting_components/mynode
   Within Linux shell, type the following command. ({{{https://github.com/AdeleResearchGroup/cube/issues/1}Other Operating systems}})
 
 ---------
-  $ sh ./init.sh
+  $ sh start.sh
       _______              
      /|      |             
     | | CUBE |...Starting the CUBE Platform  

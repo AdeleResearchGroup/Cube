@@ -29,6 +29,8 @@ import fr.liglab.adele.cube.agent.CubeAgent;
  */
 public interface IExtension {
 
+	
+	public String getLocalId();
 	public IExtensionFactory getExtensionFactory();		
 	public AgentExtensionConfig getExtensionConfig();
 	public CubeAgent getCubeAgent();
