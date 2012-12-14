@@ -3,6 +3,19 @@ Cube Project
 
 Website: http://cube.imag.fr
 
+
+Current version
+---------------
+
+1.2-SNAPSHOT
+
+Under-development version
+-------------------------
+
+1.3-SNAPSHOT
+
+
+
 Compile all the project
 -----------------------
 
