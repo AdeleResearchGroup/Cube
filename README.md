@@ -12,7 +12,8 @@ Current version
 Under-development version
 -------------------------
 
-1.3-SNAPSHOT
+Branch: medical
+1.2-SNAPSHOT
 
 
 
