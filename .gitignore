@@ -1,6 +1,31 @@
-target/
+
+# OS generated files #
 *~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Eclipse files #
+.settings/
+.project
+.classpath
+
+# Maven #
+target/
+
+# Java generated classes  #
+*.class
+
+# IntelliJ IDEA files #
+.idea/
+*.iml
+
+# Felix #
 felix-cache/
 perf.csv
-.settings
-.project
+
+
