@@ -34,14 +34,14 @@ import fr.liglab.adele.cube.util.id.CubeAgentID;
 /**
  * Cube Platform Implementation.
  * 
- * It manages the local {@link fr.liglab.adele.cube.agent.__CubeAgent Cube Agents}.
+ * It manages the local {@link fr.liglab.adele.cube.agent.CubeAgent Cube Agents}.
  * 
  * @author debbabi
  *
  */
 public class CubePlatform implements ICubePlatform {
 
-	public static final String CUBE_VERSION = "1.2.0-SNAPSHOT";
+	public static final String CUBE_VERSION = "1.2";
 	
 	private static final String DEFAULT_AGENT_CONFIG_FILE_URL = "file:cubeagent.xml";
 

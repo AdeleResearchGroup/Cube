@@ -26,9 +26,9 @@ import fr.liglab.adele.cube.util.id.CubeID;
  * 
  * Example:
  *   CMessage msg = new CMessage();
- *   msg.setTo("cube://localhost:2828/archtype/C0/0/1");
+ *   msg.setTo("cube://localhost:2828/archetype/C0/0/1");
  *   msg.setFrom("...");
- *   msg.setReplayto("...");
+ *   msg.setReplyTo("...");
  *   msg.setBody("something...");
  *   
  *   getCubeInstance().getCommunicator().send(msg);

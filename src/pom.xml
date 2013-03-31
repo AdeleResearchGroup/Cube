@@ -19,7 +19,7 @@
 	<artifactId>cube-project</artifactId>
 	<packaging>pom</packaging>
 	<name>Cube Project</name>
-	<version>1.2.0</version>
+	<version>1.2</version>
 	<url>http://cube.imag.fr</url>	        
 
 	<properties>

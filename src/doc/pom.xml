@@ -5,7 +5,7 @@
   <parent>
     <artifactId>cube-project</artifactId>
     <groupId>fr.liglab.adele.cube</groupId>
-    <version>1.2.0</version>
+    <version>1.2</version>
   </parent>
   <groupId>fr.liglab.adele.cube</groupId>
   <artifactId>doc</artifactId>
