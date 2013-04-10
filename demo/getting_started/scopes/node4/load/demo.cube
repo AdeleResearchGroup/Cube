@@ -1,0 +1,13 @@
+<cube>
+  <agent>
+    <host value="localhost"/>
+    <port value="38004"/>
+    <archetypeUrl value="file:../demo.arch"/>
+    <debug value="false"/>
+
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core"/>
+		<extension id="fr.liglab.adele.cube.osgi"/>			
+	</extensions>
+  </agent>
+</cube>

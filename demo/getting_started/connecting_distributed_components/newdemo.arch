@@ -1,0 +1,103 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo.scopes" name="Scopes tutorial" version="1.0">
+
+    <types>
+      <core:scope id="City"/>
+      <core:scope id="Central"/>
+
+      <core:node id="Gateway"/>
+      <core:node id="Server"/>
+      <core:node id="Datacenter"/>
+
+	  <core:component id="GP"/>
+	  <core:component id="WP"/>
+	  <core:component id="EP"/>	  
+	  <core:component id="HC"/>	  
+	  <core:component id="CA"/>	  
+	  <core:component id="CC"/>	  
+	  <core:component id="NA"/>	  	  
+    </types>
+
+    <constraints>
+		<variables>
+			<var id="gp" type="GP"/>			
+			<var id="ep" type="EP"/>
+			<var id="hc" type="HC"/>
+			<var id="cc" type="CC"/>
+			<!-- list of vars -->	
+		</variables>
+
+		<!-- for all hc instances in a gateway, there should be only 1 instance -->
+		<core:instances-per-node v="hc" max="1">
+			<core:hasProperty v="hc" name="component.type" value="HC"/>
+			<core:on-node v1="hc" v2="g"/>	
+			<core:hasProperty v="g" name="node.type" value="Gateway"/>		
+		</core:instances-per-node>
+
+		<!-- for all gp instances, it should be connected to an hc instance which
+             is (1) in the same node as gp or (2) created locally if not found -->
+		<core:connect v1="gp" v2="hc">			
+			<core:on-same-node v1="hc" v2="gp" priority="1"/>
+			<core:create-locally v="hc" priority="2"/>			
+		</core:connect>
+		
+		<core:connect v1="wp" v2="hc">			
+			<core:on-same-node v1="hc" v2="wp"/>
+			<core:create-locally v="hc" priority="3"/>			
+		</core:connect>
+
+		<core:connect v1="ep" v2="hc">			
+			<core:on-same-node v1="hc" v2="ep"/>
+			<core:create-locally v="hc" priority="3"/>			
+		</core:connect>
+
+		<!-- for all hc instances that are on a gateway node, it should be connected to 
+             ca instance which is (1) in server node, and in the same scope as the hc's
+             node, and (2) ca should have 10 max inputs at best -->	
+		<core:connect v1="hc" v2="ca">			
+			<core:on-node v1="hc" v2="gateway"/>
+			<core:on-node v1="ca" v2="server"/>			
+			<core:in-same-scope v1="server" v2="gatway"/>
+			<core:input-components v="ca" max="10"/>
+		</core:connect>
+
+		<!-- for all instances of type ca, wa should duplicate it each time its input-
+             component exeeds 14 -->
+		<core:self-sizing v="ca" max-inputs="14"/>		
+
+		<!-- for all ca instances in server node, it should be connected to cc instance
+             that is (1) in server node not necessarally the same but in the same scope,
+             or (2) we create this cc instance in any server of the same scope -->
+		<core:connect v1="ca" v2="cc">			
+			<core:on-node v1="ca" v2="s1"/>
+			<core:on-node v1="cc" v2="s2" priority="1"/>			
+			<core:in-same-scope v1="s2" v2="s1"/>			
+			<core:create-on-node v1="cc" v2="s2" priority="2"/>
+		</core:connect>
+
+		<!-- for all instances of cc type, that are on a server node, which is in city scope,
+             we should always verify that there only one cc instance in this scope -->
+		<core:components-per-scope v="cc"  max="1">
+			<core:on-node v1="cc" v2="s1"/>
+			<core:in-scope v1="s1" v2="city"/>
+		</core:components-per-scope>
+
+		<!-- ... -->
+		<core:connect v1="cc" v2="na">			
+			<core:on-node v1="cc" v2="s"/>
+			<core:in-scope v1="s" v2="city"/>			
+			<core:on-node v1="na" v2="d" priority="1"/>			
+			<core:in-scope v1="d" v2="central"/>	
+			<core:input-components v="na" max="14"/>					
+		</core:connect>
+
+		<core:self-sizing v="na" max-inputs="14"/>		
+
+    </constraints>
+
+    <global-configs>                    
+      <core:topscopeleader url="cube://localhost:38000"/>
+    </global-configs>
+
+  </archetype>
+</cube>
