@@ -39,7 +39,7 @@ target/
 *.class
 
 # IntelliJ IDEA files #
-.idea/
+.idea
 *.iml
 out 
 
