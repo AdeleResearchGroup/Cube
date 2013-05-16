@@ -1,0 +1,19 @@
+<cube>
+  <agent>
+    <host value="localhost"/>
+    <port value="38001"/>
+
+    <archetypeUrl value="file:../tutorial4.arch"/>
+
+	<plugins>
+		<plugin id="fr.liglab.adele.cube.core"/>
+		<plugin id="fr.liglab.adele.cube.osgi">
+			<property name="type" value="PC"/>
+		</plugin>
+	</plugins>
+  </agent>
+</cube>
+
+
+
+

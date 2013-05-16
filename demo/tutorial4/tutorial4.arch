@@ -1,0 +1,24 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo" 
+			 description="Tutorial 1" 
+			 version="2.0">
+
+	<goals>
+		<goal>
+			<core:hasComponent s="@pc" o="@b" r="fc"/>			
+			<core:hasSourceComponent s="@b" o="@a" r="fc"/>	
+		</goal>
+	</goals>
+	<elements>
+		<core:Component id="a">
+			<core:hasComponentType o="A"/>
+		</core:Component>
+		<core:Component id="b">
+			<core:hasComponentType o="B"/>
+		</core:Component>
+		<core:Node id="pc">
+			<core:hasComponentType o="PC"/>				
+		</core:Node>			
+	</elements>
+  </archetype>
+</cube>

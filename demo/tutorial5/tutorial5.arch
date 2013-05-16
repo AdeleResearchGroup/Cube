@@ -1,0 +1,60 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo" 
+			 description="Tutorial 3" 
+			 version="2.0">
+
+	<goals>
+		<goal description="dynamic scopes management">
+			<core:inScope s="@aggr_server" o="@lan" r="fc"/>
+			<core:inScope s="@med_server" o="@lan" r="fc"/>
+			<core:controlledBy s="@lan" o="@master" r="f"/>
+		</goal>
+		
+		<goal description="self-creating and connecting components">
+			<core:hasComponent s="@aggr_server" o="@a_in" r="fc"/>		
+			<core:connected s="@a_in" o="@a_out" r="fc"/>		
+			<core:onNode s="@a_out" o="@aggr_server2" r="fc"/>
+		</goal>
+
+		<!--goal description="components placement">
+			<core:onNode s="@a" o="@pc" r="f"/>
+			<core:onNode s="@b" o="@gateway" r="f"/>
+			<core:onNode s="@c" o="@gateway" r="f"/>
+		</goal>
+		
+		<goal>
+			<core:hasAtMaxInputComponents s="@b" o="2"/>
+		</goal-->
+	</goals>
+
+	<elements>
+		<core:Component id="a_in">
+			<core:hasComponentType o="AIN"/>
+		</core:Component>
+		<core:Component id="a_out">
+			<core:hasComponentType o="AOUT"/>
+		</core:Component>
+		<!--core:Component id="b">
+			<core:hasComponentType o="B"/>							
+		</core:Component>	
+		<core:Component id="c">
+			<core:hasComponentType o="C"/>							
+		</core:Component-->	
+		<core:Node id="aggr_server">
+			<core:hasNodeType o="AServer"/>			
+		</core:Node>	
+		<core:Node id="aggr_server2">
+			<core:hasNodeType o="AServer"/>			
+		</core:Node>	
+		<core:Node id="med_server">
+			<core:hasNodeType o="MServer"/>			
+		</core:Node>	
+		<core:Scope id="lan">
+			<core:hasScopeId o="LAN"/>			
+		</core:Scope>
+		<core:Master id="master">
+			<core:inAgent o="cube://localhost:38000"/>
+		</core:Master>
+	</elements>
+  </archetype>
+</cube>

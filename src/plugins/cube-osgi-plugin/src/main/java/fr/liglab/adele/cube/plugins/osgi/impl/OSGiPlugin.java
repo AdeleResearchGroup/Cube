@@ -65,10 +65,8 @@ public class OSGiPlugin extends AbstractPlugin {
         if (type == null) type = "OSGi";
         if (id == null) id = "OSGi-" + index++;
 
-        Properties properties = new Properties();
-        // TODO add type and id to properties!
         try {
-            ManagedElement me = getCubeAgent().newManagedElement(CorePluginFactory.NAMESPACE, Node.NAME, properties);
+            ManagedElement me = getCubeAgent().newManagedElement(CorePluginFactory.NAMESPACE, Node.NAME, getProperties());
             if (me != null && me instanceof Node) {
                 ((Node)me).setNodeId(id.toString());
                 ((Node)me).setNodeType(type.toString());
