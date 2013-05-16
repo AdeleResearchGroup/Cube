@@ -1,0 +1,81 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.medical" 
+			 description="Scenario 0" 
+			 version="2.0">
+
+		<elements>
+			
+			<core:Component id="a">
+				<core:hasComponentType o="A"/>
+			</core:Component>
+
+			<core:Component id="b">
+				<core:hasComponentType o="B"/>
+			</core:Component>		
+	
+			<core:Component id="b2">
+				<core:hasComponentType o="B"/>
+				<core:hasAtMaxInputComponents o="2"/>
+				<core:onNode o="@n4"/>
+			</core:Component>
+
+			<core:Component id="c">
+				<core:hasComponentType o="C"/>
+			</core:Component>		
+
+			<core:Component id="d">
+				<core:hasComponentType o="D"/>
+			</core:Component>
+
+			<core:Node id="n1">
+				<core:hasNodeType o="AggregationServer"/>
+			</core:Node>
+
+			<core:Node id="n2">
+				<core:hasNodeType o="MediationServer"/>
+			</core:Node>
+
+			<core:Node id="n3">
+				<core:hasNodeType o="AggregationServer"/>
+				<core:inScope o="@s"/>
+			</core:Node>
+			
+			<core:Node id="n4">
+				<core:hasNodeType o="MediationServer"/>
+				<core:inScope o="@s"/>
+			</core:Node>
+			
+			<core:Scope id="s">
+				<core:hasScopeId o="Medical"/>
+				<core:controlledBy o="@m"/>
+			</core:Scope>
+			
+			<core:Scope id="s2">				
+				<core:hasScopeId o="Medical"/>
+			</core:Scope>
+
+			<core:Master id="m">
+				<core:inAgent o="cube://localhost:38001"/>
+			</core:Master>
+
+		</elements>
+
+		<goals>
+			<goal>
+				<core:inScope s="@n1" o="@s" r="fc"/>
+				<core:inScope s="@n2" o="@s" r="fc"/>		
+				<core:controlledBy s="@s2" o="@m" r="f"/>			
+			</goal>
+			<goal>
+				<core:onNode s="@a" o="@n3" r="f"/>
+				<core:onNode s="@b" o="@n4" r="f"/>
+			</goal>
+			<goal>
+				<core:connected s="@a" o="@b2" r="fc"/>
+				<!--core:connected s="@b" o="@c" r="c"/>
+				<core:connected s="@c" o="@d" r="c"/-->
+			</goal>
+		</goals>
+
+  </archetype>
+</cube>

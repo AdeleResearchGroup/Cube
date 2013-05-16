@@ -1,0 +1,50 @@
+
+# OS generated files #
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Eclipse and other IDE files #
+.settings/
+.project
+.classpath
+classes
+target
+*.log
+*.ipr
+*.iws
+*.iml
+#lib
+bundle
+dist
+#bin
+build
+.wtpmodules
+.deployables
+nbproject
+*.patch
+.externalToolBuilders
+maven-eclipse.xml
+
+
+# Maven #
+target/
+
+# Java generated classes  #
+*.class
+
+# IntelliJ IDEA files #
+.idea/
+*.iml
+out 
+
+# Felix #
+felix-cache/
+perf.csv
+
+

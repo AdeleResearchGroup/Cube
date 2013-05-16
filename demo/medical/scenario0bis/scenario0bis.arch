@@ -1,0 +1,31 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.medical" 
+			 description="Scenario 0bis" 
+			 version="2.0">
+
+		<elements>
+
+			<core:Component id="a">
+				<core:hasComponentType o="A"/>
+			</core:Component>
+			<core:Component id="b">
+				<core:hasComponentType o="B"/>
+			</core:Component>
+			<core:Component id="c">
+				<core:hasComponentType o="C"/>
+			</core:Component>		
+			<core:Component id="d">
+				<core:hasComponentType o="D"/>
+			</core:Component>
+		</elements>
+
+
+		<goals>
+			<goal>
+				<core:connected s="@a" o="@b" r="fc"/>
+				<core:hasSourceComponent s="@d" o="@b" r="fc"/>
+			</goal>
+		</goals>
+
+  </archetype>
+</cube>

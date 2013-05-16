@@ -1,0 +1,67 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.medical" 
+			 description="Scenario 0" 
+			 version="2.0">
+
+		<goals>
+			<goal description="dynamic scopes management">
+				<inScope s="@aggr_server" o="@orange_infra" r="fc"/>
+				<inScope s="@med_server" o="@orange_infra" r="fc"/>		
+				<controlledBy s="@orange_infra" o="@master" r="f"/>			
+			</goal>
+			<goal description="components placement">
+				<!--onNode s="@ws_in_adapter" o="@aggr_server" r="f"/-->
+				<onNode s="@loadbalancing_out_adapter" o="@aggr_server" r="f"/>
+				<!--onNode s="@JMS_in_adapter" o="@med_server" r="f"/-->
+			</goal>
+			<goal description="initial components creation">
+				<hasComponent s="@aggr_server" o="@ws_in_adapter0" r="fc"/>
+				<hasComponent s="@med_server" o="@JMS_in_adapter" r="fc"/>
+			</goal>
+			<goal>
+				<connected s="@ws_in_adapter" o="@loadbalancing_out_adapter" r="fc"/>
+				<hasSourceComponent s="@JMS_in_adapter" o="@loadbalancing_out_adapter" r="f"/>
+			</goal>
+			<!--goal description="self-growing">
+				<core:connected s="@aggr_ws" o="@loadbalancing_outadapter" r="fc"/>
+			</goal-->
+		</goals>
+
+
+		<elements>
+			<Master id="master">
+				<inAgent o="cube://localhost:38000"/>
+			</Master>
+
+			<Scope id="orange_infra">
+				<hasScopeId o="OrangeInfrastructure"/>				
+			</Scope>
+
+			<Node id="aggr_server">
+				<hasNodeType o="AggregationServer"/>
+			</Node>
+
+			<Node id="med_server">
+				<hasNodeType o="MediationServer"/>
+			</Node>
+
+			<Component id="ws_in_adapter">
+				<hasComponentType o="WSAdapter"/>
+			</Component>
+
+			<Component id="ws_in_adapter0">
+				<hasComponentType o="WSAdapter"/>
+			</Component>
+
+			<Component id="loadbalancing_out_adapter">
+				<hasComponentType o="LBAdapter"/>	
+			</Component>
+
+			<Component id="JMS_in_adapter">
+				<hasComponentType o="JMSInAdapter"/>
+			</Component>
+
+		</elements>
+
+  </archetype>
+</cube>

@@ -1,0 +1,50 @@
+<cube xmlns:core="fr.liglab.adele.cube.core">
+  <archetype id="net.debbabi.cube.demo" 
+			 description="Tutorial 3" 
+			 version="2.0">
+
+	<goals>
+		<goal description="dynamic scopes management">
+			<core:inScope s="@pc" o="@lan" r="fc"/>
+			<core:inScope s="@gateway" o="@lan" r="fc"/>
+			<core:controlledBy s="@lan" o="@master" r="f"/>
+		</goal>
+		<goal description="components placement">
+			<core:onNode s="@a" o="@pc" r="f"/>
+			<core:onNode s="@b" o="@gateway" r="f"/>
+			<core:onNode s="@c" o="@gateway" r="f"/>
+		</goal>
+		<goal description="self-connecting components">
+			<core:connected s="@a" o="@b" r="fc"/>	   	
+			<core:connected s="@b" o="@c" r="fc"/>	  
+		</goal>
+		<goal>
+			<core:hasAtMaxInputComponents s="@b" o="2"/>
+		</goal>
+	</goals>
+
+	<elements>
+		<core:Component id="a">
+			<core:hasComponentType o="A"/>
+		</core:Component>
+		<core:Component id="b">
+			<core:hasComponentType o="B"/>							
+		</core:Component>	
+		<core:Component id="c">
+			<core:hasComponentType o="C"/>							
+		</core:Component>	
+		<core:Node id="pc">
+			<core:hasNodeType o="PC"/>			
+		</core:Node>	
+		<core:Node id="gateway">
+			<core:hasNodeType o="GATEWAY"/>			
+		</core:Node>	
+		<core:Scope id="lan">
+			<core:hasScopeId o="LAN"/>			
+		</core:Scope>
+		<core:Master id="master">
+			<core:inAgent o="cube://localhost:38001"/>
+		</core:Master>
+	</elements>
+  </archetype>
+</cube>

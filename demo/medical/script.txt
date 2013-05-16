@@ -1,0 +1,21 @@
+
+
+
+
+newi 1 component core.component.type:AggrWS
+
+
+
+
+newi 1 component
+newi 1 component core.component.type:A
+newi 1 component core.component.type:B
+newi 1 fr.liglab.adele.cube.core:Component core.component.type:A
+
+newi 1 scope core.scope.id:Medical
+
+newi 1 node core.node.type:AggregationServer 
+
+newi 1 node core.node.type:MediationServer
+
+$exception printstacktrace

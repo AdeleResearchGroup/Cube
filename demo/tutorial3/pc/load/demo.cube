@@ -1,0 +1,24 @@
+<cube>
+  <agent>
+    <host value="localhost"/>
+    <port value="38001"/>
+	<rmcheck-interval value="2000"/>
+	<keepalive-interval value="2000"/>
+	<keepalive-retry value="1"/>
+    <archetypeUrl value="file:../tutorial3.arch"/>
+
+	<debug value="true"/>
+
+	<plugins>
+		<plugin id="fr.liglab.adele.cube.core">
+			<property name="master" value="true"/>
+		</plugin>
+		<plugin id="fr.liglab.adele.cube.osgi"/>
+		<plugin id="fr.liglab.adele.cube.rm.monitoring"/>
+	</plugins>
+  </agent>
+</cube>
+
+
+
+

@@ -1,0 +1,17 @@
+<cube>
+  <agent>
+    <host value="localhost"/>
+    <port value="38002"/>
+	<pulse value="3000"/>
+
+    <archetypeUrl value="file:../scenario1.cube"/>
+
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core"/>
+		<extension id="fr.liglab.adele.cube.osgi"/>	
+		<extension id="fr.liglab.adele.cube.console"/>
+	</extensions>
+  </agent>
+</cube>
+
+
