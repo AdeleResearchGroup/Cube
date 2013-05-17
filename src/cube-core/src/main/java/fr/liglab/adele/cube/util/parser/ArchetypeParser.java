@@ -233,13 +233,17 @@ public class ArchetypeParser {
                                                 if (subject == null)
                                                     throw new ParseException("The Objective '"+oname+"' has unkown subject '"+osubject+"'");
                                                 Object object = null;
+                                                boolean unary = false;
                                                 if (oobject.startsWith("@")) {
                                                     object = archtype.getElement(oobject.substring(1));
+                                                    unary = false;
                                                 } else {
                                                     object = oobject;
+                                                    unary = true;
                                                 }
                                                 //log.info("Objective '"+oname+"' has the object: "+ oobject);
                                                 o = new Objective(g, onamespace, oname, subject, object, resolution, priority, odescription);
+                                                o.setUnaryObjective(unary);
                                                 g.addObjective(o);
 
                                             }

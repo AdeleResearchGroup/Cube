@@ -10,10 +10,18 @@
 			<core:controlledBy s="@lan" o="@master" r="f"/>
 		</goal>
 		
-		<goal description="self-creating and connecting components">
+		<goal description="aggregation server">
 			<core:hasComponent s="@aggr_server" o="@a_in" r="fc"/>		
+			<!--core:hasComponent s="@aggr_server" o="@a_out" r="fc"/-->		
 			<core:connected s="@a_in" o="@a_out" r="fc"/>		
-			<core:onNode s="@a_out" o="@aggr_server2" r="fc"/>
+			<core:onNode s="@a_out" o="@aggr_server2" r="f"/>
+		</goal>
+
+		<goal description="mediation server">
+			<core:hasComponent s="@med_server" o="@m_in" r="fc"/>		
+			<core:hasSourceComponent s="@m_in" o="@a_out" r="f"/>
+			<!--core:connected s="@a_in" o="@a_out" r="fc"/>
+			<core:onNode s="@a_out" o="@aggr_server2" r="f"/-->
 		</goal>
 
 		<!--goal description="components placement">
@@ -29,22 +37,20 @@
 
 	<elements>
 		<core:Component id="a_in">
-			<core:hasComponentType o="AIN"/>
+			<core:hasComponentType o="A_IN"/>
 		</core:Component>
 		<core:Component id="a_out">
-			<core:hasComponentType o="AOUT"/>
+			<core:hasComponentType o="A_OUT"/>
 		</core:Component>
-		<!--core:Component id="b">
-			<core:hasComponentType o="B"/>							
-		</core:Component>	
-		<core:Component id="c">
-			<core:hasComponentType o="C"/>							
-		</core:Component-->	
+		<core:Component id="m_in">
+			<core:hasComponentType o="M_IN"/>
+		</core:Component>
 		<core:Node id="aggr_server">
 			<core:hasNodeType o="AServer"/>			
 		</core:Node>	
 		<core:Node id="aggr_server2">
-			<core:hasNodeType o="AServer"/>			
+			<core:hasNodeType o="AServer"/>	
+			<core:inScope o="@lan"/>			
 		</core:Node>	
 		<core:Node id="med_server">
 			<core:hasNodeType o="MServer"/>			

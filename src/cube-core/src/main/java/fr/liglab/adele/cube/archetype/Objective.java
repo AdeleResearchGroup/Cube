@@ -39,6 +39,7 @@ public class Objective {
 
     private Element subject;
     private Object object;
+    private boolean unaryObjective;
 
     public Objective(Goal goal, String namespace, String name, Element subject, Object object, String resolution, int priority, String description) {
         this.goal = goal;
@@ -113,5 +114,13 @@ public class Objective {
 
     public void setObject(Object object) {
         this.object = object;
+    }
+
+    public boolean isUnaryObjective() {
+        return unaryObjective;
+    }
+
+    public void setUnaryObjective(boolean unaryObjective) {
+        this.unaryObjective = unaryObjective;
     }
 }

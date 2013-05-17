@@ -31,37 +31,6 @@ import java.util.Stack;
 
 /**
  *
- * A CSP containing at most binary constraints may be viewed as a constraint graph which can
- * guide a problem solver. Each graph node corresponds to a problem variable, and both unary
- * and binary constraints are represented by labelled, directed arcs.
- *
- *
- * Constraints can be:
- * - absolute constraints: violation of which rules out a potential solution.
- * - preference constraints: indicating which solutions are preferred (not yet implemented!).
- *
- * Preference constraints can often be encoded as costs on individual variable assignments,
- * for example, assigning an afternoon slot for Prof. X costs 2 points against the overall
- * objective function, whereas a morning slot costs 1.
- *
- * CSP with preferences can be solved using optimization search methods, either path-based
- * or local.
- *
- * Constraint Graph is commutative. This mean when assigning values to variables, we reach
- * the same partial assignment, regardless of order.
- *
- * We use a 'backtracking search'. This is a depth-first search that chooses values for one
- * variable at a time and backtracks when a variable has no legal values left to assign.
- *
- * tree decomposition of the constraint graph into a set of connected subproblems.
- *   Each subproblem is solved independently, and the resulting solutions are then combined.
- *   Like most divide-and-conquer algorithms, this works well if no subproblem is too large.
- *   Requirements:
- *   - Every variable in the original problem appears in at least one of the subproblems.
- *   - If two variables are connected by a constraint in the original problem, they must
- *     appear together (along with the constraint) in at least one of the subproblems.
- *   - If a variable appears in two subproblems in the tree, it must appear in every
- *     subproblem along the path connecting those subproblems.
  *
  *
  * Author: debbabi
@@ -836,23 +805,26 @@ public class ResolutionGraph {
         info("checking object variable: " + v.getName());
         for (Constraint c : v.getConstraints()) {
             info("checking constraint: " + c.getName());
-            if (c.isObjectiveConstraint() && (c.getResolutionStrategy() == Constraint.FIND_OR_CREATE || c.getResolutionStrategy() == Constraint.CREATE)) {
-                info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
-                continue;
-            }
-            // check direct constraint
-            if (c.check(agent) == false)  {
-                info("constraint '"+c.getName()+"' returns FALSE!");
-                return false;
-            }
-            // check referenced elements
-            if (c.isBinaryConstraint()) {
-
-                if (evaluateValue(c.getObjectVariable()) == false) {
-                    info("checking related value '"+c.getObjectVariable().getName()+"' of the variable '"+v.getName()+"' returns FALSe!");
+            if (c.isObjectiveConstraint()) {
+                if (c.isBinaryConstraint()) {
+                    info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
+                    continue;
+                }
+            } else {
+                // check direct constraint
+                if (c.check(agent) == false)  {
+                    info("constraint '"+c.getName()+"' returns FALSE!");
                     return false;
                 }
+                // check referenced elements
+                if (c.isBinaryConstraint()) {
 
+                    if (evaluateValue(c.getObjectVariable()) == false) {
+                        info("checking related value '"+c.getObjectVariable().getName()+"' of the variable '"+v.getName()+"' returns FALSe!");
+                        return false;
+                    }
+
+                }
             }
             info("constraint '" + c.getName()+"' TRUE");
         }
