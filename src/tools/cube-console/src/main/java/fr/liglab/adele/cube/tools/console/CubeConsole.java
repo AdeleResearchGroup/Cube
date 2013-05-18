@@ -23,6 +23,7 @@ import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.metamodel.InvalidNameException;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.PropertyExistException;
+import fr.liglab.adele.cube.metamodel.PropertyNotExistException;
 import fr.liglab.adele.cube.plugins.Plugin;
 import fr.liglab.adele.cube.plugins.core.CorePluginFactory;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
@@ -53,7 +54,7 @@ public class CubeConsole {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"version", "agents", "arch", "rm" , "newi" , "plugins" /*, "extension"*/};
+    String[] m_function = new String[]{"version", "agents", "arch", "rm" , "newi" , "plugins", "update" /*, "extension"*/};
 
 
     @Descriptor("Show Cube Platform Version")
@@ -174,7 +175,7 @@ public class CubeConsole {
         }
     }
 
-    @Descriptor("Show archtype")
+    @Descriptor("New instance")
     public void newi(@Descriptor("Agent local id") String aid,
                      @Descriptor("Element type") String type,
                      @Descriptor("Element properties") String properties) {
@@ -250,6 +251,55 @@ public class CubeConsole {
                 String ns = p.getPluginFactory().getNamespace();
                 String n = p.getPluginFactory().getName();
                 msg += ("\n" +ns + ":" + n);
+            }
+
+            msg += "\n--------------------------------------------------------------------------";
+            System.out.println(msg);
+        }
+    }
+
+    @Descriptor("Update instance property")
+    public void update(@Descriptor("Agent local id") String aid,
+                     @Descriptor("Element instance") String instance_uuid,
+                     @Descriptor("Element properties") String properties) {
+        if (aid == null) {
+            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            return;
+        }
+        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        if (agent == null) {
+            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+        } else {
+            String msg = "--------------------------------------------------------------------------";
+
+            if (instance_uuid != null) {
+
+                String[] tmp = properties.split("=");
+                String pname = null;
+                String pvalue=null;
+                if (tmp != null && tmp.length > 1) {
+                    pname = tmp[0];
+                    pvalue = tmp[0];
+                }
+                if (pname == null || pvalue == null) {
+                    System.out.println("Properties error!");
+                    return;
+                }
+
+                ManagedElement me = agent.getRuntimeModelController().getLocalElement(instance_uuid);
+                if (me == null) {
+                    System.out.println("The instance identified by '"+instance_uuid+"' does not exist in the agent '"+aid+"'!");
+                    return;
+                }
+
+                try {
+                    agent.getRuntimeModelController().updateProperty(instance_uuid, pname, pvalue);
+                } catch (PropertyNotExistException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                msg += "\n... error!";
             }
 
             msg += "\n--------------------------------------------------------------------------";

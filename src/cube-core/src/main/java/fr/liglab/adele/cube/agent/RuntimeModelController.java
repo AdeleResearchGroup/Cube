@@ -19,6 +19,14 @@ public interface RuntimeModelController {
 
     public boolean addProperty(String managed_element_uuid, String name, String value) throws PropertyExistException, InvalidNameException;
 
+    /**
+     * Update instance property.
+     * @param managed_element_uuid
+     * @param name
+     * @param newValue
+     * @return
+     * @throws PropertyNotExistException
+     */
     public String updateProperty(String managed_element_uuid, String name, String newValue) throws PropertyNotExistException;
 
     public List<String> getReferencedElements(String managed_element_uuid, String reference_name);

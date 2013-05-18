@@ -128,12 +128,33 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
     }
 
     public String updateProperty(String managed_element_uuid, String name, String newValue) throws PropertyNotExistException {
-        try {
-            throw new Exception("RuntimeModelController.updateProperty not yet implemented!");
-        } catch (Exception e) {
-            e.printStackTrace();
+        ManagedElement me1 = getLocalElement(managed_element_uuid);
+        if (me1 != null) {
+            return me1.updateProperty(name, newValue);
+        } else {
+            // remote
+            String auri = agent.getExternalAgentUri(managed_element_uuid);
+            if (auri != null) {
+                CMessage msg = new CMessage();
+                msg.setTo(auri);
+                msg.setObject("runtimemodel");
+                msg.setBody("updateProperty");
+                msg.addHeader("uuid", managed_element_uuid);
+                msg.addHeader("name", name);
+                msg.addHeader("value", newValue);
+                try {
+                    CMessage resultmsg = sendAndWait(msg);
+                    if (resultmsg != null) {
+                        if (resultmsg.getBody() != null) {
+                            return resultmsg.getBody().toString();
+                        }
+                    }
+                } catch (TimeOutException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 
     public List<String> getReferencedElements(String managed_element_uuid, String reference_name) {
@@ -551,6 +572,30 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                     resmsg.setCorrelation(msg.getCorrelation());
                     resmsg.setAttachement(me);
                     resmsg.setObject(msg.getObject());
+                    try {
+                        getCubeAgent().getCommunicator().sendMessage(resmsg);
+                    } catch (CommunicationException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }   else if (msg.getBody().toString().equalsIgnoreCase("updateProperty")) {
+                    Object uuid = msg.getHeader("uuid");
+                    Object pname = msg.getHeader("name");
+                    Object pvalue = msg.getHeader("value");
+
+                    String oldvalue = null;
+                    if (uuid != null && pname != null && pvalue != null) {
+                        oldvalue = updateProperty(uuid.toString(), pname.toString(), pvalue.toString());
+                    }
+                    CMessage resmsg = new CMessage();
+                    resmsg.setTo(msg.getFrom());
+                    resmsg.setCorrelation(msg.getCorrelation());
+                    resmsg.setObject(msg.getObject());
+                    resmsg.setBody(oldvalue);
+
                     try {
                         getCubeAgent().getCommunicator().sendMessage(resmsg);
                     } catch (CommunicationException e) {

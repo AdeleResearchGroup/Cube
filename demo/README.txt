@@ -16,9 +16,13 @@
 
 - tutorial 4
 	* hasComponent
-	* HasSourceComponent
+	* hasSourceComponent
 
 - tutorial 5
 	* onNode
 	* inScope
 	* controlledBy
+	* hasComponent
+	* connected
+	* hasSourceComponent
+	* hasProperty

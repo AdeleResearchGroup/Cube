@@ -12,8 +12,7 @@
 	<plugins>
 		<plugin id="fr.liglab.adele.cube.core"/>
 		<plugin id="fr.liglab.adele.cube.osgi">
-			<property name="type" value="AServer"/>		
-			<property name="os" value="xubuntu"/>		
+			<property name="type" value="AServer"/>					
 		</plugin>
 		<!--plugin id="fr.liglab.adele.cube.rm.monitoring"/-->
 	</plugins>
