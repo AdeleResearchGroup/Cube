@@ -5,22 +5,22 @@
 
 	<goals>
 		<goal description="dynamic scopes management">
-			<core:inScope s="@pc" o="@lan" r="fc"/>
-			<core:inScope s="@gateway" o="@lan" r="fc"/>
-			<core:controlledBy s="@lan" o="@master" r="f"/>
+			<core:inScope s="@pc" o="@home" r="fc"/>
+			<core:inScope s="@tablet" o="@home" r="fc"/>
+			<core:controlledBy s="@home" o="@master" r="f"/>
 		</goal>
 		<goal description="components placement">
 			<core:onNode s="@a" o="@pc" r="f"/>
-			<core:onNode s="@b" o="@gateway" r="f"/>
-			<core:onNode s="@c" o="@gateway" r="f"/>
+			<core:onNode s="@b" o="@tablet" r="f"/>
+			<core:onNode s="@c" o="@tablet" r="f"/>
 		</goal>
 		<goal description="self-connecting components">
 			<core:connected s="@a" o="@b" r="fc"/>	   	
 			<core:connected s="@b" o="@c" r="fc"/>	  
 		</goal>
-		<goal>
+		<!--goal>
 			<core:hasAtMaxInputComponents s="@b" o="2"/>
-		</goal>
+		</goal-->
 	</goals>
 
 	<elements>
@@ -36,11 +36,11 @@
 		<core:Node id="pc">
 			<core:hasNodeType o="PC"/>			
 		</core:Node>	
-		<core:Node id="gateway">
-			<core:hasNodeType o="GATEWAY"/>			
+		<core:Node id="tablet">
+			<core:hasNodeType o="TABLET"/>			
 		</core:Node>	
-		<core:Scope id="lan">
-			<core:hasScopeId o="LAN"/>			
+		<core:Scope id="home">
+			<core:hasScopeId o="HOME"/>			
 		</core:Scope>
 		<core:Master id="master">
 			<core:inAgent o="cube://localhost:38001"/>
