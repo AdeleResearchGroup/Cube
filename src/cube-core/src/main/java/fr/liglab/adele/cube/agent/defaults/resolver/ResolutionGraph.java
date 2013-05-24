@@ -805,10 +805,16 @@ public class ResolutionGraph {
         info("checking object variable: " + v.getName());
         for (Constraint c : v.getConstraints()) {
             info("checking constraint: " + c.getName());
+
             if (c.isObjectiveConstraint()) {
                 if (c.isBinaryConstraint()) {
                     info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
                     continue;
+                } else if (c.isUnaryConstraint()) {
+                    if (c.check(agent) == false)  {
+                        info("constraint '"+c.getName()+"' returns FALSE!");
+                        return false;
+                    }
                 }
             } else {
                 // check direct constraint
@@ -826,6 +832,7 @@ public class ResolutionGraph {
 
                 }
             }
+
             info("constraint '" + c.getName()+"' TRUE");
         }
         return true;
