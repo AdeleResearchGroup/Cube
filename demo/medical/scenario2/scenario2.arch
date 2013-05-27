@@ -14,7 +14,10 @@
 		<goal description="self-creating and connecting components">
 			<core:hasComponent s="@aserver" o="@a" r="fc"/>
 			<core:connected s="@a" o="@lb" r="fc"/>
-			<core:onSameNodeAs s="@lb" o="@a" r="fc"/>	   		   	
+			<core:onSameNodeAs s="@lb" o="@a" r="fc"/>	
+
+		   	<core:hasComponent s="@mserver" o="@in" r="fc"/>
+			<core:hasSourceComponent s="@in" o="@lb2" r="f"/>
 		</goal>
 
 <!--
@@ -35,6 +38,20 @@
 
 		<core:Component id="lb">
 			<core:hasComponentType o="LB"/>
+		</core:Component>
+
+		<core:Component id="lb2">
+			<core:hasComponentType o="LB"/>
+			<core:onNode o="@aserver"/>
+		</core:Component>
+
+		<core:Node id="aserver2">
+			<core:hasNodeType o="AggregationServer"/>			
+			<core:inScope o="@orangeinfra"/>
+		</core:Node>
+
+		<core:Component id="in">
+			<core:hasComponentType o="IN"/>
 		</core:Component>
 
 		<core:Node id="router">

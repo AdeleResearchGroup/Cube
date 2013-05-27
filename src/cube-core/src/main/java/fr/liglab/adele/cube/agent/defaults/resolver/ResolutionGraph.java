@@ -831,7 +831,7 @@ public class ResolutionGraph {
 
             if (c.isObjectiveConstraint()) {
                 if (c.isBinaryConstraint()) {
-
+                    /*
                     if (c.getResolutionStrategy() != Constraint.FIND) {
                         // is the objective constraint used as description have CREATE strategy, we do not check it!
                         info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
@@ -843,7 +843,7 @@ public class ResolutionGraph {
                             return false;
                         }
                     }
-
+                    */
                 } else if (c.isUnaryConstraint()) {
                     if (c.check(agent) == false)  {
                         info("constraint '"+c.getName()+"' returns FALSE!");

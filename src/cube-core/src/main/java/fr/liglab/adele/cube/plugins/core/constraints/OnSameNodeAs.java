@@ -116,18 +116,19 @@ public class OnSameNodeAs implements ConstraintResolver {
         Object instance2_uuid = objectVariable.getValue();
 
         if (instance1_uuid != null && instance2_uuid != null) {
-            String agent_of_instance2 = null;
+            String node_instance = null;
             for (String n :  agent.getRuntimeModelController().getReferencedElements(objectVariable.getValue().toString(),
                     Component.CORE_COMPONENT_NODE)) {
-                agent_of_instance2 = n;
+                node_instance = n;
                 break;
             }
-            if (agent_of_instance2 != null) {
+            if (node_instance != null) {
                 RuntimeModelController rmController = agent.getRuntimeModelController();
                 if (rmController != null) {
                     try {
-                        if (rmController.addReferencedElement(instance1_uuid.toString(), Component.CORE_COMPONENT_NODE, agent_of_instance2)) {
-                            return true;
+                        if (rmController.addReferencedElement(instance1_uuid.toString(), Component.CORE_COMPONENT_NODE, node_instance)) {
+                            if (rmController.addReferencedElement(node_instance, Node.CORE_NODE_COMPONENTS, instance1_uuid.toString()))
+                                return true;
                         }
                     } catch (InvalidNameException ex) {
                         ex.printStackTrace();
@@ -152,17 +153,18 @@ public class OnSameNodeAs implements ConstraintResolver {
         Object instance2_uuid = objectVariable.getValue();
 
         if (instance1_uuid != null && instance2_uuid != null) {
-            String agent_of_instance2 = null;
+            String node_instance = null;
             for (String n :  agent.getRuntimeModelController().getReferencedElements(objectVariable.getValue().toString(),
                     Component.CORE_COMPONENT_NODE)) {
-                agent_of_instance2 = n;
+                node_instance = n;
                 break;
             }
-            if (agent_of_instance2 != null) {
+            if (node_instance != null) {
                 RuntimeModelController rmController = agent.getRuntimeModelController();
                 if (rmController != null) {
-                    if (rmController.removeReferencedElement(instance1_uuid.toString(), Component.CORE_COMPONENT_NODE, agent_of_instance2)) {
-                        return true;
+                    if (rmController.removeReferencedElement(instance1_uuid.toString(), Component.CORE_COMPONENT_NODE, node_instance)) {
+                        if (rmController.removeReferencedElement(node_instance, Node.CORE_NODE_COMPONENTS, instance1_uuid.toString()))
+                            return true;
                     }
                 }
             }
