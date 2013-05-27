@@ -87,7 +87,7 @@ public class ResolverImpl implements Resolver, RuntimeModelListener {
             /*
              * Create the root variable that contains the newly created instance (to be resolved).
              */
-            Variable var = new Variable(agent, instance.getNamespace(), instance.getName());
+            Variable var = new Variable(agent, "__root", instance.getNamespace(), instance.getName());
             var.setValue(instance.getUUID());
 
             /*

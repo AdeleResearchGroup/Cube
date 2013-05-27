@@ -1,67 +1,61 @@
 <cube xmlns:core="fr.liglab.adele.cube.core">
-  <archetype id="net.debbabi.cube.medical" 
-			 description="Scenario 0" 
+  <archetype id="net.debbabi.cube.demo" 
+			 description="Tutorial 3" 
 			 version="2.0">
 
-		<goals>
-			<goal description="dynamic scopes management">
-				<inScope s="@aggr_server" o="@orange_infra" r="fc"/>
-				<inScope s="@med_server" o="@orange_infra" r="fc"/>		
-				<controlledBy s="@orange_infra" o="@master" r="f"/>			
-			</goal>
-			<goal description="components placement">
-				<!--onNode s="@ws_in_adapter" o="@aggr_server" r="f"/-->
-				<onNode s="@loadbalancing_out_adapter" o="@aggr_server" r="f"/>
-				<!--onNode s="@JMS_in_adapter" o="@med_server" r="f"/-->
-			</goal>
-			<goal description="initial components creation">
-				<hasComponent s="@aggr_server" o="@ws_in_adapter0" r="fc"/>
-				<hasComponent s="@med_server" o="@JMS_in_adapter" r="fc"/>
-			</goal>
-			<goal>
-				<connected s="@ws_in_adapter" o="@loadbalancing_out_adapter" r="fc"/>
-				<hasSourceComponent s="@JMS_in_adapter" o="@loadbalancing_out_adapter" r="f"/>
-			</goal>
-			<!--goal description="self-growing">
-				<core:connected s="@aggr_ws" o="@loadbalancing_outadapter" r="fc"/>
-			</goal-->
-		</goals>
+	<goals>
+		<goal description="dynamic scopes management">
+			<core:inScope s="@router" o="@orangeinfra" r="fc"/>
+			<core:inScope s="@aserver" o="@orangeinfra" r="fc"/>
+			<core:inScope s="@mserver" o="@orangeinfra" r="fc"/>			
+			<core:controlledBy s="@orangeinfra" o="@master" r="f"/>
+		</goal>
+		
+		<goal description="self-creating and connecting components">
+			<core:hasComponent s="@aserver" o="@a" r="fc"/>
+			<core:connected s="@a" o="@lb" r="fc"/>
+			<core:onSameNodeAs s="@lb" o="@a" r="fc"/>	   		   	
+		</goal>
 
+<!--
+		<goal description="components placement">
+			<core:onNode s="@a" o="@pc" r="f"/>
+			<core:onNode s="@b" o="@tablet" r="f"/>
+			<core:onNode s="@c" o="@tablet" r="f"/>
+		</goal>
+		
+-->
+	</goals>
 
-		<elements>
-			<Master id="master">
-				<inAgent o="cube://localhost:38000"/>
-			</Master>
+	<elements>
 
-			<Scope id="orange_infra">
-				<hasScopeId o="OrangeInfrastructure"/>				
-			</Scope>
+		<core:Component id="a">
+			<core:hasComponentType o="A"/>
+		</core:Component>
 
-			<Node id="aggr_server">
-				<hasNodeType o="AggregationServer"/>
-			</Node>
+		<core:Component id="lb">
+			<core:hasComponentType o="LB"/>
+		</core:Component>
 
-			<Node id="med_server">
-				<hasNodeType o="MediationServer"/>
-			</Node>
+		<core:Node id="router">
+			<core:hasNodeType o="Router"/>			
+		</core:Node>	
 
-			<Component id="ws_in_adapter">
-				<hasComponentType o="WSAdapter"/>
-			</Component>
+		<core:Node id="aserver">
+			<core:hasNodeType o="AggregationServer"/>			
+		</core:Node>
 
-			<Component id="ws_in_adapter0">
-				<hasComponentType o="WSAdapter"/>
-			</Component>
+		<core:Node id="mserver">
+			<core:hasNodeType o="MediationServer"/>			
+		</core:Node>
 
-			<Component id="loadbalancing_out_adapter">
-				<hasComponentType o="LBAdapter"/>	
-			</Component>
+		<core:Scope id="orangeinfra">
+			<core:hasScopeId o="OrangeInfra"/>			
+		</core:Scope>
 
-			<Component id="JMS_in_adapter">
-				<hasComponentType o="JMSInAdapter"/>
-			</Component>
-
-		</elements>
-
+		<core:Master id="master">
+			<core:inAgent o="cube://localhost:38000"/>
+		</core:Master>
+	</elements>
   </archetype>
 </cube>

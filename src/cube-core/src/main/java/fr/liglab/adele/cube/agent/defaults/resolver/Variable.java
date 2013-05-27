@@ -36,6 +36,8 @@ public class Variable extends AbstractManagedElement {
 
     //private Object value = null;
 
+    private String id;
+
     private String name;
     private String namespace;
 
@@ -50,6 +52,11 @@ public class Variable extends AbstractManagedElement {
     public Stack<Object> values = new Stack<Object>();
 
     /**
+     * used when pre-processing the variable when building the resolution graph
+     */
+    private transient boolean processed = false;
+     private transient static int index = 1;
+    /**
      * Primitive.
      *
      * @param agent
@@ -57,6 +64,7 @@ public class Variable extends AbstractManagedElement {
      */
     public Variable(CubeAgent agent, Object value) {
         super(agent);
+        this.id = "__" + index++;
         this.primitive = true;
         this.agent = agent;
         if (value != null)
@@ -69,12 +77,25 @@ public class Variable extends AbstractManagedElement {
      * @param namespace
      * @param name
      */
-    public Variable(CubeAgent agent, String namespace, String name) {
+    public Variable(CubeAgent agent, String id, String namespace, String name) {
         super(agent);
+        this.id = id;
         this.namespace = namespace;
         this.name = name;
         this.primitive = false;
         this.agent = agent;
+    }
+
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public boolean isPrimitive() {

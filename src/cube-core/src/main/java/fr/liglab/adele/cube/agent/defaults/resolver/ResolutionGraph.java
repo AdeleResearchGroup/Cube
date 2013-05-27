@@ -109,8 +109,8 @@ public class ResolutionGraph {
     private void preProcessing() {
         info("pre processing...");
         Archetype archetype = this.agent.getArchetype();
+        this.root.setProcessed(true);
         if (archetype != null) {
-
             // findValue all objectives for this element
             for (Objective obj : archetype.getObjectives()) {
                 info("checking objective " + obj.getName());
@@ -140,7 +140,6 @@ public class ResolutionGraph {
                     }
                 }
             }
-
         }
     }
 
@@ -203,7 +202,8 @@ public class ResolutionGraph {
     }
 
     private void buildObject(Variable var, Element e) {
-
+        if (var == null) return;
+        var.setProcessed(true);
         for (Characteristic car : e.getUnaryCharacteristics()) {
             addConstraint(var, car);
             //info("** adding unary characteristic constraint for subject var: " + c.getName());
@@ -211,8 +211,11 @@ public class ResolutionGraph {
         for (Characteristic car : e.getBinaryCharacteristics()) {
             Constraint c = addConstraint(var, car);
             //info("** adding binary characteristic constraint for subject var: " + c.getName());
-            if (c != null)
-                buildObject(c.getObjectVariable(), (Element)car.getObject());
+            if (c != null) {
+                if (isProcessed(c.getObjectVariable()) == false) {
+                    buildObject(c.getObjectVariable(), (Element)car.getObject());
+                }
+            }
         }
         for (Objective obj : this.agent.getArchetype().getObjectives()) {
             // TODO: à revoir!
@@ -226,8 +229,12 @@ public class ResolutionGraph {
                             /*
                              * if it is a binary constraint, we construct the graph's path.
                              */
+
                     if (objVar != null && !objVar.isPrimitive()) {
-                        buildObject(objVar, (Element)obj.getObject());
+                        // if not already in the Rsolution Graph
+                        if (isProcessed(objVar) == false) {
+                            buildObject(objVar, (Element)obj.getObject());
+                        }
                     }
                 }
             }
@@ -243,6 +250,22 @@ public class ResolutionGraph {
             buildObject(c.getObjectVariable(), (Element)car.getObject());
         } */
 
+    }
+
+    private boolean isProcessed(Variable var) {
+        return isProcessed(this.getRoot(), var);
+    }
+    boolean isProcessed(Variable v, Variable var) {
+        if (v == null || var == null) return false;
+        //System.out.println("v:" + v.getName()+"("+v + ":"+v.isProcessed()+") "+ "var:"+var.getName()+"("+var+":"+var.isProcessed()+")");
+        if (v.getId().equalsIgnoreCase(var.getId()) && v.isProcessed() == true) return true;
+        boolean found = false;
+        for (Constraint c : v.getBinaryConstraints()) {
+            if (isProcessed(c.getObjectVariable(), var)) {
+                return true;
+            }
+        }
+        return found;
     }
 
     /**
@@ -808,8 +831,19 @@ public class ResolutionGraph {
 
             if (c.isObjectiveConstraint()) {
                 if (c.isBinaryConstraint()) {
-                    info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
-                    continue;
+
+                    if (c.getResolutionStrategy() != Constraint.FIND) {
+                        // is the objective constraint used as description have CREATE strategy, we do not check it!
+                        info("avoiding to check objective constraint '"+c.getName() + "' used as description constraint!");
+                        continue;
+                    }
+                    else {
+                        if (c.check(agent) == false)  {
+                            info("constraint '"+c.getName()+"' returns FALSE!");
+                            return false;
+                        }
+                    }
+
                 } else if (c.isUnaryConstraint()) {
                     if (c.check(agent) == false)  {
                         info("constraint '"+c.getName()+"' returns FALSE!");
@@ -866,7 +900,7 @@ public class ResolutionGraph {
         if (objective.getObject() instanceof Element) {
             // Binary
             Element obj = (Element)objective.getObject();
-            objvar = new Variable(this.agent, obj.getNamespace(), obj.getName());
+            objvar = new Variable(this.agent, obj.getId(), obj.getNamespace(), obj.getName());
         } else {
             // Unary
             objvar = new Variable(this.agent, objective.getObject());
@@ -890,13 +924,27 @@ public class ResolutionGraph {
             if (car.getObject() instanceof Element) {
                 // Binary
                 Element obj = (Element)car.getObject();
-                objvar = new Variable(this.agent, obj.getNamespace(), obj.getName());
+                objvar = getVariable(this.root, obj.getId());
+                if (objvar == null)
+                    objvar = new Variable(this.agent, obj.getId(), obj.getNamespace(), obj.getName());
+
             } else {
                 // Unary
                 objvar = new Variable(this.agent, car.getObject().toString());
             }
             Constraint c = new Constraint(var, car.getNamespace(), car.getName(), objvar);
             return c;
+        }
+        return null;
+    }
+
+    private Variable getVariable(Variable v, String id) {
+        if (v == null) return null;
+        if (v.getId() == null) return null;
+        if (v.getId().equalsIgnoreCase(id)) return v;
+        for (Constraint c : v.getBinaryConstraints()) {
+            Variable res = getVariable(c.getObjectVariable(), id);
+            if (res != null) return res;
         }
         return null;
     }
