@@ -49,6 +49,9 @@ public interface RuntimeModelController {
 
     boolean hasReferencedElement(String managed_element_uuid, String reference_name, String referenced_element_uuri);
 
+    public boolean destroyElement(String managed_element_uuid);
+
+
     public void receiveMessage(CMessage msg);
 
     public boolean areSimilar(String instance_uuid1, String instance_uuid2);

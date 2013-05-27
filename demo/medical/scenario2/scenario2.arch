@@ -16,8 +16,15 @@
 			<core:connected s="@a" o="@lb" r="fc"/>
 			<core:onSameNodeAs s="@lb" o="@a" r="fc"/>	
 
-		   	<core:hasComponent s="@mserver" o="@in" r="fc"/>
-			<core:hasSourceComponent s="@in" o="@lb2" r="f"/>
+		   	<core:hasComponent s="@mserver_active" o="@in" r="fc"/>
+			<core:hasSourceComponent s="@in" o="@lb2" r="f"/> <!-- connected -->
+
+			<core:hasNoComponents s="@mserver_inactive" o="all"/>
+
+			<core:activateDesactiveNodes s="@orangeinfra" o="50:70"/>
+			<!-- plugin= monitor(Node.cpu) -->
+			<!-- plugin= monitor(Nodes.cpu) : collecter les valeurs des differents CPU -->
+
 		</goal>
 
 <!--
@@ -60,6 +67,16 @@
 
 		<core:Node id="aserver">
 			<core:hasNodeType o="AggregationServer"/>			
+		</core:Node>
+
+		<core:Node id="mserver_active">
+			<core:hasNodeType o="MediationServer"/>			
+			<core:hasProperty o="active:true"/>
+		</core:Node>
+
+		<core:Node id="mserver_inactive">
+			<core:hasNodeType o="MediationServer"/>			
+			<core:hasProperty o="active:false"/>
 		</core:Node>
 
 		<core:Node id="mserver">

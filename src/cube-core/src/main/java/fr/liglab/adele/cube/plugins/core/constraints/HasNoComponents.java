@@ -22,7 +22,9 @@ import fr.liglab.adele.cube.agent.ConstraintResolver;
 import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.agent.RuntimeModelController;
 import fr.liglab.adele.cube.agent.defaults.resolver.Variable;
+import fr.liglab.adele.cube.plugins.core.model.Node;
 
+import java.util.List;
 
 /**
  * Author: debbabi
@@ -44,11 +46,12 @@ public class HasNoComponents implements ConstraintResolver {
     public boolean check(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
         Object instance1_uuid = subjectVariable.getValue();
         Object agentUri = objectVariable.getValue();
+
         if (instance1_uuid != null && agentUri != null) {
             RuntimeModelController rmController = agent.getRuntimeModelController();
             if (rmController != null) {
-                String value = rmController.getAgentOfElement(instance1_uuid.toString());
-                if (value != null && value.equalsIgnoreCase(agentUri.toString())) {
+                List<String> comps = rmController.getReferencedElements(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS);
+                if (comps == null || comps.size() == 0) {
                     return true;
                 }
             }
@@ -57,10 +60,6 @@ public class HasNoComponents implements ConstraintResolver {
     }
 
     public boolean applyDescription(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
-        if (subjectVariable != null && objectVariable != null && objectVariable.getValue() != null) {
-            subjectVariable.setCubeAgent(objectVariable.getValue().toString());
-            return true;
-        }
         return false;
     }
 
@@ -73,7 +72,20 @@ public class HasNoComponents implements ConstraintResolver {
      * @return
      */
     public boolean performObjective(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        Object instance1_uuid = subjectVariable.getValue();
+        Object whichCompts = objectVariable.getValue();
+
+        if (instance1_uuid != null) {
+            RuntimeModelController rmController = agent.getRuntimeModelController();
+            if (rmController != null) {
+                List<String> comps = rmController.getReferencedElements(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS);
+                for (String c : comps) {
+                    rmController.removeReferencedElement(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS ,c);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -85,6 +97,7 @@ public class HasNoComponents implements ConstraintResolver {
      * @return
      */
     public boolean cancelObjective(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
+
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
@@ -96,6 +109,7 @@ public class HasNoComponents implements ConstraintResolver {
      * @return
      */
     public String find(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
+
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

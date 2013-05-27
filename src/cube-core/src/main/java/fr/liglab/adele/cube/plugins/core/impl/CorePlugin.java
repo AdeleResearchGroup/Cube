@@ -158,6 +158,9 @@ public class CorePlugin extends AbstractPlugin {
             if (name.equalsIgnoreCase("hasComponent")) {
                 return HasComponent.instance();
             }
+            if (name.equalsIgnoreCase("hasNoComponents")) {
+                return HasNoComponents.instance();
+            }
 
             // components
             if (name.equalsIgnoreCase("connected")) {

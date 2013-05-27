@@ -238,7 +238,8 @@ public abstract class AbstractManagedElement extends Observable implements Manag
      * @throws PropertyNotExistException
      */
     public String updateProperty(String name, String newValue) throws PropertyNotExistException {
-        if (name == null || name.length() <= 0) {
+        System.out.println("ME.updateProperty..");
+        if (name != null && name.length() > 0) {
             if (_getProperty(name) == null)
                 throw new PropertyNotExistException("You are trying to update unexistant property '" + name + "'!");
             Property p = _getProperty(name);

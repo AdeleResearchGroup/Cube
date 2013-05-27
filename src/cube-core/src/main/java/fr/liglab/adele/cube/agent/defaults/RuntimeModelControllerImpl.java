@@ -23,7 +23,9 @@ import fr.liglab.adele.cube.metamodel.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Author: debbabi
@@ -128,9 +130,16 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
     }
 
     public String updateProperty(String managed_element_uuid, String name, String newValue) throws PropertyNotExistException {
+        System.out.println("updateProperty:");
         ManagedElement me1 = getLocalElement(managed_element_uuid);
         if (me1 != null) {
-            return me1.updateProperty(name, newValue);
+            System.out.println("updating instance property! "+name+"="+newValue);
+            String old = me1.updateProperty(name, newValue);
+            if (old != null && !old.equalsIgnoreCase(newValue)) {
+                // notify changes!
+                ((AbstractManagedElement)me1).updateState(ManagedElement.UNCHECKED);
+            }
+            return old;
         } else {
             // remote
             String auri = agent.getExternalAgentUri(managed_element_uuid);
@@ -305,6 +314,83 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 msg.addHeader("uuid", managed_element_uuid);
                 msg.addHeader("name", reference_name);
                 msg.addHeader("refuuid", referenced_element_uuri);
+                try {
+                    CMessage resultmsg = sendAndWait(msg);
+                    if (resultmsg != null) {
+                        if (resultmsg.getBody() != null) {
+                            if (resultmsg.getBody().toString().equalsIgnoreCase("true")) {
+                                return true;
+                            }
+                        }
+                    }
+                } catch (TimeOutException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public boolean destroyElement(String managed_element_uuid) {
+        ManagedElement me1 = getLocalElement(managed_element_uuid);
+        if (me1 != null) {
+            // get its references
+            List<Reference> outRefs = me1.getReferences();
+            ManagedElement result = null;
+            result = ((RuntimeModelImpl)agent.getRuntimeModel()).remove(me1);
+            if (result != null)
+            {
+                //System.out.println("\n\n\nremoving instance: "+result.getUUID()+"\n\n\n");
+                List<String> toBeRemovedLocally = new ArrayList<String>();
+                List<String> toBeRemovedRemotely = new ArrayList<String>();
+                //List<String> toBeRemovedRemotely = new ArrayList<String>();
+                toBeRemovedLocally.add(managed_element_uuid);
+                for (Reference r : outRefs) {
+                    for (String ss : r.getReferencedElements()) {
+                        // check if it is a remote reference
+                        ManagedElement me = getLocalElement(ss);
+                        if (me == null) {
+                            String agent = getAgentOfElement(ss);
+                            if (agent != null)
+                                toBeRemovedRemotely.add(agent);
+                        }
+                    }
+                }
+                // remove references from the local Runtime Model
+                for (String s : toBeRemovedLocally) {
+                    System.out.println(">> " + s);
+                }
+                ((RuntimeModelImpl)agent.getRuntimeModel()).removeReferences(toBeRemovedLocally);
+
+                // remove remote references
+                System.out.println("\n\n\nremove remote references not yet implemented!\n\n\n");
+
+                for (String agent : toBeRemovedRemotely) {
+                    CMessage msg = new CMessage();
+                    msg.setTo(agent);
+                    msg.setObject("runtimemodel");
+                    msg.setBody("removeReferences");
+                    msg.addHeader("uuid", managed_element_uuid);
+
+                    try {
+                        send(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+            return result != null;
+        }  else {
+
+            String auri = agent.getExternalAgentUri(managed_element_uuid);
+            if (auri != null) {
+                CMessage msg = new CMessage();
+                msg.setTo(auri);
+                msg.setObject("runtimemodel");
+                msg.setBody("destroyElement");
+                msg.addHeader("uuid", managed_element_uuid);
                 try {
                     CMessage resultmsg = sendAndWait(msg);
                     if (resultmsg != null) {
@@ -561,7 +647,32 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                }  else if (msg.getBody().toString().equalsIgnoreCase("getRemoteElement")) {
+                }   else if (msg.getBody().toString().equalsIgnoreCase("destroyElement")) {
+
+                    // destroyElement
+                    Object uuid = msg.getHeader("uuid");
+                    if (uuid == null) return;
+                    boolean p = false;
+                    if (uuid != null) {
+                        p = destroyElement(uuid.toString());
+                    }
+                    CMessage resmsg = new CMessage();
+                    resmsg.setTo(msg.getFrom());
+                    resmsg.setCorrelation(msg.getCorrelation());
+                    resmsg.setObject(msg.getObject());
+                    if (p == true)
+                        resmsg.setBody("true");
+                    else
+                        resmsg.setBody("false");
+                    try {
+                        getCubeAgent().getCommunicator().sendMessage(resmsg);
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }   else if (msg.getBody().toString().equalsIgnoreCase("getRemoteElement")) {
                     Object uuid = msg.getHeader("uuid");
                     ManagedElement me = null;
                     if (uuid != null) {
@@ -604,6 +715,13 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                     } catch (IOException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
+                    }
+                }  else if (msg.getBody().toString().equalsIgnoreCase("removeReferences")) {
+                    Object uuid = msg.getHeader("uuid");
+                    if (uuid != null) {
+                        List<String> toBeRemoved = new ArrayList<String>();
+                        toBeRemoved.add(uuid.toString());
+                        ((RuntimeModelImpl)agent.getRuntimeModel()).removeReferences(toBeRemoved);
                     }
                 }
             }

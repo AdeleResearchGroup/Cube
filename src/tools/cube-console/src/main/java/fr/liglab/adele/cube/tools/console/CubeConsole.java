@@ -20,6 +20,7 @@ package fr.liglab.adele.cube.tools.console;
 
 import fr.liglab.adele.cube.CubePlatform;
 import fr.liglab.adele.cube.agent.CubeAgent;
+import fr.liglab.adele.cube.agent.defaults.RuntimeModelImpl;
 import fr.liglab.adele.cube.metamodel.InvalidNameException;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.PropertyExistException;
@@ -54,7 +55,7 @@ public class CubeConsole {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"version", "agents", "arch", "rm" , "newi" , "plugins", "update" /*, "extension"*/};
+    String[] m_function = new String[]{"version", "agents", "arch", "rm" , "newi" , "plugins", "update", "rmi" /*, "extension"*/};
 
 
     @Descriptor("Show Cube Platform Version")
@@ -234,6 +235,30 @@ public class CubeConsole {
         }
     }
 
+    @Descriptor("Show archtype")
+    public void rmi(@Descriptor("Agent local id") String aid, @Descriptor("instance uuid") String uuid) {
+        if (aid == null) {
+            System.out.println("You should specify in which Cube Agent you want to execute your command!");
+            return;
+        }
+        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        if (agent == null) {
+            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+        } else {
+
+            String msg = "--------------------------------------------------------------------------";
+
+            boolean result = agent.getRuntimeModelController().destroyElement(uuid);
+            if (result == true)
+                msg += "\n... Done!";
+            else
+                msg += "\n... No instance was found to be removed!";
+
+            msg += "\n--------------------------------------------------------------------------";
+            System.out.println(msg);
+        }
+    }
+
     @Descriptor("Shows the internal plugins of the given Cube Agent")
     public void plugins(@Descriptor("Agent local id") String aid) {
         if (aid == null) {
@@ -279,7 +304,7 @@ public class CubeConsole {
                 String pvalue=null;
                 if (tmp != null && tmp.length > 1) {
                     pname = tmp[0];
-                    pvalue = tmp[0];
+                    pvalue = tmp[1];
                 }
                 if (pname == null || pvalue == null) {
                     System.out.println("Properties error!");
@@ -293,7 +318,10 @@ public class CubeConsole {
                 }
 
                 try {
-                    agent.getRuntimeModelController().updateProperty(instance_uuid, pname, pvalue);
+                    String old = agent.getRuntimeModelController().updateProperty(instance_uuid, pname, pvalue);
+                    if (old != null && !old.equalsIgnoreCase(pvalue)) {
+                        (agent.getRuntimeModel()).refresh();
+                    }
                 } catch (PropertyNotExistException e) {
                     e.printStackTrace();
                 }

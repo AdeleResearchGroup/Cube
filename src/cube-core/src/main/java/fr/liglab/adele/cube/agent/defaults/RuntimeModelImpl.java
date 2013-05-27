@@ -141,6 +141,11 @@ public class RuntimeModelImpl implements RuntimeModel {
         }
     }
 
+    public synchronized ManagedElement remove(ManagedElement me1) {
+        if (me1 == null) return null;
+        return this.elements.remove(me1.getUUID());
+    }
+
     /**
      * ================================ NOTIFICATIONS ===============================================
      */
@@ -253,7 +258,6 @@ public class RuntimeModelImpl implements RuntimeModel {
       public synchronized boolean hasChanged() {
         return changed;
       }
-
 
 
 
