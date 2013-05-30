@@ -17,8 +17,11 @@
 			<property name="master" value="true"/>
 		</plugin>
 		<plugin id="fr.liglab.adele.cube.osgi">
-			<property name="type" value="Router"/>			
+			<property name="type" value="Server"/>			
 		</plugin>	
+		<plugin id="fr.liglab.adele.cube.loadbalancing">
+			<property name="interval" value="6000"/>
+		</plugin>
 	</plugins>
 
   </agent>

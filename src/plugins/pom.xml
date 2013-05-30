@@ -31,6 +31,7 @@
 	<modules>
         <module>cube-osgi-plugin</module>
 		<module>cube-rm-monitoring-plugin</module>
+		<module>cube-loadbalancing-plugin</module>
 	</modules>	
 
 </project>
