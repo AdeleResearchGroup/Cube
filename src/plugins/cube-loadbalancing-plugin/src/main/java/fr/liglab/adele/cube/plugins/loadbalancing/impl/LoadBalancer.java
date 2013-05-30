@@ -87,11 +87,23 @@ public class LoadBalancer implements Runnable {
                     String loadbalanced = me.getProperty(LOADBALANCING_PROPERTY);
                     if (loadbalanced != null) {
                         if (loadbalanced.equalsIgnoreCase("true")) {
-                            if (me.hasProperty(CPU_PROPERTY)) {
-                                agent.getRuntimeModelController().updateProperty(me.getUUID(), CPU_PROPERTY, new Integer(cpu).toString());
-                            } else {
-                                agent.getRuntimeModelController().addProperty(me.getUUID(), CPU_PROPERTY, new Integer(cpu).toString());
+                            String active = me.getProperty("active");
+                            if (active != null) {
+                                if (active.equalsIgnoreCase("true")) {
+                                    if (me.hasProperty(CPU_PROPERTY)) {
+                                        agent.getRuntimeModelController().updateProperty(me.getUUID(), CPU_PROPERTY, new Integer(cpu).toString());
+                                    } else {
+                                        agent.getRuntimeModelController().addProperty(me.getUUID(), CPU_PROPERTY, new Integer(cpu).toString());
+                                    }
+                                } else {
+                                    if (me.hasProperty(CPU_PROPERTY)) {
+                                        agent.getRuntimeModelController().updateProperty(me.getUUID(), CPU_PROPERTY, "0");
+                                    } else {
+                                        agent.getRuntimeModelController().addProperty(me.getUUID(), CPU_PROPERTY, "0");
+                                    }
+                                }
                             }
+
                         }
                     }
                 } catch (PropertyExistException e) {
@@ -142,17 +154,18 @@ public class LoadBalancer implements Runnable {
                                 if (loadbalanced.equalsIgnoreCase("true")) {
                                     // check that the node is "active"
                                     String active = agent.getRuntimeModelController().getPropertyValue(node, "active");
-                                    if (active != null && active.equalsIgnoreCase("true")) {
-                                        //
-                                        active_nodes.add(node);
-                                        // get the cpu value of the node
-                                        String cpu = agent.getRuntimeModelController().getPropertyValue(node, CPU_PROPERTY);
-                                        if (cpu != null) {
-                                            msg += "**** cpu of '"+node+"' is: "+cpu+"\n";
-                                            total += new Integer(cpu).intValue();
+                                    if (active != null) {
+                                        if (active.equalsIgnoreCase("true")) {
+                                            active_nodes.add(node);
+                                            // get the cpu value of the node
+                                            String cpu = agent.getRuntimeModelController().getPropertyValue(node, CPU_PROPERTY);
+                                            if (cpu != null) {
+                                                msg += "**** cpu of '"+node+"' is: "+cpu+"\n";
+                                                total += new Integer(cpu).intValue();
+                                            }
+                                        } else {
+                                            inactive_nodes.add(node);
                                         }
-                                    } else {
-                                        inactive_nodes.add(node);
                                     }
                                 }  else {
                                     // nothing to do

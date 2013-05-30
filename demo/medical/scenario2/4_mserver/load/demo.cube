@@ -16,7 +16,7 @@
 		<plugin id="fr.liglab.adele.cube.osgi">
 			<property name="type" value="MediationServer"/>
 			<property name="loadbalancing" value="true"/>
-			<property name="active" value="true"/>
+			<property name="active" value="false"/>
 		</plugin>
 		<plugin id="fr.liglab.adele.cube.loadbalancing">
 			<property name="interval" value="6000"/>

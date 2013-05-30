@@ -21,7 +21,7 @@
 		<plugin id="fr.liglab.adele.cube.loadbalancing">
 			<property name="interval" value="6000"/>
 		</plugin>
-		<!--plugin id="fr.liglab.adele.cube.rm.monitoring"/-->
+		<plugin id="fr.liglab.adele.cube.rm.monitoring"/>
 	</plugins>
   </agent>
 </cube>

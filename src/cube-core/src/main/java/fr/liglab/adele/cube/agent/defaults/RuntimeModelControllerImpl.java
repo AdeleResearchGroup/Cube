@@ -364,7 +364,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 ((RuntimeModelImpl)agent.getRuntimeModel()).removeReferences(toBeRemovedLocally);
 
                 // remove remote references
-                System.out.println("\n\n\nremove remote references not yet implemented!\n\n\n");
+                //System.out.println("\n\n\nremove remote references not yet implemented!\n\n\n");
 
                 for (String agent : toBeRemovedRemotely) {
                     CMessage msg = new CMessage();

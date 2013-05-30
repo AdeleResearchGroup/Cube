@@ -22,8 +22,12 @@ import fr.liglab.adele.cube.agent.ConstraintResolver;
 import fr.liglab.adele.cube.agent.CubeAgent;
 import fr.liglab.adele.cube.agent.RuntimeModelController;
 import fr.liglab.adele.cube.agent.defaults.resolver.Variable;
+import fr.liglab.adele.cube.metamodel.ManagedElement;
+import fr.liglab.adele.cube.plugins.core.CorePluginFactory;
+import fr.liglab.adele.cube.plugins.core.model.Component;
 import fr.liglab.adele.cube.plugins.core.model.Node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,15 +76,27 @@ public class HasNoComponents implements ConstraintResolver {
      * @return
      */
     public boolean performObjective(CubeAgent agent, Variable subjectVariable, Variable objectVariable) {
+        System.out.println("\n\n performing: hasNoComponents...\n\n");
         Object instance1_uuid = subjectVariable.getValue();
         Object whichCompts = objectVariable.getValue();
 
         if (instance1_uuid != null) {
             RuntimeModelController rmController = agent.getRuntimeModelController();
             if (rmController != null) {
-                List<String> comps = rmController.getReferencedElements(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS);
+
+                ArrayList<String> comps = new ArrayList<String>();
+                synchronized (this) {
+                    List<ManagedElement> tmp = agent.getRuntimeModel().getManagedElements(CorePluginFactory.NAMESPACE, Component.NAME, ManagedElement.VALID);
+                    for (ManagedElement m : tmp) {
+                        comps.add(m.getUUID());
+                    }
+                }
+                //List<String> comps = rmController.getReferencedElements(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS);
                 for (String c : comps) {
-                    rmController.removeReferencedElement(instance1_uuid.toString(), Node.CORE_NODE_COMPONENTS ,c);
+                    System.out.println("- "+c);
+                    rmController.destroyElement(c);
+                    //rmController.removeReferencedElement(c, Component.CORE_COMPONENT_NODE ,instance1_uuid.toString());
+
                 }
                 return true;
             }

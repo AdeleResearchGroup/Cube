@@ -19,35 +19,16 @@
 		</goal>
 		
 		<goal description="self-creating and connecting components on mserver">
-			<core:hasComponent s="@mserver" o="@in" r="fc"/>
+			<core:hasComponent s="@mserver_active" o="@in" r="fc"/>
 			<core:hasSourceComponent s="@in" o="@lb2" r="f"/>	
 			<core:connected s="@in" o="@b" r="fc"/>
 			<core:onNode s="@b" o="@mserver2" r="f"/>
 		</goal>
 
-		<!--goal description="self-creating and connecting components">
-			<core:hasComponent s="@aserver" o="@a" r="fc"/>
-			<core:connected s="@a" o="@lb" r="fc"/>
-			<core:onSameNodeAs s="@lb" o="@a" r="fc"/>	
-
-		   	<core:hasComponent s="@mserver_active" o="@in" r="fc"/>
-			<core:hasSourceComponent s="@in" o="@lb2" r="f"/>
-
+		<goal description="self-destroying components on mserver if inactive">
 			<core:hasNoComponents s="@mserver_inactive" o="all"/>
-
-			<core:activateDesactiveNodes s="@orangeinfra" o="50:70"/-->
-			<!-- plugin= monitor(Node.cpu) -->
-			<!-- plugin= monitor(Nodes.cpu) : collecter les valeurs des differents CPU -->
-		<!--/goal-->
-
-<!--
-		<goal description="components placement">
-			<core:onNode s="@a" o="@pc" r="f"/>
-			<core:onNode s="@b" o="@tablet" r="f"/>
-			<core:onNode s="@c" o="@tablet" r="f"/>
 		</goal>
-		
--->
+
 	</goals>
 
 	<elements>
@@ -91,6 +72,17 @@
 			<!--core:hasProperty o="active:true"/-->
 		</core:Node>
 
+		<core:Node id="mserver_active">
+			<core:hasNodeType o="MediationServer"/>			
+			<core:hasProperty o="active:true"/>
+		</core:Node>
+
+
+		<core:Node id="mserver_inactive">
+			<core:hasNodeType o="MediationServer"/>			
+			<core:hasProperty o="active:false"/>
+		</core:Node>
+
 		<core:Node id="mserver2">
 			<core:hasNodeType o="MediationServer"/>			
 			<core:inScope s="@orangeinfra"/>
@@ -103,32 +95,6 @@
 		<core:Master id="master">
 			<core:inAgent o="cube://localhost:38000"/>
 		</core:Master>
-
-		<!--core:Component id="lb2">
-			<core:hasComponentType o="LB"/>
-			<core:onNode o="@aserver"/>
-		</core:Component-->
-
-		<!--core:Node id="aserver2">
-			<core:hasNodeType o="AggregationServer"/>			
-			<core:inScope o="@orangeinfra"/>
-		</core:Node-->
-
-		<!--core:Component id="in">
-			<core:hasComponentType o="IN"/>
-		</core:Component-->
-	
-		<!--
-
-		<core:Node id="mserver_inactive">
-			<core:hasNodeType o="MediationServer"/>			
-			<core:hasProperty o="active:false"/>
-		</core:Node>
-
-		<core:Node id="mserver">
-			<core:hasNodeType o="MediationServer"/>			
-		</core:Node-->
-
 
 	</elements>
   </archetype>
