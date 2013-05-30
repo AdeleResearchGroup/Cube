@@ -150,37 +150,41 @@ public class ResolverImpl implements Resolver, RuntimeModelListener {
             Object uuid =v.getValue();
             if (uuid != null) {
                 String agenturi = getCubeAgent().getRuntimeModelController().getAgentOfElement(uuid.toString());
-                if (getCubeAgent().getUri().equalsIgnoreCase(agenturi)) {
-                    ManagedElement me = agent.getRuntimeModelController().getLocalElement(uuid.toString());
-                    if (me != null) {
-                        if (me.getState() == ManagedElement.UNCHECKED) {
-                            ((AbstractManagedElement)me).validate();
-                            ((AbstractManagedElement)me).setInResolution(false);
-                        } else if (me.getState() == ManagedElement.UNMANAGED) {
-                            agent.getRuntimeModel().add(me);
-                            ((AbstractManagedElement)me).setInResolution(false);
+                if (agenturi == null || agenturi.trim().length() == 0) {
+                   System.out.println("[WARNING] trying to validate instance '"+uuid+"' but Resolver cannot find its corresponding agent!");
+                }  else {
+                    if (getCubeAgent().getUri().equalsIgnoreCase(agenturi)) {
+                        ManagedElement me = agent.getRuntimeModelController().getLocalElement(uuid.toString());
+                        if (me != null) {
+                            if (me.getState() == ManagedElement.UNCHECKED) {
+                                ((AbstractManagedElement)me).validate();
+                                ((AbstractManagedElement)me).setInResolution(false);
+                            } else if (me.getState() == ManagedElement.UNMANAGED) {
+                                agent.getRuntimeModel().add(me);
+                                ((AbstractManagedElement)me).setInResolution(false);
+                            }
+                            changed = true;
                         }
-                        changed = true;
                     }
-                }
-                else {
-                    //info("... remote createValue");
+                    else {
+                        //info("... remote createValue");
 
-                    CMessage msg = new CMessage();
-                    msg.setTo(agenturi);
-                    msg.setFrom(agent.getUri());
-                    msg.setReplyTo(agent.getUri());
-                    msg.setObject("resolution");
-                    msg.setBody("validateVariable");
-                    msg.setAttachement(v);
-                    try {
-                        //System.out.println("sending..." + msg.toString());
-                        //System.out.println(v.getTextualDescription());
-                        send(msg);
-                    } catch (TimeOutException e) {
-                        e.printStackTrace();
-                    } catch (Exception e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        CMessage msg = new CMessage();
+                        msg.setTo(agenturi);
+                        msg.setFrom(agent.getUri());
+                        msg.setReplyTo(agent.getUri());
+                        msg.setObject("resolution");
+                        msg.setBody("validateVariable");
+                        msg.setAttachement(v);
+                        try {
+                            //System.out.println("sending..." + msg.toString());
+                            //System.out.println(v.getTextualDescription());
+                            send(msg);
+                        } catch (TimeOutException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        }
                     }
                 }
             }
