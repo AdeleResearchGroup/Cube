@@ -172,8 +172,8 @@ public class CorePlugin extends AbstractPlugin {
             if (name.equalsIgnoreCase("hasAtMaxInputComponents")) {
                 return HasAtMaxInputComponents.instance();
             }
-            if (name.equalsIgnoreCase("onSameNodeAs")) {
-                return OnSameNodeAs.instance();
+            if (name.equalsIgnoreCase("onSameNode")) {
+                return OnSameNode.instance();
             }
 
         }

@@ -34,9 +34,9 @@ import java.util.List;
  * Date: 4/28/13
  * Time: 10:24 PM
  */
-public class OnSameNodeAs implements ConstraintResolver {
+public class OnSameNode implements ConstraintResolver {
 
-    private static ConstraintResolver instance = new OnSameNodeAs();
+    private static ConstraintResolver instance = new OnSameNode();
 
     public static ConstraintResolver instance() {
         return instance;
