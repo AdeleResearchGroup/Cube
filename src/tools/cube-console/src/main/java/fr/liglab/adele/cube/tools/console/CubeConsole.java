@@ -18,21 +18,18 @@
 
 package fr.liglab.adele.cube.tools.console;
 
-import fr.liglab.adele.cube.CubePlatform;
-import fr.liglab.adele.cube.agent.CubeAgent;
-import fr.liglab.adele.cube.agent.defaults.RuntimeModelImpl;
+
+import fr.liglab.adele.cube.AdministrationService;
+import fr.liglab.adele.cube.AutonomicManager;
+import fr.liglab.adele.cube.autonomicmanager.NotFoundManagedElementException;
+import fr.liglab.adele.cube.extensions.Extension;
+import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.metamodel.InvalidNameException;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.PropertyExistException;
 import fr.liglab.adele.cube.metamodel.PropertyNotExistException;
-import fr.liglab.adele.cube.plugins.Plugin;
-import fr.liglab.adele.cube.plugins.core.CorePluginFactory;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
-import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
-import org.apache.felix.ipojo.annotations.Provides;
-import org.apache.felix.ipojo.annotations.Requires;
-import org.apache.felix.ipojo.annotations.ServiceProperty;
+import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
 
 import java.util.Properties;
@@ -49,29 +46,29 @@ import java.util.Properties;
 public class CubeConsole {
 
     @Requires
-    CubePlatform cps;
+    AdministrationService cps;
 
     @ServiceProperty(name = "osgi.command.scope", value = "cube")
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"version", "agents", "arch", "rm" , "newi" , "plugins", "update", "rmi" /*, "extension"*/};
+    String[] m_function = new String[]{"version", "ams", "arch", "rm" , "newi" , "extensions", "update", "rmi", "delete" /*, "extension"*/};
 
 
     @Descriptor("Show Cube Platform Version")
     public void version() {
         String msg = "--------------------------------------------------------------------------";
-        msg += "\nCube Platform version: " + this.cps.getVersion();
+        msg += "\nCube Runtime - version: " + this.cps.getVersion();
         msg += "\n--------------------------------------------------------------------------";
         System.out.println(msg);
 
     }
 
     @Descriptor("Show created Cube Agents")
-    public void agents() {
+    public void ams() {
         String msg = "--------------------------------------------------------------------------";
-        for (String uri : this.cps.getCubeAgents()) {
-            CubeAgent ci = cps.getCubeAgent(uri);
+        for (String uri : this.cps.getAutonomicManagers()) {
+            AutonomicManager ci = cps.getAutonomicManager(uri);
             msg += "\n[" + ci.getLocalId() + "] " + ci.getUri();
 
         }
@@ -83,12 +80,12 @@ public class CubeConsole {
     @Descriptor("Show archtype")
     public void arch(@Descriptor("Agent local id") String aid) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Autonomic Manager you want to see its archetype.\nType 'cube:ams' to see the list of existing Cube Agents in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube AM in this runtime.");
         } else {
             String msg = "--------------------------------------------------------------------------";
             if (agent.getArchetype() != null) {
@@ -104,26 +101,26 @@ public class CubeConsole {
     @Descriptor("Shows the internal model at runtime of the given Cube Agent")
     public void rm(@Descriptor("Agent local id") String aid) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its Runtime Model.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Autonomic Manager you want to see its Runtime Model.\nType 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Manager in this runtime.");
         } else {
             String msg = "--------------------------------------------------------------------------";
 
             msg += "\n------ UNMANAGED ----";
-            for (ManagedElement e : agent.getUnmanagedElements()) {
-                msg += e.getTextualDescription();
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.UNMANAGED)) {
+                msg += e.getDocumentation();
             }
-            msg += "\n" + "------ UNCHECKED ----";
-            for (ManagedElement e : agent.getRuntimeModel().getManagedElements(ManagedElement.UNCHECKED)) {
-                msg += e.getTextualDescription();
+            msg += "\n" + "------ INVALID ----";
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.INVALID)) {
+                msg += e.getDocumentation();
             }
             msg += "\n" + "------ VALID --------";
-            for (ManagedElement e : agent.getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
-                msg += e.getTextualDescription();
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
+                msg += e.getDocumentation();
             }
 
             msg += "\n--------------------------------------------------------------------------";
@@ -133,19 +130,19 @@ public class CubeConsole {
 
     @Descriptor("Show archtype")
     public void newi(@Descriptor("Agent local id") String aid,
-                     @Descriptor("Element type") String type) {
+                     @Descriptor("ElementDescription type") String type) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
         } else {
             String msg = "--------------------------------------------------------------------------";
 
             if (type != null) {
-                String typens = CorePluginFactory.NAMESPACE;
+                String typens = CoreExtensionFactory.NAMESPACE;
                 String typename = type;
                 if (type.contains(":")) {
                     String[] tmp = type.split(":");
@@ -156,42 +153,44 @@ public class CubeConsole {
                 }
                 ManagedElement me = null;
                 try {
-                    me = agent.newManagedElement(typens, typename, null);
+                    me = agent.getRuntimeModelController().newManagedElement(typens, typename, null);
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
                 } catch (PropertyExistException e) {
                     e.printStackTrace();
+                } catch (NotFoundManagedElementException e) {
+                    System.out.println(e.getMessage());
                 }
                 if (me != null) {
-                    agent.getRuntimeModel().add(me);
+                    //agent.getRuntimeModelController().getRuntimeModel().add(me);
                     msg += "\n... instance created: " + me.getUri();
-                    agent.getRuntimeModel().refresh();
+                    agent.getRuntimeModelController().getRuntimeModel().refresh();
                 }
             } else {
                 msg += "\n... error!";
             }
 
             msg += "\n--------------------------------------------------------------------------";
-            System.out.println(msg);
+            //System.out.println(msg);
         }
     }
 
     @Descriptor("New instance")
     public void newi(@Descriptor("Agent local id") String aid,
-                     @Descriptor("Element type") String type,
-                     @Descriptor("Element properties") String properties) {
+                     @Descriptor("ElementDescription type") String type,
+                     @Descriptor("ElementDescription properties") String properties) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
         } else {
             String msg = "--------------------------------------------------------------------------";
 
             if (type != null) {
-                String typens = CorePluginFactory.NAMESPACE;
+                String typens = CoreExtensionFactory.NAMESPACE;
                 String typename = type;
                 if (type.contains(":")) {
                     String[] tmp = type.split(":");
@@ -214,36 +213,38 @@ public class CubeConsole {
 
                 ManagedElement me = null;
                 try {
-                    me = agent.newManagedElement(typens, typename, p);
+                    me = agent.getRuntimeModelController().newManagedElement(typens, typename, p);
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
                 } catch (PropertyExistException e) {
                     e.printStackTrace();
+                } catch (NotFoundManagedElementException e) {
+                    System.out.println(e.getMessage());
                 }
 
                 if (me != null) {
-                    agent.getRuntimeModel().add(me);
+                    //agent.getRuntimeModelController().getRuntimeModel().add(me);
                     msg += "\n... instance created: " + me.getUri();
-                    agent.getRuntimeModel().refresh();
+                    agent.getRuntimeModelController().getRuntimeModel().refresh();
                 }
             } else {
                 msg += "\n... error!";
             }
 
             msg += "\n--------------------------------------------------------------------------";
-            System.out.println(msg);
+            //System.out.println(msg);
         }
     }
 
     @Descriptor("Show archtype")
     public void rmi(@Descriptor("Agent local id") String aid, @Descriptor("instance uuid") String uuid) {
         if (aid == null) {
-            System.out.println("You should specify in which Cube Agent you want to execute your command!");
+            System.out.println("You should specify in which Cube Autonomic Manager you want to execute your command!");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
         } else {
 
             String msg = "--------------------------------------------------------------------------";
@@ -259,22 +260,22 @@ public class CubeConsole {
         }
     }
 
-    @Descriptor("Shows the internal plugins of the given Cube Agent")
-    public void plugins(@Descriptor("Agent local id") String aid) {
+    @Descriptor("Shows the internal extensions of the given Cube Agent")
+    public void extensions(@Descriptor("Agent local id") String aid) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its Runtime Model.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Autonomic Manager you want to see its Runtime Model.\nType 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
         } else {
 
             String msg = "--------------------------------------------------------------------------";
 
-            for (Plugin p : agent.getPlugins()) {
-                String ns = p.getPluginFactory().getNamespace();
-                String n = p.getPluginFactory().getName();
+            for (Extension p : agent.getExtensions()) {
+                String ns = p.getExtensionFactory().getNamespace();
+                String n = p.getExtensionFactory().getName();
                 msg += ("\n" +ns + ":" + n);
             }
 
@@ -285,15 +286,15 @@ public class CubeConsole {
 
     @Descriptor("Update instance property")
     public void update(@Descriptor("Agent local id") String aid,
-                     @Descriptor("Element instance") String instance_uuid,
-                     @Descriptor("Element properties") String properties) {
+                     @Descriptor("ElementDescription instance") String instance_uuid,
+                     @Descriptor("ElementDescription properties") String properties) {
         if (aid == null) {
-            System.out.println("You should provide which Cube Agent you want to see its archetype.\nType 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("You should provide which Cube Autonomic Manager you want to see its archetype.\nType 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
             return;
         }
-        CubeAgent agent = cps.getCubeAgentByLocalId(aid);
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
         if (agent == null) {
-            System.out.println("Agent '"+aid+"' does not exist! Type 'cube:agents' to see the list of existing Cube Agents in this platform.");
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
         } else {
             String msg = "--------------------------------------------------------------------------";
 
@@ -313,14 +314,14 @@ public class CubeConsole {
 
                 ManagedElement me = agent.getRuntimeModelController().getLocalElement(instance_uuid);
                 if (me == null) {
-                    System.out.println("The instance identified by '"+instance_uuid+"' does not exist in the agent '"+aid+"'!");
+                    System.out.println("The instance identified by '"+instance_uuid+"' does not exist in the autonomicmanager '"+aid+"'!");
                     return;
                 }
 
                 try {
-                    String old = agent.getRuntimeModelController().updateProperty(instance_uuid, pname, pvalue);
+                    String old = agent.getRuntimeModelController().updateAttribute(instance_uuid, pname, pvalue);
                     if (old != null && !old.equalsIgnoreCase(pvalue)) {
-                        (agent.getRuntimeModel()).refresh();
+                        (agent.getRuntimeModelController().getRuntimeModel()).refresh();
                     }
                 } catch (PropertyNotExistException e) {
                     e.printStackTrace();
@@ -330,6 +331,24 @@ public class CubeConsole {
                 msg += "\n... error!";
             }
 
+            msg += "\n--------------------------------------------------------------------------";
+            System.out.println(msg);
+        }
+    }
+
+    @Descriptor("delete Autonomic Manager")
+    public void delete(@Descriptor("AM local id") String aid) {
+        if (aid == null) {
+            System.out.println("You should provide which Cube Autonomic Managed you want to remove.\nType 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
+            return;
+        }
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
+        if (agent == null) {
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
+        } else {
+            String msg = "--------------------------------------------------------------------------";
+            cps.destroyAutonomicManager(agent.getUri());
+            msg +="\n  Deleted!";
             msg += "\n--------------------------------------------------------------------------";
             System.out.println(msg);
         }

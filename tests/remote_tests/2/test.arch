@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.test" version="1.0">
+		<goals>	
+			<goal>								
+				<inScope s="@gateway" o="@g-city" r="fc"/>
+				<inScope s="@server" o="@p-city" r="fc"/>
+				<inScope s="@datacentre" o="@p-city" r="fc"/>
+			</goal>
+		</goals>
+		<elements>
+			<node id="g-gateway">
+				<hasNodeType o="OSGi"/>
+				<hasAttribute o="city=grenoble"/>
+			</node>
+			<node id="p-gateway">
+				<hasNodeType o="OSGi"/>
+				<hasAttribute o="city=paris"/>
+			</node>
+			<node id="server">
+				<hasNodeType o="Server"/>
+			</node>
+			<node id="datacentre">
+				<hasNodeType o="Datacentre"/>
+			</node>
+			<scope id="g-city">
+				<hasScopeId o="grenoble"/>
+				<controlledBy o="@master"/>
+			</scope>
+			<scope id="p-city">
+				<hasScopeId o="paris"/>
+				<controlledBy o="@master"/>
+			</scope>
+			<scope id="central">
+				<hasScopeId o="central"/>
+				<controlledBy o="@master"/>
+			</scope>
+			<core:master id="master">
+				<core:locatedIn o="cube://localhost:38001"/>
+			</core:master>
+		</elements>	
+  </archetype>
+</cube>

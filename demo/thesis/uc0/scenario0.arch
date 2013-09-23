@@ -1,0 +1,34 @@
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.thesis.uc2.scenario0" version="1.0">
+
+		<goals>	
+			<goal>
+				<core:connected s="@a" o="@b" r="fc"/>
+				<core:onNode s="@b" o="@pc" r="f"/>				
+			</goal>
+		</goals>
+		
+		<elements>
+			<Component id="a">
+				<core:hasComponentType o="A"/>
+			</Component>
+			<Component id="b">
+				<core:hasComponentType o="B"/>				
+			</Component>
+			<Node id="pc">
+				<core:hasNodeTYpe o="PC"/>
+			</Node>
+			
+			
+			<Component id="b2">
+				<core:hasComponentType o="B"/>
+				<core:connected o="@a"/>
+			</Component>			
+			
+			<Node id="osgi">
+				<core:hasNodeTYpe o="OSGi"/>
+			</Node>		  
+		</elements>
+
+  </archetype>
+</cube>

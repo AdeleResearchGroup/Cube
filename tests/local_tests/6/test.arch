@@ -1,0 +1,55 @@
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.test" version="1.0">
+
+		<goals>	
+			<goal>				
+				<core:inScope s="@as" o="@ac" r="fc"/>
+				<core:inScope s="@ms" o="@mc" r="fc"/>
+			</goal>
+			<goal>
+				<core:holdComponent s="@as" o="@wsp" r="fc"/>
+				<core:connected s="@wsp" o="@lb" r="fc"/>
+			</goal>
+			<goal>
+				<core:holdComponent s="@active_ms" o="@ahd" r="fc"/>
+				<core:hasSourceComponent s="@ahd" o="@lb" r="f"/>
+			</goal>
+		</goals>
+		
+		<elements>
+			<core:component id="wsp">
+				<core:hasComponentType o="WSP"/>
+				<core:hasAttribute o="wsSources=file:///ws-endpoints.xml"/>
+			</core:component>
+			<core:component id="lb">
+				<core:hasComponentType o="LB"/>
+				<core:hasAttribute o="dispatcher=loadbalancing"/>
+			</core:component>
+			<core:component id="ahd">
+				<core:hasComponentType o="AHD"/>				
+			</core:component>
+			<core:node id="as">
+				<hasNodeType o="AS"/>
+			</core:node>
+			<core:node id="ms">
+				<hasNodeType o="MS"/>
+			</core:node>
+			<core:node id="active_ms">
+				<hasNodeType o="MS"/>
+				<hasAttribute o="active=true"/>
+			</core:node>
+			<core:scope id="ac">
+				<hasScopeId o="AC"/>
+				<core:controlledBy o="@master"/>
+			</core:scope>
+			<core:scope id="mc">
+				<hasScopeId o="MC"/>				
+				<core:controlledBy o="@master"/>
+			</core:scope>
+			<core:master id="master">
+				<core:hasAttribute o="url=localhost"/>
+			</core:master>
+		</elements>
+
+  </archetype>
+</cube>

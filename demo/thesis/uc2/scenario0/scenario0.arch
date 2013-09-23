@@ -1,0 +1,36 @@
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.thesis.uc2.scenario0" version="1.0">
+		
+		<elements>
+		  <element id="ahd">
+			<core:hasComponentType o="AHD-Box"/>
+		  </element>
+		  <element id="hl7router">
+			<core:hasComponentType o="HL7-Router"/>
+		  </element>
+		  <element id="hl7validator">
+			  <core:hasComponentType o="HL7-Validator"/>
+		  </element>
+		  <element id="validator">
+			  <core:hasComponentType o="Validator"/>
+		  </element>
+		  <element id="translator">
+			  <core:hasComponentType o="Translator"/>
+		  </element>
+		  <element id="phr">
+			  <core:hasComponentType o="PHR-Integrator"/>
+		  </element>
+		</elements>
+		
+		<goals>	
+			<goal>
+				<core:connected s="@ahd" o="@hl7router" r="fc"/>
+				<core:connected s="@hl7router" o="@hl7validator" r="fc"/>
+				<core:connected s="@hl7validator" o="@validator" r="fc"/>
+				<core:connected s="@validator" o="@translator" r="fc"/>
+				<core:connected s="@translator" o="@phr" r="fc"/>
+			</goal>
+		</goals>
+		
+  </archetype>
+</cube>

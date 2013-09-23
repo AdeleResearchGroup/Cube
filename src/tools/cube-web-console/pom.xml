@@ -14,10 +14,10 @@
 	<name>Cube Web Console</name>
 	<packaging>bundle</packaging>
 
-	<properties>
+	<attributes>
 		<bin-dir>${basedir}/../../../bin</bin-dir>
         <lib-dir>${basedir}/../../../lib</lib-dir>
-	</properties>
+	</attributes>
 
     <dependencies>
         <dependency>
@@ -66,7 +66,7 @@
 						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
 
                         <Private-Package>
-                            fr.liglab.adele.cube.plugins.webconsole
+                            fr.liglab.adele.cube.extensions.webconsole
                         </Private-Package>
 
 					</instructions>
@@ -79,7 +79,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>ipojo-bundle</goal>
+							<goalProperty>ipojo-bundle</goalProperty>
 						</goals>
 						<configuration>
 						</configuration>
@@ -102,7 +102,7 @@
 					<execution>
 						<phase>install</phase>
 						<goals>
-							<goal>run</goal>
+							<goalProperty>run</goalProperty>
 						</goals>
 						<configuration>
 							<tasks>

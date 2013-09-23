@@ -30,8 +30,8 @@
 
 	<modules>
         <module>cube-console</module>
-        <module>cube-web-console</module>
-        <module>cube-web-console-branding</module>
+        <!--module>cube-web-console</module>
+        <module>cube-web-console-branding</module-->
 	</modules>	
 
 </project>
