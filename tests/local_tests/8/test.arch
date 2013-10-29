@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.uc1" version="1.0">
+		<goals>				
+			<goal>
+				<core:connected s="@a" o="@b" r="fc"/>								
+			</goal>
+		</goals>
+		
+		<elements>
+			<core:component id="a">
+				<core:hasComponentType o="A"/>				
+			</core:component>
+			<core:component id="b">
+				<core:hasComponentType o="B"/>
+				<core:hasMaxInputComponents o="2"/>
+				<hasAttribute o="url=${url}"/>
+			</core:component>				
+			
+		</elements>	
+	</archetype>
+</cube>

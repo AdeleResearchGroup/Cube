@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<cube>
+  <autonomic-manager>
+    <host value="localhost"/>
+    <port value="38000"/>
+	<debug value="true"/>
+    <archetypeUrl value="file:test.arch"/>
+	<properties>
+		<property name="url" value="localhost:38000"/>
+	</properties>
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core">
+			<property name="master" value="true"/>
+		</extension>
+		<!--extension id="fr.liglab.adele.cube.rm.monitoring"/-->
+	</extensions>
+  </autonomic-manager>
+</cube>
+
+
+
+

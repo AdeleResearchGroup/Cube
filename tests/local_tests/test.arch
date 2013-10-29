@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.uc1" version="1.0">
+		<goals>				
+
+			<goal>
+				<inScope s="@osgi" o="@city_scope" r="f"/>
+				<!-- scope instance is only in server nodes => FC-->
+				<inScope s="@server" o="@city_scope" r="fc"/>
+				<inScope s="@datacentre" o="@central" r="fc"/>
+			</goal>
+			<goal>
+				<connected s="@gp" o="@hc_home" r="fc"/>
+				<connected s="@wp" o="@hc_home" r="fc"/>								
+				<connected s="@ep" o="@hc_home" r="fc"/>								
+			</goal>
+			<goal>
+				<connected s="@hc" o="@rc_region" r="fc"/>				
+			</goal>
+		</goals>
+		
+		<elements>
+			<node id="osgi">				
+				<hasNodeType o="OSGi"/>
+			</node>
+			
+			<node id="server">				
+				<hasNodeType o="Server"/>
+			</node>
+			
+			<scope id="city_scope">
+				<hasScopeId o="${city}"/>
+				<controlledBy o="@master"/>
+			</scope>
+			
+			<node id="datacentre">				
+				<hasNodeType o="Datacentre"/>				
+			</node>
+			
+			<scope id="central">
+				<hasScopeId o="Central"/>
+				<controlledBy o="@master"/>
+			</scope>
+			
+			<master id="@master">
+				<locatedIn o="cube://localhost:38001"/>
+			</master>									
+			
+			<component id="gp" extends="@adapter">
+				<hasComponentType o="GP"/>				
+			</component>
+			<component id="ep" extends="@adapter">
+				<hasComponentType o="EP"/>				
+			</component>
+			<component id="wp" extends="@adapter">
+				<hasComponentType o="WP"/>				
+			</component>
+			<component id="hc" extends="@mediator">
+				<hasComponentType o="HC"/>							
+			</component>		
+			<component id="rc" extends="@mediator">
+				<hasComponentType o="RC"/>							
+			</component>		
+			<component id="CC" extends="@mediator">
+				<hasComponentType o="CC"/>							
+			</component>		
+			<component id="NA" extends="@mediator">
+				<hasComponentType o="NA"/>							
+			</component>		
+			<component id="DB" extends="@adapter">
+				<hasComponentType o="DB"/>							
+			</component>		
+			
+			<component id="mediator">
+				<hasAttribute o="kind=mediateur"/>
+			</component>			
+			<component id="adapter">
+				<hasAttribute o="kind=adapter"/>
+			</component>								
+						
+		</elements>	
+	</archetype>
+</cube>

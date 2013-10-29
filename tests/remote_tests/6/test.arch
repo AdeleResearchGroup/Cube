@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.test" version="1.0">
+
+		<goals>	
+			<goal>				
+				<core:inScope s="@pc" o="@lan" r="fc"/>
+				<holdComponent s="@pc" o="@b" r="c"/>
+				<connected s="@a" o="@bb" r="fc"/>
+			</goal>
+			<!--goal>
+				<core:holdComponent s="@as" o="@wsp" r="fc"/>
+				<core:connected s="@wsp" o="@ahd" r="fc"/>
+			</goal>
+			<goal>
+				<core:holdComponent s="@ms" o="@ahd" r="fc"/>				
+			</goal-->
+		</goals>
+		
+		<elements>
+			<core:component id="a">
+				<core:hasComponentType o="A"/>				
+			</core:component>
+			<core:component id="b">
+				<core:hasComponentType o="B"/>				
+			</core:component>
+			<core:component id="bb">
+				<core:hasComponentType o="B"/>
+				<onNode o="@pcc"/>
+				<HasMaxInputComponents o="2"/>				
+			</core:component>						
+			<core:node id="pc">
+				<hasNodeType o="PC"/>
+			</core:node>		
+			<core:node id="pcc">
+				<hasNodeType o="PC"/>
+				<inScope o="@lan"/>
+			</core:node>
+			<core:scope id="lan">
+				<hasScopeId o="LAN"/>				
+				<core:controlledBy o="@master"/>
+			</core:scope>
+			<core:master id="master">
+				<core:locatedIn o="cube://localhost:38001"/>
+			</core:master>
+		</elements>
+
+  </archetype>
+</cube>

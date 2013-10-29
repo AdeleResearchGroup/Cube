@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="net.debbabi.cube.uc1" version="1.0">
+		<goals>
+			<goal>
+				<inScope s="@datacentre" o="@central" r="fc"/>
+				<inScope s="@server" o="@central" r="f"/>
+				<!-- scope instance created only on server -->
+				<inScope s="@gateway" o="@central" r="f"/> 
+			</goal>
+			<goal>
+				<holdComponent s="@gateway" o="@hc" r="fc"/>				
+				<connected s="@gp" o="@hc" r="f"/>
+				<connected s="@ep" o="@hc" r="f"/>
+				<connected s="@wp" o="@hc" r="f"/>
+				<connected s="@hc" o="@city_rc" r="f"/>
+			</goal>
+			<goal>	
+				<holdComponent s="@server" o="@rc" r="fc"/>		
+				<connected s="@rc" o="@city_cc" r="fc"/>
+				<connected s="@cc" o="@central_na" r="f"/>
+			</goal>
+			<goal>
+				<holdComponent s="@datacentre" o="@na" r="fc"/>
+			</goal>
+		</goals>
+		
+		<elements>			
+		
+			<master id="master">
+				<locatedIn o="cube://localhost:19000"/>
+			</master>
+			<!-- ============ SCOPES ============ -->
+			<scope id="central">
+				<hasScopeId o="central"/>
+				<controlledBy o="@master"/>
+			</scope>			
+			<!-- ============ NODES ============ -->
+			<node id="server">				
+				<hasNodeType o="Server"/>
+			</node>
+			<node id="city_server">				
+				<hasNodeType o="Server"/>
+				<inScope o="@central"/>
+			</node>			
+			<node id="gateway">				
+				<hasNodeType o="Gateway"/>
+			</node>						
+			<node id="datacentre">				
+				<hasNodeType o="Datacentre"/>
+			</node>
+			<node id="central_datacentre">				
+				<hasNodeType o="Datacentre"/>
+				<inScope o="@central"/>
+			</node>	
+			<!-- ============ COMPONENTS ============ -->
+			<component id="gp">
+				<hasComponentType o="GP"/>
+			</component>
+			<component id="ep">
+				<hasComponentType o="EP"/>
+			</component>
+			<component id="wp">
+				<hasComponentType o="WP"/>
+			</component>
+			<component id="hc">
+				<hasComponentType o="HC"/>				
+			</component>
+			<component id="rc">
+				<hasComponentType o="RC"/>
+			</component>			
+			<component id="city_rc">
+				<hasComponentType o="RC"/>
+				<onNode o="@city_server"/>
+				<HasMaxInputComponents o="5"/>
+			</component>			
+			<component id="cc">
+				<hasComponentType o="CC"/>
+			</component>
+			<component id="city_cc">
+				<hasComponentType o="CC"/>
+				<onNode o="@city_server"/>
+			</component>		
+			<component id="na">
+				<hasComponentType o="NA"/>
+			</component>			
+			<component id="central_na">
+				<hasComponentType o="NA"/>
+				<onNode o="@central_datacentre"/>
+			</component>			
+		</elements>
+	</archetype>
+</cube>

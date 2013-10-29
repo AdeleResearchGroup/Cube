@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- ====================================================== 
+     SERVER of PARIS
+	 ====================================================== -->
+<cube>
+  <autonomic-manager>
+  
+    <host value="localhost"/>
+    <port value="38101"/>
+	<debug value="false"/>
+    <archetypeUrl value="file:test.arch"/>
+    
+	<properties>
+		<property name="city" value="Paris"/>		
+		<property name="node.type" value="Server"/>
+	</properties>
+	
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core">			
+		</extension>
+		
+		<extension id="fr.liglab.adele.cube.script">
+			<property name="1" value="newi node type=${node.type}"/>
+		</extension>
+		
+	</extensions>
+	
+  </autonomic-manager>
+</cube>
+
+
+
+
