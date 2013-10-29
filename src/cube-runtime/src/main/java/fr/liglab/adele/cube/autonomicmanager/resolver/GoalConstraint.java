@@ -11,7 +11,8 @@ public class GoalConstraint extends Constraint {
 
     ResolutionStrategy resolutionStrategy = ResolutionStrategy.Find;
 
-    private String currentSolution = null;
+
+    private boolean optional=false;
 
     public GoalConstraint(ResolutionGraph resolutionGraph, String archetypePropertyName, ResolutionStrategy resolutionStrategy, Variable subject, Variable object) {
         super(resolutionGraph, archetypePropertyName, subject, object);
@@ -27,11 +28,12 @@ public class GoalConstraint extends Constraint {
         this.resolutionStrategy = resolutionStrategy;
     }
 
-    public String getCurrentSolution() {
-        return currentSolution;
+
+    public boolean isOptional() {
+        return optional;
     }
 
-    public void setCurrentSolution(String currentSolution) {
-        this.currentSolution = currentSolution;
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }

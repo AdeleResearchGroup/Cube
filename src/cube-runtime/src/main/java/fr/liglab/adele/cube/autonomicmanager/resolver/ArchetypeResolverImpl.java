@@ -5,8 +5,13 @@ import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.CommunicationException;
 import fr.liglab.adele.cube.autonomicmanager.comm.TimeOutException;
 import fr.liglab.adele.cube.extensions.ResolverExtensionPoint;
+import fr.liglab.adele.cube.extensions.core.model.Component;
+import fr.liglab.adele.cube.extensions.core.model.Master;
+import fr.liglab.adele.cube.extensions.core.model.Node;
+import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.metamodel.*;
 import fr.liglab.adele.cube.util.model.ModelUtils;
+import fr.liglab.adele.cube.util.perf.ResolutionMeasure;
 
 import java.io.IOException;
 import java.util.*;
@@ -47,21 +52,9 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
     }
 
     public void resolveUncheckedInstance(ManagedElement instance) {
-        boolean check = false;
-        if (instance != null) {
-            synchronized (instance) {
-                if (instance.getState() == ManagedElement.INVALID && instance.isInResolution() == false) {
-                    instance.setInResolution(true);
-                    check = true;
-                } else {
-                    info("resolution stopped! instance '"+instance.getUUID()+"' if already VALID or already in a resolution process");
-                    return;
-                }
-            }
-        } else {
-            return;
-        }
-        if (check == true) {
+        if (instance == null) return;
+        if (instance.getState() == ManagedElement.INVALID) {
+            System.out.println(getAutonomicManager().getUri()+ " resolving "+instance.getName()+" ...");
             info("resolving INVALID "+instance.getName()+" '"+instance.getUUID()+"'...");
 
             ResolutionGraph rg = new ResolutionGraph(this);
@@ -76,25 +69,43 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
-
+            ResolutionMeasure m = new ResolutionMeasure(getAutonomicManager().getUri(), instance.getName());
+            if (instance.getName().equalsIgnoreCase(Component.NAME)) {
+                m.setComment(instance.getAttribute(Component.CORE_COMPONENT_TYPE));
+            } else if (instance.getName().equalsIgnoreCase(Node.NAME)) {
+                m.setComment(instance.getAttribute(Node.CORE_NODE_TYPE));
+            } else if (instance.getName().equalsIgnoreCase(Scope.NAME)) {
+                m.setComment(instance.getAttribute(Scope.CORE_SCOPE_ID));
+            } else if (instance.getName().equalsIgnoreCase(Master.NAME)) {
+                m.setComment(instance.getAttribute(Master.NAME));
+            }
+            m.start();
             if (rg.resolve()) {
+                m.end();
+                m.setResolved(true);
                 info(instance.getName()+" '"+instance.getUUID()+"' is resolved!");
                 if (validateSolution(rg)) {
-                    am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
+                    //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
                     //am.getRuntimeModelController().getRuntimeModel().refresh();
+                    am.getRuntimeModelController().getRuntimeModel().refresh();
                 }
             } else {
-                am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
+                m.end();
+                m.setResolved(false);
+                //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
                 info("no solution found for "+instance.getName()+": " + instance.getUUID());
             }
-            instance.setInResolution(false);
-            am.getRuntimeModelController().getRuntimeModel().refresh();
+            m.calculate();
+            getAutonomicManager().getAdministrationService().getPerformanceChecker().addResolutionMeasure(m);
+            //instance.setInResolution(false);
+            //am.getRuntimeModelController().getRuntimeModel().refresh();
         }
     }
 
     private boolean validateSolution(ResolutionGraph rg) {
         // TODO should check "am" attribute to check if it should added here or in another runtime model part
         Variable root = rg.getRoot();
+        boolean changed = false;
         for (Constraint c : root.getConstraints()) {
             if (c instanceof GoalConstraint) {
                 String related = ((GoalConstraint) c).getCurrentSolution();
@@ -102,6 +113,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                     int state = am.getRuntimeModelController().getState(related);
                     if (state == ManagedElement.UNMANAGED) {
                         am.getRuntimeModelController().getRuntimeModel().manage(related);
+                        changed = true;
                     }
                 }
             }
@@ -109,13 +121,13 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         String uuid = ((MultiValueVariable)root).getDescription().getUUID();
         ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
         if (me != null) {
-            me.setState(ManagedElement.VALID);
-            return true;
+            if (me.getState() == ManagedElement.INVALID) {
+                me.setState(ManagedElement.VALID);
+                changed = true;
+            }
         }
-        return false;
+        return changed;
     }
-
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// HELPERS ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,14 +144,14 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 msg.setTo(to);
                 msg.setReplyTo(am.getUri());
                 msg.setFrom(am.getUri());
-                msg.setAttachement(description);
+                msg.setAttachment(description);
                 msg.setObject("resolution");
                 msg.setBody("findFromRuntimeModel");
                 //System.out.println("///// " + msg.toString());
                 try {
                     CMessage resultmsg = sendAndWait(msg);
                     if (resultmsg != null) {
-                        info("////////: receiving find from RM: "+resultmsg.toString());
+                        //info("////////: receiving find from RM: "+resultmsg.toString());
                         if (resultmsg.getBody() != null) {
                             String[] tmp = resultmsg.getBody().toString().split(",");
                             for (int i=0; i<tmp.length; i++) {
@@ -151,7 +163,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
 
                                         this.am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
                                     }
-                                    System.out.println("************* adding "+ elementuuid);
+                                    //System.out.println("************* adding "+ elementuuid);
                                     result.add(elementuuid);
                                 }
                             }
@@ -194,12 +206,12 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             msg.setTo(to);
             msg.setReplyTo(am.getUri());
             msg.setFrom(am.getUri());
-            msg.setAttachement(description);
+            msg.setAttachment(description);
             msg.addHeader("pname", archetypePropertyName);
             msg.addHeader("uuid", uuid);
             msg.setObject("resolution");
             msg.setBody("findUsingArchetypeProperty");
-            info("//////////////// find using archetype property: " + msg.toString());
+            //info("//////////////// find using archetype property: " + msg.toString());
             try {
                 CMessage resultmsg = sendAndWait(msg);
                 if (resultmsg != null) {
@@ -213,7 +225,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                                 if (!agenturi.equalsIgnoreCase(am.getUri())) {
                                     this.am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
                                 }
-                                System.out.println("************* adding "+ elementuuid);
+                                //System.out.println("************* adding "+ elementuuid);
                                 result.add(elementuuid);
                             }
                         }
@@ -237,6 +249,46 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             System.out.println("[WARNING] ArchetypeResolver: no specific resolver was found for the archetype property '"+archetypePropertyName+"'!");
         }
         return true;
+    }
+
+    public boolean verifyProperty(String archetypePropertyName, String uuid, String value) {
+        info( archetypePropertyName + ".verify("+uuid+", "+value+")...");
+        boolean result = false;
+        if (am.getRuntimeModelController().isLocalInstance(uuid) == true) {
+            ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
+            ResolverExtensionPoint r = am.getArchetypeResolver().getResolver(archetypePropertyName);
+            if (r != null) {
+                result =  r.check(me, value);
+            } else {
+                info(" WARNING! verifyProperty: no specific resolver was found for the archetype property '" + archetypePropertyName + "'!");
+            }
+        } else if (am.getRuntimeModelController().isRemoteInstance(uuid) == true) {
+            String to = getAutonomicManager().getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
+            CMessage msg = new CMessage();
+            msg.setTo(to);
+            msg.setReplyTo(am.getUri());
+            msg.setFrom(am.getUri());
+            msg.addHeader("pname", archetypePropertyName);
+            msg.addHeader("uuid", uuid);
+            msg.addHeader("value", value);
+            msg.setObject("resolution");
+            msg.setBody("verifyProperty");
+            try {
+                CMessage resultmsg = sendAndWait(msg);
+                if (resultmsg != null) {
+                    if (resultmsg.getBody() != null) {
+                        if (resultmsg.getBody().toString().equalsIgnoreCase("true")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+            } catch (TimeOutException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     public boolean performProperty(String archetypePropertyName, ManagedElement managedElement, String value) {
@@ -292,6 +344,8 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         }
         return null;
     }
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// UTILS //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -377,7 +431,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         if (msg != null) {
             if (msg.getBody() != null) {
                 if (msg.getBody().toString().equalsIgnoreCase("findFromRuntimeModel")) {
-                    ManagedElement me = msg.getAttachement();
+                    ManagedElement me = msg.getAttachment();
                     String resultat = "";
                     if (me != null ) {
                         List<String> res = findFromRuntimeModel(me);
@@ -400,8 +454,8 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                         e.printStackTrace();
                     }
                 } else if (msg.getBody().toString().equalsIgnoreCase("findUsingArchetypeProperty")) {
-                    info("received.msg:\n"+msg.toString());
-                    ManagedElement me = msg.getAttachement();
+                    //info("received.msg:\n"+msg.toString());
+                    ManagedElement me = msg.getAttachment();
                     Object pname = msg.getHeader("pname");
                     Object uuid = msg.getHeader("uuid");
                     String resultat = "";
@@ -417,6 +471,30 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                     resmsg.setObject(msg.getObject());
                     resmsg.setBody(resultat);
 
+                    try {
+                        am.getCommunicator().sendMessage(resmsg);
+                    } catch (CommunicationException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else if (msg.getBody().toString().equalsIgnoreCase("verifyProperty")) {
+                    Object pname = msg.getHeader("pname");
+                    Object uuid = msg.getHeader("uuid");
+                    Object value = msg.getHeader("value");
+
+                    boolean p = false;
+                    if (uuid != null && value != null) {
+                        p = verifyProperty(pname.toString(), uuid.toString(), value.toString());
+                    }
+                    CMessage resmsg = new CMessage();
+                    resmsg.setTo(msg.getFrom());
+                    resmsg.setCorrelation(msg.getCorrelation());
+                    resmsg.setObject(msg.getObject());
+                    if (p == true)
+                        resmsg.setBody("true");
+                    else
+                        resmsg.setBody("false");
                     try {
                         am.getCommunicator().sendMessage(resmsg);
                     } catch (CommunicationException e) {

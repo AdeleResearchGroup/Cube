@@ -27,11 +27,13 @@ public class GoalProperty extends Property {
 
     private String resolutionStrategy;
     private String priority;
+    private boolean optional=false;
 
     public GoalProperty(Archetype archetype, String namespace, String name, String resolutionStrategy, String priority, String documentation) {
         super(archetype, namespace, name, null, documentation);
         this.resolutionStrategy = resolutionStrategy;
         this.priority = priority;
+        optional=false;
     }
 
     public String getResolutionStrategy() {
@@ -48,7 +50,6 @@ public class GoalProperty extends Property {
             if (resolutionStrategy.equalsIgnoreCase("F")) rs = ResolutionStrategy.Find;
             else if (resolutionStrategy.equalsIgnoreCase("C")) rs = ResolutionStrategy.Create;
             else if (resolutionStrategy.equalsIgnoreCase("FC")) rs = ResolutionStrategy.FindOrCreate;
-            else if (resolutionStrategy.equalsIgnoreCase("FN")) rs = ResolutionStrategy.FindOrNothing;
         }
         return rs;
     }
@@ -59,5 +60,13 @@ public class GoalProperty extends Property {
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 }

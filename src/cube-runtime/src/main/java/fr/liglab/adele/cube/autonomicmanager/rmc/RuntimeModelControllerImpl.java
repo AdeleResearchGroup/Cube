@@ -20,6 +20,7 @@ package fr.liglab.adele.cube.autonomicmanager.rmc;
 
 import fr.liglab.adele.cube.autonomicmanager.CMessage;
 import fr.liglab.adele.cube.autonomicmanager.NotFoundManagedElementException;
+import fr.liglab.adele.cube.autonomicmanager.comm.CommunicationException;
 import fr.liglab.adele.cube.autonomicmanager.comm.TimeOutException;
 import fr.liglab.adele.cube.extensions.ManagedElementExtensionPoint;
 import fr.liglab.adele.cube.metamodel.*;
@@ -27,6 +28,7 @@ import fr.liglab.adele.cube.autonomicmanager.RuntimeModel;
 import fr.liglab.adele.cube.AutonomicManager;
 import fr.liglab.adele.cube.autonomicmanager.RuntimeModelController;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -163,7 +165,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         if (isLocalInstance(managed_element_uuid)){
             ManagedElement me1 = getLocalElement(managed_element_uuid);
             if (me1 != null) {
-                System.out.println("updating instance property! "+name+"="+newValue);
+                //System.out.println("updating instance property! "+name+"="+newValue);
                 String old = me1.updateAttribute(name, newValue);
                 if (old != null && !old.equalsIgnoreCase(newValue)) {
                     me1.updateState(ManagedElement.INVALID);
@@ -441,7 +443,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(uuid)) {
-            System.out.println("\n[RMC] getCopyOfManagedElement method is not implemented yet for remote instances!\n");
+            //System.out.println("\n[RMC] getCopyOfManagedElement method is not implemented yet for remote instances!\n");
             String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
@@ -452,7 +454,8 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 try {
                     CMessage resultmsg = sendAndWait(msg);
                     if (resultmsg != null) {
-                        return msg.getAttachement();
+                        //System.out.println("getCopyOfManagedElement...return:\n"+msg.toString());
+                        return resultmsg.getAttachment();
                     }
                 } catch (TimeOutException e) {
                     e.printStackTrace();
@@ -476,8 +479,8 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
             if (me1 != null) {
                 // get its references
                 List<Reference> outRefs = me1.getReferences();
-                ManagedElement result = null;
-                result = ((RuntimeModelImpl) am.getRuntimeModelController().getRuntimeModel()).remove(me1);
+                ManagedElement result = me1;
+                ((RuntimeModelImpl) am.getRuntimeModelController().getRuntimeModel()).remove(me1);
                 if (result != null)
                 {
                     List<String> toBeRemovedLocally = new ArrayList<String>();
@@ -543,6 +546,33 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         }
         return false;
     }
+    /*
+    public boolean move(ManagedElement me, String amUri) {
+        if (me != null) {
+            if (isLocalInstance(me.getUUID())) {
+                me.setAutonomicManager(amUri);
+                CMessage msg = new CMessage();
+                msg.setTo(amUri);
+                msg.setAttachment(me);
+                msg.setFrom(getAutonomicManager().getUri());
+                msg.setReplyTo(getAutonomicManager().getUri());
+                msg.setObject("runtimemodel");
+                msg.setBody("move");
+                try {
+                    getAutonomicManager().getCommunicator().sendMessage(msg);
+                    // remove from the local runtime model
+                    getExternalInstancesHandler().addExternalInstance(me.getUUID(), amUri);
+                    ((RuntimeModelImpl)getRuntimeModel()).remove(me);
+
+                } catch (CommunicationException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return true;
+    } */
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// UTILS //////////////////////////////////////////////////////////////////////////////////////////////////////

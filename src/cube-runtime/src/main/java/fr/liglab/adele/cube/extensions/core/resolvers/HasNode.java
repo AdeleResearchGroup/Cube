@@ -20,7 +20,9 @@ package fr.liglab.adele.cube.extensions.core.resolvers;
 
 import fr.liglab.adele.cube.extensions.AbstractUnaryResolver;
 import fr.liglab.adele.cube.extensions.Extension;
+import fr.liglab.adele.cube.extensions.core.model.Component;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
+import fr.liglab.adele.cube.metamodel.Reference;
 
 /**
  * Author: debbabi
@@ -40,22 +42,17 @@ public class HasNode extends AbstractUnaryResolver {
     public boolean check(ManagedElement me, String value) {
         if (me != null && value != null) {
             if (value.equalsIgnoreCase("true")) {
-                String am1 = me.getAutonomicManager();
-                String am2 = getExtension().getAutonomicManager().getUri();
-                if (am1.equalsIgnoreCase(am2)) {
-                    return true;
-                }
+                Reference r = me.getReference(Component.CORE_COMPONENT_NODE);
+                if (r == null) return false;
+                if (r.getReferencedElements().size() == 0) return false;
+                return true;
             }
         }
         return false;
     }
 
     public boolean perform(ManagedElement me, String value) {
-        if (me != null && value != null) {
-            me.setAutonomicManager(value);
-            return true;
-        }
-        return false;
+        return true;
     }
 
 }

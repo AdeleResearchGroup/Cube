@@ -17,6 +17,8 @@
 
 package fr.liglab.adele.cube.util;
 
+import fr.liglab.adele.cube.AutonomicManager;
+
 import java.util.UUID;
 
 /**
@@ -73,4 +75,30 @@ public class Utils {
         return String.valueOf(uuid);
     }
 
+    public static String toString(CharSequence charSequence) {
+        final StringBuilder sb = new StringBuilder(charSequence.length());
+        sb.append(charSequence);
+        return sb.toString();
+    }
+
+    public static String evaluateValue(AutonomicManager am, String value) {
+        String result = value;
+        if (am != null && result != null && result.contains("${")) {
+            int ps1 = result.indexOf("$");
+            int ps2 = result.indexOf("}");
+            CharSequence toModify = result.subSequence(ps1, ps2+1);
+            if (toModify != null) {
+                CharSequence pname = toModify.subSequence(2, toModify.length()-1);
+                if (am != null) {
+                    String pvalue = am.getArchetype().getAutonomicManager().getProperty(Utils.toString(pname));
+                    if (pvalue != null) {
+                        result = result.replace(toModify, pvalue);
+                    } else {
+                        System.out.println("[WARNING] value of Archetype Element '"+value+"' cannot be found among Autonomic Manager's properties!");
+                    }
+                }
+            }
+        }
+        return result;
+    }
 }

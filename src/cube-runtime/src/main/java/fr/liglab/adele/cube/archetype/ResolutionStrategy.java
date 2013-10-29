@@ -7,7 +7,7 @@ package fr.liglab.adele.cube.archetype;
  */
 public enum ResolutionStrategy {
 
-    Find(1), FindOrCreate(2), Create(3), FindOrNothing(4);
+    Find(1), FindOrCreate(2), Create(3);
 
     private int value;
 

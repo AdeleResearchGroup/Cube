@@ -50,7 +50,7 @@ public class Reference implements Serializable, Cloneable {
         return name;
     }
 
-    public List<String> getReferencedElements() {
+    public synchronized List<String> getReferencedElements() {
         return referencedElements;
     }
 
@@ -58,7 +58,7 @@ public class Reference implements Serializable, Cloneable {
         return unary;
     }
 
-    public void setReferencedElements(List<String> referencedElements) {
+    public synchronized void setReferencedElements(List<String> referencedElements) {
         this.referencedElements = referencedElements;
     }
 
@@ -70,7 +70,7 @@ public class Reference implements Serializable, Cloneable {
      * @param elementUUID
      * @return FALSE if 'elementUUID' is null or the element already referenced; TRUE if added properly.
      */
-    public boolean addReferencedElement(String elementUUID) {
+    public synchronized boolean addReferencedElement(String elementUUID) {
         if (elementUUID == null || elementUUID.length() == 0) {
             return false;
         }
@@ -87,7 +87,7 @@ public class Reference implements Serializable, Cloneable {
         return this.referencedElements.add(elementUUID);
     }
 
-    public boolean removeReferencedElement(String elementUUID) {
+    public synchronized boolean removeReferencedElement(String elementUUID) {
         if (elementUUID == null || elementUUID.length() == 0) {
             return false;
         }
@@ -97,7 +97,7 @@ public class Reference implements Serializable, Cloneable {
         return this.referencedElements.remove(elementUUID);
     }
 
-    public boolean hasReferencedElement(String elementUUID) {
+    public synchronized boolean hasReferencedElement(String elementUUID) {
         if (elementUUID != null) {
             return (referencedElements.contains(elementUUID));
         }

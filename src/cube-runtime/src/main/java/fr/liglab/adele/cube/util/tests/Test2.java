@@ -30,7 +30,7 @@ public class Test2 {
 
 
     public static void test(AdministrationService administrationService) {
-        System.out.println("\n||||||||||||| TEST 1 UC1 ||||||||||||||||\n");
+        System.out.println("\n||||||||||||| TEST 2 UC1 ||||||||||||||||\n");
         Map<String, String> ams = new HashMap<String, String>();
         try {
             // MASTER
@@ -91,7 +91,7 @@ public class Test2 {
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19100+i);
-                config.addProperty("city","Grenoble");
+                //config.addProperty("city","Grenoble");
                 config.addProperty("node.type","Server");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -132,7 +132,7 @@ public class Test2 {
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19200+i);
-                config.addProperty("city","Paris");
+                //config.addProperty("city","Paris");
                 config.addProperty("node.type","Server");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -174,7 +174,7 @@ public class Test2 {
                 config.setHost("localhost");
                 config.setPort(19300 + i);
                 //config.setDebug(true);
-                config.addProperty("city","Grenoble");
+                //config.addProperty("city","Grenoble");
                 config.addProperty("node.type","Gateway");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -217,7 +217,7 @@ public class Test2 {
                 config.setHost("localhost");
                 config.setPort(19400 + i);
                 //config.setDebug(true);
-                config.addProperty("city","Paris");
+                //config.addProperty("city","Paris");
                 config.addProperty("node.type","Gateway");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");

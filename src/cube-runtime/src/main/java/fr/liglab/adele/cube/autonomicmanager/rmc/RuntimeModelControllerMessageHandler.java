@@ -234,7 +234,7 @@ public class RuntimeModelControllerMessageHandler {
                     CMessage resmsg = new CMessage();
                     resmsg.setTo(msg.getFrom());
                     resmsg.setCorrelation(msg.getCorrelation());
-                    resmsg.setAttachement(me);
+                    resmsg.setAttachment(me);
                     resmsg.setObject(msg.getObject());
                     try {
                         rmc.getAutonomicManager().getCommunicator().sendMessage(resmsg);
@@ -278,19 +278,35 @@ public class RuntimeModelControllerMessageHandler {
                     }
                 } else if (msg.getBody().toString().equalsIgnoreCase("getCopyOfManagedElement")) {
                     Object uuid = msg.getHeader("uuid");
-                    CMessage resmsg = new CMessage();
-                    resmsg.setTo(msg.getFrom());
-                    resmsg.setCorrelation(msg.getCorrelation());
-                    resmsg.setObject(msg.getObject());
-                    if (uuid != null)
-                        resmsg.setAttachement(rmc.getCopyOfManagedElement(uuid.toString()));
-                    try {
-                        rmc.getAutonomicManager().getCommunicator().sendMessage(resmsg);
-                    } catch (CommunicationException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+
+                    if (uuid == null) {
+
+                    } else {
+                        ManagedElement me = rmc.getRuntimeModel().getManagedElement(uuid.toString());
+                        if (me != null) {
+
+                            ManagedElement copy = (ManagedElement) me.clone();
+
+                            CMessage resmsg = new CMessage();
+                            resmsg.setTo(msg.getFrom());
+                            resmsg.setCorrelation(msg.getCorrelation());
+                            resmsg.setObject(msg.getObject());
+                            resmsg.setAttachment(copy);
+
+                            try {
+                                rmc.getAutonomicManager().getCommunicator().sendMessage(resmsg);
+                            } catch (CommunicationException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        } else {
+
+                        }
+
                     }
+
                 }
             }
         }

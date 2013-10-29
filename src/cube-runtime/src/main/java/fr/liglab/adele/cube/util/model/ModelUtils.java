@@ -72,5 +72,36 @@ public class ModelUtils {
             else return notok;
         }
     }
+    public static int compareAttributesOfTwoManagedElements(ManagedElement me1, ManagedElement me2) {
+        //System.out.println("[RESOLVER] comparing two managed elements:");
+        //System.out.println("[RESOLVER] me1: " + me1.getUUID()+"\n"+me1.getDocumentation());
+        //System.out.println("[RESOLVER] me2: " + me2.getUUID()+"\n"+me2.getDocumentation());
+        int result = -1;
+        if (me1 == null || me1.getNamespace() == null || me1.getName() == null ||
+                me2 == null || me2.getNamespace() == null || me2.getName() == null) {
+            return -1;
+        } else {
+            int ok = 0;
+            int notok = 0;
+            int totalComparedAttributes = 0;
+            List<Attribute> me1as = me1.getAttributes();
+            List<Reference> me1rs = me1.getReferences();
+            for (Attribute a : me1as) {
+                if (a.getValue() != null) {
+                    totalComparedAttributes++;
+                    String tmp = me2.getAttribute(a.getName());
+                    if (tmp != null) {
+                        if (tmp.equalsIgnoreCase(a.getValue())) {
+                            ok++;
+                        } else { notok++; }
+                    } else {
+                        notok++;
+                    }
+                }
+            }
+            if (ok == (totalComparedAttributes)) return 0;
+            else return notok;
+        }
+    }
 
 }

@@ -31,10 +31,10 @@ import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ArchetypeException;
 import fr.liglab.adele.cube.autonomicmanager.life.LifeController;
 import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelControllerImpl;
-import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelImpl;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
 import fr.liglab.adele.cube.util.parser.ArchetypeParsingException;
 import fr.liglab.adele.cube.util.parser.ParseException;
+import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,7 +45,7 @@ import java.util.*;
  * Date: 4/26/13
  * Time: 6:16 PM
  */
-public class AutonomicManagerImpl implements AutonomicManager {
+public class AutonomicManagerImpl implements AutonomicManager, Runnable {
 
 
     /**
@@ -72,6 +72,8 @@ public class AutonomicManagerImpl implements AutonomicManager {
      * Cube AM Extensions.
      */
     private List<Extension> extensions;
+
+    private Properties properties = new Properties();
 
     /**
      * Runtime Model Controller.
@@ -102,6 +104,8 @@ public class AutonomicManagerImpl implements AutonomicManager {
      */
     private String localId = "0";
 
+
+
     /**
      * key: uuid
      * value: agent_uri
@@ -110,13 +114,25 @@ public class AutonomicManagerImpl implements AutonomicManager {
 
     private static int index = 1;
 
+    Thread t;
+    private boolean working = false;
+    private boolean destroyRequested = false;
+
+    public void run() {
+
+    }
+
     /**
      * Constructor
+     *
      * @param admin
      * @param config
      * @throws fr.liglab.adele.cube.autonomicmanager.AutonomicManagerException
+     *
      */
     public AutonomicManagerImpl(AdministrationService admin, Configuration config) throws AutonomicManagerException {
+
+
 
         this.adminService = admin;
         this.config = config;
@@ -128,10 +144,17 @@ public class AutonomicManagerImpl implements AutonomicManager {
         String host = config.getHost();
         long port = config.getPort();
         this.uri = "cube://" + host + ":" + port;
+        for (Object p : config.getProperties().keySet()) {
+            //System.out.println(">>>>>>>> adding property to AM: "+p.toString()+"="+config.getHeaders().getProperty(p.toString()));
+            addProperty(p.toString(), config.getProperties().getProperty(p.toString()));
+        }
+
+        t = new Thread(this);
 
         // archetype
         try {
             this.archetype = ArchetypeParser.parse(getAdministrationService(), new URL(this.config.getArchetypeUrl()));
+            this.archetype.setAutonomicManager(this);
         } catch (ParseException e) {
             throw new AutonomicManagerException(e.getMessage());
         } catch (ArchetypeParsingException e) {
@@ -177,7 +200,7 @@ public class AutonomicManagerImpl implements AutonomicManager {
                                 }
                             }
                         } else {
-                            System.out.println("received NULL msg!");
+                            //System.out.println("received NULL msg!");
                         }
                     }
                 });
@@ -190,6 +213,8 @@ public class AutonomicManagerImpl implements AutonomicManager {
         checker = new RuntimeModelCheckerImpl(this);
 
         lifeController = new LifeController(this);
+
+
     }
 
     private void init() throws AutonomicManagerException {
@@ -271,6 +296,22 @@ public class AutonomicManagerImpl implements AutonomicManager {
         return this.archetype;
     }
 
+    public void addProperty(String name, String value) {
+        this.properties.put(name, value);
+    }
+
+    public String getProperty(String name) {
+        if (name != null) {
+            if (this.properties.get(name) != null)
+                return this.properties.get(name).toString();
+        }
+        return null;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
     public List<Extension> getExtensions() {
         return this.extensions;
     }
@@ -310,6 +351,7 @@ public class AutonomicManagerImpl implements AutonomicManager {
 
     public void start() {
         System.out.println("[INFO] >>>>>>>>> starting autonomic manager: " + uri.toString());
+        this.working = true;
         for (Extension ex: this.getExtensions()) {
             ex.start();
         }
@@ -326,6 +368,7 @@ public class AutonomicManagerImpl implements AutonomicManager {
 
     public void stop() {
         System.out.println("[INFO] >>>>>>>>> stopping autonomic manager: " + uri.toString());
+        this.working = false;
         for (Extension ex: this.getExtensions()) {
             ex.stop();
         }
@@ -342,6 +385,8 @@ public class AutonomicManagerImpl implements AutonomicManager {
 
     public void destroy() {
         System.out.println("[INFO] >>>>>>>>> destroying autonomic manager: " + uri.toString());
+        this.working = false;
+        this.destroyRequested = true;
         for (Extension ex: this.getExtensions()) {
             ex.destroy();
         }
@@ -349,6 +394,7 @@ public class AutonomicManagerImpl implements AutonomicManager {
         if (this.checker != null) {
             this.checker.destroy();
         }
+
         /*
         if (this.lifeController != null) {
             this.lifeController.destroy();
@@ -358,4 +404,6 @@ public class AutonomicManagerImpl implements AutonomicManager {
     public ArchetypeResolver getArchetypeResolver() {
         return this.resolver;
     }
+
+
 }

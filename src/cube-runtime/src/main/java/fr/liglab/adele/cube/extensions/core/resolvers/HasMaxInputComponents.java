@@ -20,10 +20,8 @@ package fr.liglab.adele.cube.extensions.core.resolvers;
 
 import fr.liglab.adele.cube.extensions.AbstractUnaryResolver;
 import fr.liglab.adele.cube.extensions.Extension;
-import fr.liglab.adele.cube.metamodel.InvalidNameException;
-import fr.liglab.adele.cube.metamodel.ManagedElement;
-import fr.liglab.adele.cube.metamodel.PropertyExistException;
-import fr.liglab.adele.cube.metamodel.PropertyNotExistException;
+import fr.liglab.adele.cube.extensions.core.model.Component;
+import fr.liglab.adele.cube.metamodel.*;
 
 /**
  * Author: debbabi
@@ -42,70 +40,18 @@ public class HasMaxInputComponents extends AbstractUnaryResolver {
 
     public boolean check(ManagedElement me, String value) {
         if (me != null && value != null) {
-
-            if (value != null) {
-                String pname = null;
-                String pvalue = null;
-                if (value.toString().contains("=")) {
-                    String[] tmp = value.toString().split("=");
-                    if (tmp != null && tmp.length==2) {
-                        pname = tmp[0];
-                        pvalue = tmp[1];
-                    }
-                } else {
-                    pname = value.toString();
-                }
-                if (pvalue == null) {
-                    return me.hasAttribute(pname);
-                } else {
-                    if (me.hasAttribute(pname) == false) {
-                        return false;
-                    } else {
-                        String attributeValue = me.getAttribute(pname);
-                        return attributeValue.equalsIgnoreCase(pvalue);
-                    }
-                }
+            Reference r = me.getReference(Component.CORE_COMPONENT_INPUTS);
+            if (r != null) {
+                return r.getReferencedElements().size() < new Integer(value);
+            } else {
+                return true;
             }
         }
         return false;
     }
 
     public boolean perform(ManagedElement me, String value) {
-        if (me != null && value != null) {
-            String pname = null;
-            String pvalue = null;
-            if (value.contains("=")) {
-                String[] tmp = value.split("=");
-                if (tmp != null && tmp.length==2) {
-                    pname = tmp[0];
-                    pvalue = tmp[1];
-                }
-            } else {
-                pname = value;
-            }
-            if (pvalue == null) {
-                return false;
-            } else {
-                if (me.hasAttribute(pname)) {
-                    try {
-                        me.updateAttribute(pname, pvalue);
-                        return true;
-                    } catch (PropertyNotExistException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        me.addAttribute(pname, pvalue);
-                    } catch (PropertyExistException e) {
-                        e.printStackTrace();
-                    } catch (InvalidNameException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-        }
-        return false;
+        return true;
     }
 
 }

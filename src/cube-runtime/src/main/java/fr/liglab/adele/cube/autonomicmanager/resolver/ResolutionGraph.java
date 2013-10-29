@@ -32,23 +32,26 @@ public class ResolutionGraph {
 
     public boolean resolve() {
         retrieveGoalsFromArchetype();
+        print();
         for (Constraint c : root.getConstraints()) {
-            resolveConstraint(c);
+            resolveConstraint(c, root.getValues().get(0));
         }
         return performConstraints(this.root);
     }
 
-    private void resolveConstraint(Constraint c) {
+    private void resolveConstraint(Constraint c, String currentProblem) {
         info("resolving constraint "+c.getArchetypePropertyName()+"...");
+        c.setCurrentProblem(currentProblem);
         if (c instanceof GoalConstraint) {
             if (c.getObject() instanceof PrimitiveVariable) {
-                info("unary constraint '"+c.getArchetypePropertyName()+"' is by default resolved! no need to execute a resolution strategy!");
+                info("unary constraint '" + c.getArchetypePropertyName() + "' is by default resolved! no need to execute a resolution strategy!");
             } else {
                 switch (((GoalConstraint) c).getResolutionStrategy()) {
                     case Find: {
                         info("executing resolution strategy 'Find' on constraint '"+c.getArchetypePropertyName()+"'...");
                         List<String> result = findValues(c.getObject());
                         info("find..."+result.size());
+
                     } break;
                     case FindOrCreate: {
                         info("executing resolution strategy 'FindOrCreate' on constraint '"+c.getArchetypePropertyName()+"'...");
@@ -69,14 +72,88 @@ public class ResolutionGraph {
                         createValue(c.getObject());
                         info("create...1");
                     } break;
-                    case FindOrNothing: {
-                        info("executing resolution strategy 'FindOrNothing' on constraint '"+c.getArchetypePropertyName()+"'...");
-                        List<String> result=findValues(c.getObject());
-                        info("find..."+result.size());
-                    } break;
                 }
             }
         }
+    }
+
+    private void createValue(Variable v) {
+        if (v instanceof PrimitiveVariable) {
+            // nothing to do!
+        } else if (v instanceof MultiValueVariable) {
+            String newInstance = this.resolver.createUsingDescription(((MultiValueVariable) v).getDescription());
+            //System.out.println("[RG] .... new instance: " + newInstance);
+            /// VERIFY
+            if (verifyValue(newInstance, v)) {
+                ((MultiValueVariable) v).addValue(newInstance);
+                for (Constraint c : v.getConstraints()) {
+                    c.setCurrentProblem(newInstance);
+                }
+                //r.add(res);
+            }
+        }
+    }
+    /**
+     * It updates the values of the variable, as well as returning the find values
+     * @param v
+     * @return
+     */
+    private List<String> findValues(Variable v) {
+        //System.out.println("[RESOLVER] find possible values for variable: "+ v.getId());
+        List<String> r = new ArrayList<String>();
+        if (v instanceof PrimitiveVariable) {
+            //System.out.println("[RESOLVER] find possible values for variable: "+ v.getId() + " ... is primitive variable!");
+            //((MultiValueVariable)v).addValues(r);
+        } else if (v instanceof MultiValueVariable) {
+
+            List<Constraint> cc = v.getConstraints();
+            // if has only unary constraints! we look on the Runtime Model!
+            boolean isFinalVariable = true;
+            for (Constraint c : cc) {
+                if (c.getObject() instanceof MultiValueVariable) {
+                    isFinalVariable = false;
+                }
+            }
+            if (isFinalVariable == true) {
+                info("find possible values for variable: "+ ((MultiValueVariable) v).getDescription().getName() + " from RuntimeModel...");
+                // has no constraints, find value from Runtime Model
+                List<String> result = this.resolver.findFromRuntimeModel(((MultiValueVariable) v).getDescription());
+                info("find possible values for variable: "+ ((MultiValueVariable) v).getDescription().getName() + " from RuntimeModel...("+result.size()+")");
+                // verify found values
+                for (String res : result) {
+                    if (verifyValue(res, v)) {
+                        ((MultiValueVariable) v).addValue(res);
+                        r.add(res);
+                        info("--- "+res+ " OK");
+                    } else {
+                        info("--- "+res+ " X");
+                    }
+                }
+                //((MultiValueVariable) v).addValues(result);
+                //r.addAll(result);
+            } else {
+                info("find possible values for variable: "+ ((MultiValueVariable) v).getDescription().getName() + " ... using its constraints");
+                // has constraint, find value using those constraints
+                for (Constraint c : cc) {
+                    if (c.getObject() instanceof MultiValueVariable) { // avoid finding values for primitive values!
+                        Variable cv = c.getObject();
+                        List<String> cvs = findValues(cv);
+                        for (String uuid : cvs) {
+                            List<String> result = this.resolver.findUsingArchetypeProperty(c.getArchetypePropertyName(), uuid, ((MultiValueVariable) v).getDescription());
+                            for (String res : result) {
+                                if (verifyValue(res, v)) {
+                                    ((MultiValueVariable) v).addValue(res);
+                                    r.add(res);
+                                }
+                            }
+                            //((MultiValueVariable) v).addValues(result);
+                            //r.addAll(result);
+                        }
+                    }
+                }
+            }
+        }
+        return r;
     }
 
     private boolean performConstraints(Variable v) {
@@ -86,7 +163,7 @@ public class ResolutionGraph {
             if (c.getObject() instanceof MultiValueVariable) {
                 if (((MultiValueVariable) c.getObject()).getValues().size()==0) {
                     if (c instanceof GoalConstraint){
-                        if (((GoalConstraint) c).getResolutionStrategy()!=ResolutionStrategy.FindOrNothing) {
+                        if (((GoalConstraint) c).isOptional() == false) {
                             info("constraint "+c.getArchetypePropertyName()+" is not resolved for instance '"+((MultiValueVariable) c.getObject()).getDescription().getName()+"'!");
                             return false;
                         }
@@ -109,7 +186,29 @@ public class ResolutionGraph {
                     info("--- "+pv);
                 }
                 if (possibleValues.size()>0) {
+
+                    String uuid_subject = c.getCurrentProblem();
                     String uuid_object = possibleValues.get(0);
+
+                    if (isUnmanaged(uuid_object)) {
+                        if (performConstraints(c.getObject()) == false) {
+                            return false;
+                        }
+                    }
+                    if (this.resolver.performProperty(c.getArchetypePropertyName(), uuid_subject, uuid_object)==true) {
+                        info("performing constraint '"+c.getArchetypePropertyName()+"' between '"+uuid_subject+"' and '"+uuid_object+"'");
+                        if (c instanceof GoalConstraint) {
+                            ((GoalConstraint) c).setCurrentSolution(uuid_object);
+                        }
+                    } else {
+                        info("there were problem while performing constraint '"+c.getArchetypePropertyName()+"' between '"+uuid_subject+"' and '"+uuid_object+"'");
+                        if (c instanceof GoalConstraint) {
+                            if (((GoalConstraint) c).isOptional()) {
+                               continue;
+                            }
+                        }
+                    }
+                    /*
                     if (isUnmanaged(uuid_object)) {
                         if (performConstraints(c.getObject()) == false) {
                             return false;
@@ -128,6 +227,7 @@ public class ResolutionGraph {
                     } else {
                         String uuid_subject = ((MultiValueVariable)v).getValues().get(0);
                         if (this.resolver.performProperty(c.getArchetypePropertyName(), uuid_subject, uuid_object)==true) {
+                            info("performing constraint '"+c.getArchetypePropertyName()+"' between '"+uuid_subject+"' and '"+uuid_object+"'");
                             if (c instanceof GoalConstraint) {
                                 ((GoalConstraint) c).setCurrentSolution(uuid_object);
                             }
@@ -136,8 +236,13 @@ public class ResolutionGraph {
                             // TODO cancel performed constraints!
                             return false;
                         }
-                    }
+                    } */
+
                 } else {
+                    if (c instanceof GoalConstraint) {
+                        if (((GoalConstraint)c).isOptional()==true)
+                            return true;
+                    }
                     return false;
                 }
             }
@@ -146,76 +251,30 @@ public class ResolutionGraph {
         return true;
     }
 
-    private boolean isUnmanaged(String uuid) {
-        if (this.am.getRuntimeModelController().isLocalInstance(uuid)) {
-            ManagedElement me = this.am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
-            if (me != null && me.getState() == ManagedElement.UNMANAGED) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * It updates the values of the variable, as well as returning the find values
-     * @param v
-     * @return
-     */
-    private List<String> findValues(Variable v) {
-        //System.out.println("[RESOLVER] find possible values for variable: "+ v.getId());
-        List<String> r = new ArrayList<String>();
-        if (v instanceof PrimitiveVariable) {
-            //System.out.println("[RESOLVER] find possible values for variable: "+ v.getId() + " ... is primitive variable!");
-            //((MultiValueVariable)v).addValues(r);
-        } else if (v instanceof MultiValueVariable) {
-            List<Constraint> cc = v.getConstraints();
-            if (cc.size() == 0) {
-                info("find possible values for variable: "+ ((MultiValueVariable) v).getDescription().getName() + " ... from RuntimeModel");
-                // has no constraints, find value from Runtime Model
-                List<String> result = this.resolver.findFromRuntimeModel(((MultiValueVariable) v).getDescription());
-                ((MultiValueVariable) v).addValues(result);
-                r.addAll(result);
-            } else {
-                info("find possible values for variable: "+ ((MultiValueVariable) v).getDescription().getName() + " ... using its constraints");
-                // has constraint, find value using those constraints
-                for (Constraint c : cc) {
-                    Variable cv = c.getObject();
-                    List<String> cvs = findValues(cv);
-                    for (String uuid : cvs) {
-                        List<String> result = this.resolver.findUsingArchetypeProperty(c.getArchetypePropertyName(), uuid, ((MultiValueVariable) v).getDescription());
-                        ((MultiValueVariable) v).addValues(result);
-                        r.addAll(result);
-                    }
-                    // TODO verify found values!!
+    private boolean verifyValue(String uuid, Variable v) {
+        boolean verified = true;
+        for (Constraint c: v.getConstraints()) {
+            if (c.getObject() instanceof PrimitiveVariable) {
+                if (this.resolver.verifyProperty(c.getArchetypePropertyName(), uuid, ((PrimitiveVariable) c.getObject()).getValue())==false) {
+                    info("constraint '"+c.getArchetypePropertyName()+"' is NOT verified!");
+                    verified = false;
+                    break;
                 }
+                info("constraint '"+c.getArchetypePropertyName()+"' is verified!");
             }
-
         }
-        return r;
+        info ("verification result: "+verified);
+        return verified;
     }
 
-    private void createValue(Variable v) {
-        if (v instanceof PrimitiveVariable) {
-            // nothing to do!
-        } else if (v instanceof MultiValueVariable) {
-            List<Constraint> cc = v.getConstraints();
-            if (cc.size() == 0) {
 
-            } else {
-                // find values for related elements to this "te be created" element.
-            }
-            String newInstance = this.resolver.createUsingDescription(((MultiValueVariable) v).getDescription());
-            System.out.println("[RG] .... new instance: " + newInstance);
-            ((MultiValueVariable) v).addValue(newInstance);
-        }
-    }
 
     private void retrieveGoalsFromArchetype() {
         // get applicable goals
         for (GoalProperty gp : am.getArchetype().getGoalProperties()) {
             Element subject = gp.getSubject();
             if (checkForGoalSubjects((ElementDescription) subject, root) == true) {
+                info(">> we will add the goal '"+gp.getName()+"' to the Resolution Graph!");
                 addGoal(gp);
                 //System.out.println("[RESOLVER] adding goal: "+gp.getFullname());
             } else {
@@ -276,6 +335,7 @@ public class ResolutionGraph {
             for (DescriptionProperty unaryDP : ((ElementDescription) objectElement).getUnaryDescriptionProperties()) {
                 String ov = ((ElementValue)unaryDP.getObject()).getValue().toString();
                 this.resolver.performProperty(unaryDP.getFullname(), ((MultiValueVariable)v2).getDescription(), ov);
+                addConstraint(unaryDP, v2);
             }
             for (DescriptionProperty binaryDP : ((ElementDescription)objectElement).getBinaryDescriptionProperties()) {
                 addConstraint(binaryDP, v2);
@@ -284,11 +344,17 @@ public class ResolutionGraph {
         return v2;
     }
 
-    private boolean resolveGoal(Constraint c) {
-       return true;
+
+
+    private boolean isUnmanaged(String uuid) {
+        if (this.am.getRuntimeModelController().isLocalInstance(uuid)) {
+            ManagedElement me = this.am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
+            if (me != null && me.getState() == ManagedElement.UNMANAGED) {
+                return true;
+            }
+        }
+        return false;
     }
-
-
 
 
     ////////// getters/setters /////////////////////////////////////////////////
@@ -301,15 +367,14 @@ public class ResolutionGraph {
         this.root = root;
     }
 
-    public String print() {
-        String out = "";
-        out += "root::\n";
-        out += "      " + root.getDescription().getDocumentation();
+    public void print() {
+        String out = "-------------------------------------------------------------------------------------\n";
+        out += root.getDescription().getName();
         for (Constraint c : root.getConstraints()) {
-            out += "\n------------goal:::"+c.getArchetypePropertyName()+"------- "+ c.getObject();
+            out += "\n" + c.print("    ");
         }
-
-        return out;
+        out += "\n-------------------------------------------------------------------------------------";
+        info(out);
     }
 
 

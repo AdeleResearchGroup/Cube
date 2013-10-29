@@ -5,6 +5,7 @@ import fr.liglab.adele.cube.autonomicmanager.Communicator;
 import fr.liglab.adele.cube.extensions.CommunicatorExtensionPoint;
 import fr.liglab.adele.cube.autonomicmanager.CMessage;
 import fr.liglab.adele.cube.autonomicmanager.MessagesListener;
+import fr.liglab.adele.cube.util.perf.MessageMeasure;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,6 +41,19 @@ public class CommunicatorImpl implements Communicator {
             communicators.get(c).sendMessage(msg);
             //System.out.println("[INFO:"+am.getUri()+"] Sending message using '" + communicators.get(c).getName() + "' communicator...\n" + msg.toString());
         }
+        /*
+        String headers = "";
+        if (msg.getHeaders() != null) {
+            for (Object key : msg.getHeaders().keySet()) {
+                headers += key + ":" + msg.getHeaders().get(key) + ",";
+            }
+        }
+        */
+
+            MessageMeasure m = new MessageMeasure(am.getUri(), msg.getFrom(), msg.getTo(), "", msg.getObject(),
+                    msg.getBody()!=null?msg.getBody().toString():"");
+            am.getAdministrationService().getPerformanceChecker().addMessageMeasure(m);
+
     }
     public void addMessagesListener(String id, MessagesListener callback) throws Exception {
         if (this.callbacks.containsKey(id) == false) {

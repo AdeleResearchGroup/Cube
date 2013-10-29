@@ -41,6 +41,7 @@ public interface RuntimeModelController {
     ManagedElement getCopyOfManagedElement(String uuid);
     void addManagedElement(ManagedElement managedElement);
     boolean destroyElement(String managed_element_uuid);
+    //boolean move(ManagedElement me, String amUri);
 
     // Utils
     void addManagedElementFactory(ManagedElementExtensionPoint exp);

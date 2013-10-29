@@ -4,8 +4,8 @@
 
 		<goals>	
 			<goal>				
-				<core:inScope s="@as" o="@ac" r="fc"/>
-				<core:inScope s="@ms" o="@mc" r="fc"/>
+				<core:inScope s="@pc" o="@lan" r="fc"/>				
+				<connected s="@a" o="@b" r="fc"/>
 			</goal>
 			<!--goal>
 				<core:holdComponent s="@as" o="@wsp" r="fc"/>
@@ -17,24 +17,25 @@
 		</goals>
 		
 		<elements>
-			<core:component id="wsp">
-				<core:hasComponentType o="WSP"/>				
-			</core:component>
-			<core:component id="ahd">
-				<core:hasComponentType o="AHD"/>				
+			<core:component id="a">
+				<core:hasComponentType o="A"/>				
 			</core:component>			
-			<core:node id="as">
-				<hasNodeType o="AS"/>
+			<core:component id="b">
+				<core:hasComponentType o="B"/>
+				<onNode o="@pcc"/>				
+			</core:component>						
+			<core:node id="gateway">
+				<hasNodeType o="Gateway"/>
+			</core:node>		
+			<core:node id="pc">
+				<hasNodeType o="PC"/>
+			</core:node>		
+			<core:node id="pcc">
+				<hasNodeType o="PC"/>
+				<inScope o="@lan"/>
 			</core:node>
-			<core:node id="ms">
-				<hasNodeType o="MS"/>
-			</core:node>
-			<core:scope id="ac">
-				<hasScopeId o="AC"/>
-				<core:controlledBy o="@master"/>
-			</core:scope>
-			<core:scope id="mc">
-				<hasScopeId o="MC"/>				
+			<core:scope id="lan">
+				<hasScopeId o="LAN"/>				
 				<core:controlledBy o="@master"/>
 			</core:scope>
 			<core:master id="master">

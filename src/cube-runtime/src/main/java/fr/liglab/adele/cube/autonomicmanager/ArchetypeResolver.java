@@ -25,6 +25,7 @@ public interface ArchetypeResolver extends RuntimeModelListener {
     boolean performProperty(String archetypePropertyName, ManagedElement managedElement, String value);
     boolean performProperty(String archetypePropertyName, String uuid, String value);
     String createUsingDescription(ManagedElement description);
+    boolean verifyProperty(String archetypePropertyName, String uuid, String value);
 
     // Utils
 
@@ -32,5 +33,6 @@ public interface ArchetypeResolver extends RuntimeModelListener {
     ResolverExtensionPoint getResolver(String fullname);
     void addSpecificResolver(ResolverExtensionPoint specificResolver);
     void receiveMessage(CMessage msg);
+
 
 }

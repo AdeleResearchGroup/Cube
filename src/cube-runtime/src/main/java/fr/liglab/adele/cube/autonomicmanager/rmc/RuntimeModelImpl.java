@@ -73,7 +73,7 @@ public class RuntimeModelImpl implements RuntimeModel {
         ManagedElement me = this.unmanagedElements.get(uuid) ;
         if (me != null && me.getState() == ManagedElement.UNMANAGED) {
             add(me, ManagedElement.INVALID);
-            this.unmanagedElements.remove(me);
+            removeUnmanaged(me);
         }
     }
 
@@ -198,14 +198,51 @@ public class RuntimeModelImpl implements RuntimeModel {
         }
     }
 
-    public synchronized ManagedElement remove(ManagedElement me1) {
-        if (me1 == null) return null;
+    private void removeUnmanaged(ManagedElement me1) {
+        Set set2 = this.unmanagedElements.keySet();
+        Iterator itr2 = set2.iterator();
+        while (itr2.hasNext())
+        {
+            Object o2 = itr2.next();
+            if (o2.toString().equalsIgnoreCase(me1.getUUID())) {
+                itr2.remove(); //remove the pair if key length is less then 3
+                return;
+            }
+        }
+    }
+
+    private void removeManaged(ManagedElement me1) {
+        Set set = this.elements.keySet();
+        Iterator itr = set.iterator();
+        while (itr.hasNext())
+        {
+            Object o = itr.next();
+            if (o.toString().equalsIgnoreCase(me1.getUUID())) {
+                itr.remove(); //remove the pair if key length is less then 3
+                return;
+            }
+        }
+    }
+
+    public synchronized void remove(ManagedElement me1) {
+        if (me1 == null) return;
+        removeManaged(me1);
+        removeUnmanaged(me1);
+        /*
         ManagedElement result = this.unmanagedElements.remove(me1.getUUID());
         if (result != null) return result; else return this.elements.remove(me1.getUUID());
+        */
     }
 
     public synchronized void removeUnmanagedElements() {
-        this.unmanagedElements.clear();
+        List<String> tmp = new ArrayList<String>();
+        for (String me : this.unmanagedElements.keySet()) {
+            tmp.add(me);
+        }
+        for (String t : tmp) {
+            this.am.getRuntimeModelController().destroyElement(t);
+        }
+        //this.unmanagedElements.clear();
     }
 
     /**

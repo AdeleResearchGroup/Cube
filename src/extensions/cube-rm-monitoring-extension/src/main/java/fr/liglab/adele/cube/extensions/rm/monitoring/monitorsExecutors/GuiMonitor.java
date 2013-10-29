@@ -48,7 +48,7 @@ public class GuiMonitor extends AbstractMonitorExecutor {
                          gui.addNode((ManagedElement)instance);
                     }
                     */
-            gui.updateGraph();
+            //gui.updateGraph();
         }
     }
 }

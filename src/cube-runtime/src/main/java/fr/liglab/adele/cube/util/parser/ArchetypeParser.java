@@ -22,6 +22,7 @@ import fr.liglab.adele.cube.CubeLogger;
 import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
 import fr.liglab.adele.cube.AdministrationService;
 import fr.liglab.adele.cube.archetype.*;
+import fr.liglab.adele.cube.util.Utils;
 import fr.liglab.adele.cube.util.xml.XMLElement;
 import fr.liglab.adele.cube.util.xml.XMLParser;
 import org.osgi.framework.BundleContext;
@@ -53,6 +54,7 @@ public class ArchetypeParser {
     public static final String GOALS = "goals";
     public static final String GOAL = "goal";
     public static final String PRIORITY = "priority";
+    public static final String OPTIONAL = "optional";
     public static final String SUBJECT = "s";
     public static final String OBJECT = "o";
     public static final String RESOLUTION = "r";
@@ -181,7 +183,12 @@ public class ArchetypeParser {
                                                 if (cobjectAttr.startsWith("@")) {
                                                     String tmp = cobjectAttr.substring(1);
                                                     objectElement = archtype.getElement(tmp);
-                                                } else {
+                                                } else if(cobjectAttr.startsWith("$")) {
+                                                    objectElement = new ElementValue(archtype, cobjectAttr);
+                                                    //System.out.println("ARCHETYPE PROPERTY: " + propval);
+                                                    //objectElement = archtype.getElement();
+                                                }
+                                                else {
                                                     objectElement = new ElementValue(archtype, cobjectAttr);
                                                 }
                                             }
@@ -230,6 +237,7 @@ public class ArchetypeParser {
                                                     if (oobject == null) throw new ParseException("No object was specified for the Objective '"+oname+"'!");
                                                     String resolution = xmlobjective.getAttribute(RESOLUTION);
                                                     String opriority = xmlobjective.getAttribute(PRIORITY);
+                                                    String ooptional = xmlobjective.getAttribute(OPTIONAL);
 
                                                     GoalProperty o = null;
                                                     //Objective o = null;
@@ -263,6 +271,9 @@ public class ArchetypeParser {
                                                     goalProperty = new GoalProperty(archtype, onamespace, oname, resolution, opriority, odescription);
                                                     goalProperty.setSubject(subjectElement);
                                                     goalProperty.setObject(objectElement);
+                                                    if (oobject != null && oobject.equalsIgnoreCase("true")) {
+                                                        goalProperty.setOptional(true);
+                                                    }
                                                     g.addGoal(goalProperty);
                                                     archtype.addProperty(goalProperty);
 
@@ -346,9 +357,18 @@ public class ArchetypeParser {
                     }
                     else {
                         if (e.getNamespace() == CoreExtensionFactory.NAMESPACE)
-                            out += "<"+c.getName()+" o=\""+((ElementValue)c.getObject()).getValue().toString()+"\"/>\n";
-                        else
-                            out += "<"+c.getNamespace()+":"+c.getName()+" o=\""+((ElementValue)c.getObject()).getValue().toString()+"\"/>\n";
+                            if (((ElementValue)c.getObject()) != null) {
+                                out += "<"+c.getName()+" o=\""+((ElementValue)c.getObject()).getValue()+"\"/>\n";
+                            } else {
+                                out += "<"+c.getName()+" o=\"NULL\"/>\n";
+                            }
+                        else {
+                            if (((ElementValue)c.getObject()) != null) {
+                                out += "<"+c.getNamespace()+":"+c.getName()+" o=\""+((ElementValue)c.getObject()).getValue()+"\"/>\n";
+                            } else {
+                                out += "<"+c.getNamespace()+":"+c.getName()+" o=\"NULL\"/>\n";
+                            }
+                        }
                     }
                 }
                 if (e.getNamespace() == CoreExtensionFactory.NAMESPACE)

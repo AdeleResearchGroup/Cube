@@ -25,13 +25,11 @@ import fr.liglab.adele.cube.Configuration;
 import fr.liglab.adele.cube.extensions.ExtensionFactoryService;
 import fr.liglab.adele.cube.AdministrationService;
 import fr.liglab.adele.cube.autonomicmanager.impl.AutonomicManagerImpl;
+import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 import org.apache.felix.ipojo.annotations.*;
 import org.osgi.framework.BundleContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Implementation class of the AdministrationService OSGi service.
@@ -54,6 +52,8 @@ public class CubeRuntime implements AdministrationService {
         autonomicManagers = new HashMap<String, AutonomicManager>();
     }
 
+    private PerformanceChecker performanceChecker;
+
     /**
      * Extension Factories
      */
@@ -71,6 +71,7 @@ public class CubeRuntime implements AdministrationService {
      */
     public CubeRuntime(BundleContext btx) {
         this.bundleContext = btx;
+        this.performanceChecker = new PerformanceChecker();
         extensionFactories = new ArrayList<ExtensionFactoryService>();
         communicators = new ArrayList<CommunicatorExtensionPoint>();
     }
@@ -101,11 +102,19 @@ public class CubeRuntime implements AdministrationService {
         System.out.println("[INFO] ... Stopping CUBE Runtime");
 
         // Stopping and destroying all the created cube agents.
+        List<String> tmp = new ArrayList<String>();
+
         for (String a : this.autonomicManagers.keySet()) {
+            tmp.add(a);
+        }
+        for (String a : tmp) {
             stopAutonomicManager(a);
             destroyAutonomicManager(a);
         }
-
+        System.out.println("[INFO] ... writing performance measures to file...");
+        if (this.performanceChecker != null) {
+            this.performanceChecker.saveToFile();
+        }
         System.out.println("[INFO] ... Bye!");
         System.out.println(" ");
     }
@@ -151,7 +160,16 @@ public class CubeRuntime implements AdministrationService {
         AutonomicManager am = getAutonomicManager(amUri);
         if (am != null)
             am.destroy();
-        this.autonomicManagers.remove(amUri);
+        Set set2 = this.autonomicManagers.keySet();
+        Iterator itr2 = set2.iterator();
+        while (itr2.hasNext())
+        {
+            Object o2 = itr2.next();
+            if (o2.toString().equalsIgnoreCase(amUri)) {
+                itr2.remove(); //remove the pair if key length is less then 3
+                return;
+            }
+        }
     }
 
     /**
@@ -271,6 +289,13 @@ public class CubeRuntime implements AdministrationService {
         return this.bundleContext;
     }
 
+    public PerformanceChecker getPerformanceChecker() {
+        return performanceChecker;
+    }
+
+    public void setPerformanceChecker(PerformanceChecker performanceChecker) {
+        this.performanceChecker = performanceChecker;
+    }
     /**
      * Get Cube Platform Version.
      *

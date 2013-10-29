@@ -71,7 +71,7 @@ public class ControlledBy extends AbstractResolver {
                         String scope_id=rmController.getAttributeValue(instance1_uuid.toString(), Scope.CORE_SCOPE_ID);
                         if (rmController.addReferencedElement(instance1_uuid.toString(), Scope.CORE_SCOPE_MASTER, instance2_uuid.toString())) {
                             if (rmController.addReferencedElement(instance2_uuid.toString(), scope_id, true, instance1_uuid.toString())) {
-                                System.out.println("++++++++++++++ ControlledBy.perform......"+me.getUUID()+"....TRUE");
+                                //System.out.println("++++++++++++++ ControlledBy.perform......"+me.getUUID()+"....TRUE");
                                 return true;
                             }
                         }
@@ -81,7 +81,7 @@ public class ControlledBy extends AbstractResolver {
                 }
             }
         }
-        System.out.println("++++++++++++++ ControlledBy.perform......"+me.getUUID()+"....FALSE");
+        //System.out.println("++++++++++++++ ControlledBy.perform......"+me.getUUID()+"....FALSE");
         return false;
 
 
@@ -95,10 +95,10 @@ public class ControlledBy extends AbstractResolver {
     public List<String> find(ManagedElement me, ManagedElement description) {
         List<String> result = new ArrayList<String>();
         if (me != null && description != null) {
-            System.out.println(description.getDocumentation());
+            //System.out.println(description.getDocumentation());
             Reference r = me.getReference(description.getAttribute(Scope.CORE_SCOPE_ID));
             if (r != null) {
-                System.out.println("CONTROLLED BY . FIND: " + r.getReferencedElements().size());
+                //System.out.println("CONTROLLED BY . FIND: " + r.getReferencedElements().size());
                 return r.getReferencedElements();
             }
             /*
@@ -117,7 +117,7 @@ public class ControlledBy extends AbstractResolver {
                 }
             } */
         }
-        System.out.println("CONTROLLED BY . FIND: RIEN!");
+        //System.out.println("CONTROLLED BY . FIND: RIEN!");
         return result;
     }
 

@@ -20,6 +20,7 @@ package fr.liglab.adele.cube.extensions;
 
 import fr.liglab.adele.cube.AutonomicManager;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
+import fr.liglab.adele.cube.util.Utils;
 
 import java.util.List;
 import java.util.Properties;
@@ -61,7 +62,13 @@ public abstract class AbstractExtension implements Extension {
     }
 
     public Properties getProperties(){
-        return this.properties;
+        Properties p = new Properties();
+        for (Object k : this.properties.keySet()) {
+            String pvalue = this.properties.getProperty(k.toString());
+            p.put(k.toString(), Utils.evaluateValue(getAutonomicManager(), pvalue));
+        }
+        //return this.properties;
+        return p;
     }
 
     public abstract List<ExtensionPoint> getExtensionPoints();

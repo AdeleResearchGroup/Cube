@@ -22,6 +22,7 @@ import fr.liglab.adele.cube.extensions.ExtensionConfig;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * Author: debbabi
@@ -35,7 +36,7 @@ public class Configuration {
     public static final long DEFAULT_PULSE = 3000;
     private static final long DEFAULT_KAINTERVAL = 5000;
     private static final long DEFAULT_KARETRY = 1;
-    public static final String DEFAULT_RESOLVER = "default-__resolver";
+    public static final String DEFAULT_RESOLVER = "default-resolver";
     public static final String DEFAULT_COMMUNICATOR = "socket-communicator";
 
 
@@ -49,6 +50,8 @@ public class Configuration {
     private boolean debug = false;
     private boolean perf = false;
     private boolean persist = false;
+
+    private Properties properties = new Properties();
 
     private List<ExtensionConfig> extensions = new ArrayList<ExtensionConfig>();
     private long keepAliveInterval = DEFAULT_KAINTERVAL;
@@ -116,6 +119,22 @@ public class Configuration {
 
     public void setArchetypeUrl(String archetypeUrl) {
         this.archetypeUrl = archetypeUrl;
+    }
+
+    public void addProperty(String name, String value) {
+        this.properties.put(name, value);
+    }
+
+    public String getProperty(String name) {
+        if (name != null) {
+            if (this.properties.get(name) != null)
+                return this.properties.get(name).toString();
+        }
+        return null;
+    }
+
+    public Properties getProperties() {
+        return properties;
     }
 
     public List<ExtensionConfig> getExtensionConfigs() {

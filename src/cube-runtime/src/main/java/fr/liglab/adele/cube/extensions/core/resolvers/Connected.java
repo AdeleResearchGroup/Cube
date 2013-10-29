@@ -68,11 +68,13 @@ public class Connected extends AbstractResolver {
                     r = me.addReference(Component.CORE_COMPONENT_OUTPUTS, false);
                     RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
                     rmc.addReferencedElement(value, Component.CORE_COMPONENT_INPUTS, me.getUUID());
+                    r.addReferencedElement(value);
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
                 }
-            }
+            } else {
             r.addReferencedElement(value);
+            }
             return true;
         }
         return false;

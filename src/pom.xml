@@ -32,7 +32,7 @@
 		<module>tools</module>
 		<!--module>usecases</module>
 	    <module>doc</module-->
-  </modules>
+    </modules>
 
 	<distributionManagement>		
 		<repository>

@@ -29,8 +29,8 @@ public class Test3 {
     private static final int NBR_PARIS_GATWAYS = 25;
 
 
-    public static void test(AdministrationService administrationService) {
-        System.out.println("\n||||||||||||| TEST 2 UC1 ||||||||||||||||\n");
+    public static void test(AdministrationService administrationService, int param) {
+        System.out.println("\n||||||||||||| TEST 3 UC1 ||||||||||||||||\n");
         Map<String, String> ams = new HashMap<String, String>();
         try {
             // MASTER
@@ -91,7 +91,7 @@ public class Test3 {
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19100+i);
-                //config.addProperty("city","Grenoble");
+                config.addProperty("city","Grenoble");
                 config.addProperty("node.type","Server");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -132,7 +132,7 @@ public class Test3 {
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19200+i);
-                //config.addProperty("city","Paris");
+                config.addProperty("city","Paris");
                 config.addProperty("node.type","Server");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -166,15 +166,19 @@ public class Test3 {
                 e.printStackTrace();
             }
 
+            int index = param;
+            int gg = NBR_GRENOBLE_GATWAYS>=param?param:NBR_GRENOBLE_GATWAYS;
+            int pg = (param-NBR_GRENOBLE_GATWAYS)<0?0:param-NBR_GRENOBLE_GATWAYS;
+
             System.out.println("\n[INFO] Initializing Grenoble Gateways ...\n");
             // GRENOBLE GATEWAYS
-            for (int i=0; i<NBR_GRENOBLE_GATWAYS; i++) {
+            for (int i=0; i<gg; i++) {
                 Configuration config = new Configuration();
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19300 + i);
                 //config.setDebug(true);
-                //config.addProperty("city","Grenoble");
+                config.addProperty("city","Grenoble");
                 config.addProperty("node.type","Gateway");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -211,13 +215,13 @@ public class Test3 {
 
             System.out.println("\n[INFO] Initializing Paris Gateways ...\n");
             // GRENOBLE GATEWAYS
-            for (int i=0; i<NBR_PARIS_GATWAYS; i++) {
+            for (int i=0; i<pg; i++) {
                 Configuration config = new Configuration();
                 config.setArchetypeUrl("file:test.arch");
                 config.setHost("localhost");
                 config.setPort(19400 + i);
                 //config.setDebug(true);
-                //config.addProperty("city","Paris");
+                config.addProperty("city","Paris");
                 config.addProperty("node.type","Gateway");
                 ExtensionConfig ext1 = new ExtensionConfig();
                 ext1.setId("fr.liglab.adele.cube.core");
@@ -255,7 +259,7 @@ public class Test3 {
             System.out.println("\n[INFO] Initializing Grenoble Gateway Mediators...\n");
 
             // create mediators of grenoble gateways
-            for (int i=0; i<NBR_GRENOBLE_GATWAYS; i++) {
+            for (int i=0; i<gg; i++) {
                 String amUri = ams.get("gg"+i);
                 AutonomicManager am = administrationService.getAutonomicManager(amUri);
                 if (am != null) {
@@ -293,7 +297,7 @@ public class Test3 {
             System.out.println("\n[INFO] Initializing Paris Gateway Mediators...\n");
 
             // create mediators of grenoble gateways
-            for (int i=0; i<NBR_PARIS_GATWAYS; i++) {
+            for (int i=0; i<pg; i++) {
                 String amUri = ams.get("gp"+i);
                 AutonomicManager am = administrationService.getAutonomicManager(amUri);
                 if (am != null) {
@@ -328,5 +332,4 @@ public class Test3 {
         }
 
     }
-
 }

@@ -88,6 +88,8 @@
                             fr.liglab.adele.cube.util.parser,
                             fr.liglab.adele.cube.util.deploy,
                             fr.liglab.adele.cube.util.model,
+                            fr.liglab.adele.cube.util.perf,
+                            fr.liglab.adele.cube.util.tests,
 
                             fr.liglab.adele.cube.autonomicmanager,
 

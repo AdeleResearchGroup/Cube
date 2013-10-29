@@ -171,7 +171,7 @@ public class SocketCommunicator extends AbstractCommunicator {
 				}				
 			};
 		} catch (Exception e) {
-			log.error(e.getMessage());
+			log.error(e.getMessage() + "..." + port);
 		}
 	}
 	

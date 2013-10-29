@@ -71,6 +71,12 @@ public class OnNode extends AbstractResolver {
                     e.printStackTrace();
                 }
             }
+            // TODO update AM URI of the ME to be the same as the node instance
+            /*
+            String amUri = getExtension().getAutonomicManager().getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(value);
+            if (amUri != null && !amUri.equalsIgnoreCase(getExtension().getAutonomicManager().getUri())) {
+                me.setAutonomicManager(amUri);
+            } */
             r.addReferencedElement(value);
             return true;
         }

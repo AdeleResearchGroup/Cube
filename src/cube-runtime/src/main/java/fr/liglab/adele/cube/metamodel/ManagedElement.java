@@ -165,6 +165,11 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         return this.namespace;
     }
 
+
+    public String getFullname() {
+        return this.getNamespace()+":"+getName();
+    }
+
     public String getAutonomicManager() {
         return this.am;
     }
@@ -215,7 +220,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name
      * @return NULL if 'name' is null or no property found with 'name' name; the value of the found property other else
      */
-    public String getAttribute(String name) {
+    public synchronized String getAttribute(String name) {
         if (name != null && name.length() > 0) {
             Attribute p = _getAttribute(name);
             if (p != null) {
@@ -231,7 +236,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name Attribute name
      * @return TRUE if it has the provided property.
      */
-    public boolean hasAttribute(String name) {
+    public synchronized  boolean hasAttribute(String name) {
         if (name != null) {
             for(Attribute p : this.attributes) {
                 if (p.getName().equalsIgnoreCase(name)) {
@@ -271,7 +276,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @throws PropertyNotExistException
      */
     public synchronized String updateAttribute(String name, String newValue) throws PropertyNotExistException {
-        System.out.println("ME.updateAttribute..");
+        //System.out.println("ME.updateAttribute..");
         if (name != null && name.length() > 0) {
             if (_getAttribute(name) == null)
                 throw new PropertyNotExistException("You are trying to update unexistant property '" + name + "'!");
@@ -475,40 +480,6 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         this.inResolution = inResolution;
     }
 
-    public boolean isSimilar(ManagedElement managedElement) {
-        if (getNamespace() != null && getNamespace().equalsIgnoreCase(managedElement.getNamespace()) && getName() != null
-                && getName().equalsIgnoreCase(managedElement.getName())) {
-            if (getAttributes().size() != managedElement.getAttributes().size()) {
-                return false;
-            }
-            for (Attribute p : getAttributes()) {
-                if (managedElement.hasAttribute(p.getName()) == false) {
-                    return false;
-                }
-                if (!managedElement.getAttribute(p.getName()).equalsIgnoreCase(p.getValue())) {
-                    return false;
-                }
-            }
-            if (getReferences().size() != managedElement.getReferences().size()) {
-                return false;
-            }
-            for (Reference r : getReferences()) {
-                if (managedElement.hasReference(r.getName()) == false) {
-                    return false;
-                }
-                if (r.getReferencedElements().size() != managedElement.getReference(r.getName()).getReferencedElements().size()) {
-                    return false;
-                }
-                for (String ref : r.getReferencedElements()) {
-                    if (!managedElement.getReference(r.getName()).hasReferencedElement(ref)) {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public synchronized Object clone() throws CloneNotSupportedException {

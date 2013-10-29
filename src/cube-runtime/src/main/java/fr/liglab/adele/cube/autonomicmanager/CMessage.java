@@ -53,8 +53,8 @@ public class CMessage implements Cloneable, Serializable {
 	/** The message body. */
 	private Object body = null;
 
-	/** The message header properties. */
-	private Properties properties = null;
+	/** The message header headers. */
+	private Properties headers = null;
 
 	/** The message expiration time, by default 0 for infinite time-to-live. */
 	private long expiration = 0;
@@ -68,19 +68,20 @@ public class CMessage implements Cloneable, Serializable {
 	/** The send to destination's cube identifier. */
 	private String to = null;
 	
-	/** The send to destination's cube identifier. */
+	/** The send to destination's cube identifierproperties. */
 	private String from = null;
 
 	/** The reply to destination's cube identifier. */
 	private String replyTo = null;
 
-    private ManagedElement attachement = null;
+    private ManagedElement attachment;
 
 	/**
 	 * Constructs a new <code>Message</code>
 	 */
 	public CMessage() {
 		this.timestamp = new Date().getTime();
+        this.attachment = new ManagedElement();
 		
 	}
 
@@ -116,8 +117,8 @@ public class CMessage implements Cloneable, Serializable {
 	 * @return
 	 */
 	public Object getHeader(String name) {
-		if (properties != null) {
-			return properties.get(name);
+		if (headers != null) {
+			return headers.get(name);
 		}
 		return null;
 	}
@@ -137,14 +138,14 @@ public class CMessage implements Cloneable, Serializable {
 	public void addHeader(String name, Object value) {
 		if (name == null || name.equals(""))
 			throw new IllegalArgumentException("Invalid property name: " + name);
-		if (properties == null)
-			properties = new Properties();
+		if (headers == null)
+			headers = new Properties();
 
 		if (value instanceof Boolean || value instanceof Number
 				|| value instanceof String) {
-			properties.put(name, value);
+			headers.put(name, value);
 		} else {
-			properties.put(name, value.toString());
+			headers.put(name, value.toString());
 		}
 	}
 
@@ -172,12 +173,12 @@ public class CMessage implements Cloneable, Serializable {
 		this.body = body;
 	}
 
-	public Properties getProperties() {
-		return properties;
+	public Properties getHeaders() {
+		return headers;
 	}
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
+	public void setHeaders(Properties headers) {
+		this.headers = headers;
 	}
 	
 	public long getExpiration() {
@@ -204,12 +205,12 @@ public class CMessage implements Cloneable, Serializable {
 		this.timestamp = timestamp;
 	}
 
-    public void setAttachement(ManagedElement managedElement) {
-        this.attachement = managedElement;
+    public void setAttachment(ManagedElement managedElement) {
+        this.attachment = managedElement;
     }
 
-    public ManagedElement getAttachement(){
-        return this.attachement;
+    public ManagedElement getAttachment(){
+        return this.attachment;
     }
 
 	@Override
@@ -219,14 +220,14 @@ public class CMessage implements Cloneable, Serializable {
 		tmp += "to:" + this.getTo() + "\n";
 		tmp += "replyto:" + this.getReplyTo() + "\n";
 		tmp += "correlation:" + this.getCorrelation() + "\n";
-		if (properties != null) {
-			for (Object key : properties.keySet()) {
-				tmp += key + ":" + properties.get(key) + "\n";
+		if (headers != null) {
+			for (Object key : headers.keySet()) {
+				tmp += key + ":" + headers.get(key) + "\n";
 			}
 		}
 		tmp += "object:" + this.getObject() + "\n";
 		tmp += "body:\n" + this.getBody() + "\n";
-        tmp += "attachement:\n" + this.getAttachement() + "\n";
+        tmp += "attachment:" + this.getAttachment() + "\n";
 
         return tmp;
 	}

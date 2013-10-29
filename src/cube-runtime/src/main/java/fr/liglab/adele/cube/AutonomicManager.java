@@ -6,8 +6,10 @@ import fr.liglab.adele.cube.autonomicmanager.RuntimeModelController;
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.extensions.Extension;
+import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Author: debbabi
@@ -52,6 +54,12 @@ public interface AutonomicManager {
      */
     public ArchetypeResolver getArchetypeResolver();
 
+    public void addProperty(String name, String value);
+
+    public String getProperty(String name);
+
+    public Properties getProperties();
+
     /**
      * Gets the associated Extensions
      * @return
@@ -85,6 +93,7 @@ public interface AutonomicManager {
      * @return
      */
     public RuntimeModelController getRuntimeModelController();
+
 
     public void start();
     public void stop();

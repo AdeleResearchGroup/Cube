@@ -20,6 +20,7 @@ package fr.liglab.adele.cube;
 
 import fr.liglab.adele.cube.autonomicmanager.AutonomicManagerException;
 import fr.liglab.adele.cube.extensions.ExtensionFactoryService;
+import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 import org.osgi.framework.BundleContext;
 
 import java.util.List;
@@ -99,6 +100,9 @@ public interface AdministrationService {
      * @return
      */
     //public CommunicatorExtensionPoint getCommunicator(String id);
+    public PerformanceChecker getPerformanceChecker();
+
+    public void setPerformanceChecker(PerformanceChecker performanceChecker);
 
     /**
      * Get OSGi Bundle Context.

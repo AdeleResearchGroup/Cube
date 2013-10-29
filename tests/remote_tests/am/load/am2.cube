@@ -8,7 +8,13 @@
 
 	<extensions>
 		<extension id="fr.liglab.adele.cube.core"/>
+	
+		<extension id="fr.liglab.adele.cube.script">
+			<property name="1" value="newi node type=PC"/>						
+		</extension>
+		<extension id="fr.liglab.adele.cube.rm.monitoring"/>
 	</extensions>
+			
   </autonomic-manager>
 </cube>
 

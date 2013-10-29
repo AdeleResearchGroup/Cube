@@ -42,28 +42,11 @@ public class IsLocal extends AbstractUnaryResolver {
 
     public boolean check(ManagedElement me, String value) {
         if (me != null && value != null) {
-
-            if (value != null) {
-                String pname = null;
-                String pvalue = null;
-                if (value.toString().contains("=")) {
-                    String[] tmp = value.toString().split("=");
-                    if (tmp != null && tmp.length==2) {
-                        pname = tmp[0];
-                        pvalue = tmp[1];
-                    }
-                } else {
-                    pname = value.toString();
-                }
-                if (pvalue == null) {
-                    return me.hasAttribute(pname);
-                } else {
-                    if (me.hasAttribute(pname) == false) {
-                        return false;
-                    } else {
-                        String attributeValue = me.getAttribute(pname);
-                        return attributeValue.equalsIgnoreCase(pvalue);
-                    }
+            if (value.equalsIgnoreCase("true")) {
+                String am1 = me.getAutonomicManager();
+                String am2 = getExtension().getAutonomicManager().getUri();
+                if (am1.equalsIgnoreCase(am2)) {
+                    return true;
                 }
             }
         }
@@ -72,38 +55,8 @@ public class IsLocal extends AbstractUnaryResolver {
 
     public boolean perform(ManagedElement me, String value) {
         if (me != null && value != null) {
-            String pname = null;
-            String pvalue = null;
-            if (value.contains("=")) {
-                String[] tmp = value.split("=");
-                if (tmp != null && tmp.length==2) {
-                    pname = tmp[0];
-                    pvalue = tmp[1];
-                }
-            } else {
-                pname = value;
-            }
-            if (pvalue == null) {
-                return false;
-            } else {
-                if (me.hasAttribute(pname)) {
-                    try {
-                        me.updateAttribute(pname, pvalue);
-                        return true;
-                    } catch (PropertyNotExistException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        me.addAttribute(pname, pvalue);
-                    } catch (PropertyExistException e) {
-                        e.printStackTrace();
-                    } catch (InvalidNameException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
+            me.setAutonomicManager(value);
+            return true;
         }
         return false;
     }

@@ -28,6 +28,7 @@ import fr.liglab.adele.cube.metamodel.InvalidNameException;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.PropertyExistException;
 import fr.liglab.adele.cube.metamodel.PropertyNotExistException;
+import fr.liglab.adele.cube.util.tests.Test;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
@@ -52,8 +53,30 @@ public class CubeConsole {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"version", "ams", "arch", "rm" , "newi" , "extensions", "update", "rmi", "delete" /*, "extension"*/};
+    String[] m_function = new String[]{"version", "ams", "arch", "rm" , "newi" , "extensions", "update", "rmi", "delete", "test" /*, "extension"*/};
 
+
+    @Descriptor("Test Cube")
+    public void test(@Descriptor("Test id") String testNumber) {
+        if (testNumber == null) {
+            System.out.println("You should provide the test1 number!");
+            return;
+        }
+
+        Test t1 = new Test(cps, new Integer(testNumber));
+
+    }
+
+    @Descriptor("Test Cube")
+    public void test(@Descriptor("Test id") String testNumber, @Descriptor("Test param") String param) {
+        if (testNumber == null) {
+            System.out.println("You should provide the test1 number!");
+            return;
+        }
+
+        Test t1 = new Test(cps, new Integer(testNumber), new Integer(param));
+
+    }
 
     @Descriptor("Show Cube Platform Version")
     public void version() {

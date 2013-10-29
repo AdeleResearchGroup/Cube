@@ -18,6 +18,7 @@ mkdir am/bundle
 
 cp ../../bin/cube-runtime-2.0.jar am/bundle
 cp ../../bin/cube-console-2.0.jar am/bundle
+cp ../../bin/cube-rm-monitoring-extension-2.0.jar am/bundle
 
 cp ../../lib/org.apache.felix.bundlerepository-1.6.2.jar am/bundle
 cp ../../lib/org.apache.felix.fileinstall-3.2.0.jar am/bundle

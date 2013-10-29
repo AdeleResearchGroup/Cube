@@ -57,8 +57,9 @@ public class AutonomicManagerConfigParser {
 	private static final String RESOLVER = "__resolver";
 	private static final String COMMUNICATOR = "communicator";
 	private static final String ARCHETYPEURL = "archetypeUrl";
-	private static final String PLUGINS = "extensions";
-	private static final String PLUGIN = "extension";
+	private static final String EXTENSIONS = "extensions";
+	private static final String EXTENSION = "extension";
+    private static final String PROPERTIES = "properties";
     private static final String PROPERTY = "property";
     private static final String NAME = "name";
 	private static final String VALUE = "value";
@@ -176,8 +177,18 @@ public class AutonomicManagerConfigParser {
 								cac.setPerf(new Boolean(cconfig.getAttribute(VALUE)).booleanValue());
 							} else if (cconfig.getName().equalsIgnoreCase(ARCHETYPEURL)) {
 								cac.setArchetypeUrl(cconfig.getAttribute(VALUE));
-							} else if (cconfig.getName().equalsIgnoreCase(PLUGINS)) {
-								XMLElement[] extensions = cconfig.getElements(PLUGIN);
+                            } else if (cconfig.getName().equalsIgnoreCase(PROPERTIES)) {
+                                XMLElement[] properties = cconfig.getElements(PROPERTY);
+                                if (properties != null && properties.length>0) {
+                                    for (int j=0; j<properties.length; j++) {
+                                        XMLElement property = properties[j];
+
+                                        cac.addProperty(property.getAttribute(NAME).toString(), property.getAttribute(VALUE).toString());
+
+                                    }
+                                }
+							} else if (cconfig.getName().equalsIgnoreCase(EXTENSIONS)) {
+								XMLElement[] extensions = cconfig.getElements(EXTENSION);
 								if (extensions != null && extensions.length>0) {
 									for (int j=0; j<extensions.length; j++) {
 										XMLElement extension = extensions[j];										

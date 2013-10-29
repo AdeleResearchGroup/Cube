@@ -81,15 +81,26 @@ public class InScope extends AbstractResolver {
     }
 
     public List<String> find(ManagedElement me, ManagedElement description) {
-        //System.out.println(".......... inScoope.find..........");
+
         List<String> result = new ArrayList<String>();
         if (me != null) {
             Reference r = me.getReference(Scope.CORE_SCOPE_NODES);
             if (r != null) {
+                List<String> res = new ArrayList<String>();
                 for (String tmp : r.getReferencedElements()) {
+                    res.add(tmp);
+                }
+                for (String tmp : res) {
+
                     ManagedElement cmpts = getExtension().getAutonomicManager().getRuntimeModelController().getCopyOfManagedElement(tmp);
-                    if (ModelUtils.compareTwoManagedElements(description, cmpts) == 0) {
-                        result.add(tmp);
+                    if (cmpts == null) {
+
+                    } else {
+
+                        if (ModelUtils.compareTwoManagedElements(description, cmpts) == 0) {
+
+                            result.add(tmp);
+                        }
                     }
                 }
             }

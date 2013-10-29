@@ -14,9 +14,9 @@
 	<name>Cube Loadbalancing Extension</name>
 	<packaging>bundle</packaging>
 
-	<attributes>
+	<properties>
 		<bin-dir>../../../bin</bin-dir>
-	</attributes>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -64,7 +64,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goalProperty>ipojo-bundle</goalProperty>
+							<property>ipojo-bundle</property>
 						</goals>
 						<configuration>
 						</configuration>

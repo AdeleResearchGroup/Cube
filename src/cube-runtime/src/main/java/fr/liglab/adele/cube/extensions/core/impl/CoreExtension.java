@@ -55,13 +55,19 @@ public class CoreExtension extends AbstractExtension {
         extensionPointsList.add(new ScopeFactory(this));
         extensionPointsList.add(new MasterFactory(this));
 
+
         // specific resolvers
         extensionPointsList.add(new HasAttribute(this));
+        extensionPointsList.add(new IsLocal(this));
+        extensionPointsList.add(new HasMaxInstancesPerAM(this));
+        extensionPointsList.add(new LocatedIn(this));
 
         extensionPointsList.add(new HasComponentId(this));
         extensionPointsList.add(new HasComponentType(this));
         extensionPointsList.add(new Connected(this));
         extensionPointsList.add(new HasSourceComponent(this));
+        extensionPointsList.add(new HasMaxInputComponents(this));
+        extensionPointsList.add(new HasNode(this));
 
         extensionPointsList.add(new HasNodeId(this));
         extensionPointsList.add(new HasNodeType(this));
@@ -72,7 +78,7 @@ public class CoreExtension extends AbstractExtension {
         extensionPointsList.add(new HasScopeId(this));
         extensionPointsList.add(new ControlledBy(this));
 
-        extensionPointsList.add(new LocatedIn(this));
+
         /*
         extensionPointsList.add(new HasProperty(this));
         extensionPointsList.add(new LocatedIn(this));

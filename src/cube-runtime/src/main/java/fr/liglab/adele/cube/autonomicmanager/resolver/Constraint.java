@@ -17,6 +17,8 @@ public class Constraint implements Serializable {
 
     Variable subject;
     Variable object;
+    private String currentSolution = null;
+    private String currentProblem = null;
 
     public Constraint(ResolutionGraph resolutionGraph, String archetypePropertyName, Variable subject, Variable object) {
         this.resolutionGraph = resolutionGraph;
@@ -48,6 +50,21 @@ public class Constraint implements Serializable {
     public void setArchetypePropertyName(String archetypePropertyName) {
         this.archetypePropertyName = archetypePropertyName;
     }
+    public String getCurrentSolution() {
+        return currentSolution;
+    }
+
+    public void setCurrentSolution(String currentSolution) {
+        this.currentSolution = currentSolution;
+    }
+
+    public String getCurrentProblem() {
+        return currentProblem;
+    }
+
+    public void setCurrentProblem(String currentProblem) {
+        this.currentProblem = currentProblem;
+    }
 
     public ResolutionGraph getResolutionGraph() {
         return resolutionGraph;
@@ -55,5 +72,16 @@ public class Constraint implements Serializable {
 
     public void setResolutionGraph(ResolutionGraph resolutionGraph) {
         this.resolutionGraph = resolutionGraph;
+    }
+
+    public String print(String indation) {
+        String out = indation;
+        //out += (subject instanceof PrimitiveVariable?((PrimitiveVariable) subject).getValue():((MultiValueVariable)subject).getDescription().getName());
+        out += " ---"+getArchetypePropertyName()+"---> ";
+        out += (object instanceof PrimitiveVariable?((PrimitiveVariable) object).getValue():((MultiValueVariable)object).getDescription().getName());
+        for (Constraint c : object.getConstraints()) {
+            out += "\n" + c.print(indation + "    ");
+        }
+        return out;
     }
 }

@@ -19,6 +19,7 @@
 package fr.liglab.adele.cube.archetype;
 
 import fr.liglab.adele.cube.AdministrationService;
+import fr.liglab.adele.cube.AutonomicManager;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +43,8 @@ public class Archetype {
     private String version = DEFAULT_ARCHETYPE_VERSION;
     private String cubeVersion = AdministrationService.CUBE_VERSION;
 
+    private AutonomicManager autonomicManager;
+
     private Map<String, Element> elements;  // element_id, element
     private Map<String, Property> properties;
     private Map<String, GoalSet> goalGroups;
@@ -58,6 +61,14 @@ public class Archetype {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public AutonomicManager getAutonomicManager() {
+        return autonomicManager;
+    }
+
+    public void setAutonomicManager(AutonomicManager autonomicManager) {
+        this.autonomicManager = autonomicManager;
     }
 
     public String getArchetypeDescription() {
