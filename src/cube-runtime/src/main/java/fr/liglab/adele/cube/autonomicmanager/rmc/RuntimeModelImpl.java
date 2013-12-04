@@ -82,6 +82,10 @@ public class RuntimeModelImpl implements RuntimeModel {
         notifyListeners(new Notification(RuntimeModelListener.UPDATED_RUNTIMEMODEL, this));
     }
 
+    /**
+     * TODO: rename to getElements
+     * @return
+     */
     public List<ManagedElement> getManagedElements() {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         for (String key : this.elements.keySet()) {
@@ -93,6 +97,12 @@ public class RuntimeModelImpl implements RuntimeModel {
         return result;
     }
 
+    /**
+     * TODO: rename to getElements
+     * @param namespace
+     * @param name
+     * @return
+     */
     public List<ManagedElement> getManagedElements(String namespace, String name) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         for (String key : this.elements.keySet()) {
@@ -108,6 +118,11 @@ public class RuntimeModelImpl implements RuntimeModel {
         return result;
     }
 
+    /**
+     * TODO: rename to getElements
+     * @param state
+     * @return
+     */
     public List<ManagedElement> getManagedElements(int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
@@ -124,6 +139,13 @@ public class RuntimeModelImpl implements RuntimeModel {
         return result;
     }
 
+    /**
+     * TODO: rename to getElements
+     * @param namespace
+     * @param name
+     * @param state
+     * @return
+     */
     public List<ManagedElement> getManagedElements(String namespace, String name, int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
@@ -145,6 +167,11 @@ public class RuntimeModelImpl implements RuntimeModel {
         return result;
     }
 
+    /**
+     * TODO: rename to getElement
+     * @param uuid
+     * @return
+     */
     public ManagedElement getManagedElement(String uuid) {
         ManagedElement result = this.elements.get(uuid);
         if (result != null) return result; else return this.unmanagedElements.get(uuid);

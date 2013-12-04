@@ -18,7 +18,7 @@ public interface ArchetypeResolver extends RuntimeModelListener {
     void resolveUncheckedInstance(ManagedElement instance);
 
     /// helpers
-
+    public boolean moveManagedElement(ManagedElement me, String am_uri);
     List<String> findFromRuntimeModel(ManagedElement description);
     List<String> findUsingArchetypeProperty(String archetypePropertyName, String uuid, ManagedElement description);
     boolean checkProperty(String archetypePropertyName, ManagedElement managedElement, String value);

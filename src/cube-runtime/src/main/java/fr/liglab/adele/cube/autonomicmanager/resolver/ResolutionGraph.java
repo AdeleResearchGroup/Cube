@@ -58,6 +58,7 @@ public class ResolutionGraph {
                         List<String> result = findValues(c.getObject());
                         info("find..."+result.size());
                         if (result.size() == 0) {
+
                             createValue(c.getObject());
                             info("create...1");
                         }
@@ -69,20 +70,35 @@ public class ResolutionGraph {
                             Variable cv = cs.getObject();
                             findValues(cv);
                         }
-                        createValue(c.getObject());
-                        info("create...1");
+                        // perform ...
+                        if (c.getObject() instanceof MultiValueVariable) {
+                            ManagedElement desc = ((MultiValueVariable) c.getObject()).getDescription();
+                            if (performConstraints((c.getObject()))== true) {
+                                createValue(c.getObject());
+                                info("create...1");
+                            } else {
+                                info("create...0");
+                            }
+                        }
+
+
+
                     } break;
                 }
             }
         }
     }
 
+    /**
+     * Create a value for the variable using the provided description
+     * @param v
+     */
     private void createValue(Variable v) {
         if (v instanceof PrimitiveVariable) {
             // nothing to do!
         } else if (v instanceof MultiValueVariable) {
             String newInstance = this.resolver.createUsingDescription(((MultiValueVariable) v).getDescription());
-            //System.out.println("[RG] .... new instance: " + newInstance);
+            System.out.println("[RG] .... new instance: " + newInstance);
             /// VERIFY
             if (verifyValue(newInstance, v)) {
                 ((MultiValueVariable) v).addValue(newInstance);
@@ -174,10 +190,12 @@ public class ResolutionGraph {
         // perform constraints
         for (Constraint c : v.getConstraints()) {
             if (c.getObject() instanceof PrimitiveVariable) {
-                String me1 = ((MultiValueVariable)v).getValues().get(0);
-                this.resolver.performProperty(c.getArchetypePropertyName(), me1, ((PrimitiveVariable) c.getObject()).getValue());
-                if (c instanceof GoalConstraint) {
-                    ((GoalConstraint) c).setCurrentSolution(((PrimitiveVariable) c.getObject()).getValue());
+                if (((MultiValueVariable)v).getValues().size()>0) {
+                    String me1 = ((MultiValueVariable)v).getValues().get(0);
+                    this.resolver.performProperty(c.getArchetypePropertyName(), me1, ((PrimitiveVariable) c.getObject()).getValue());
+                    if (c instanceof GoalConstraint) {
+                        ((GoalConstraint) c).setCurrentSolution(((PrimitiveVariable) c.getObject()).getValue());
+                    }
                 }
             } else if (c.getObject() instanceof MultiValueVariable) {
                 List<String> possibleValues = ((MultiValueVariable) c.getObject()).getValues();
@@ -188,6 +206,7 @@ public class ResolutionGraph {
                 if (possibleValues.size()>0) {
 
                     String uuid_subject = c.getCurrentProblem();
+                    info("We only perform the first found solution!");
                     String uuid_object = possibleValues.get(0);
 
                     if (isUnmanaged(uuid_object)) {
@@ -262,6 +281,7 @@ public class ResolutionGraph {
                 }
                 info("constraint '"+c.getArchetypePropertyName()+"' is verified!");
             }
+            info("we do not verify binary constraints!");
         }
         info ("verification result: "+verified);
         return verified;

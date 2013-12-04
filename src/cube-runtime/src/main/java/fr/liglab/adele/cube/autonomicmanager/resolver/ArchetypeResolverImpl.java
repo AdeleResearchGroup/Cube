@@ -110,11 +110,33 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             if (c instanceof GoalConstraint) {
                 String related = ((GoalConstraint) c).getCurrentSolution();
                 if (am.getRuntimeModelController().isLocalInstance(related)) {
-                    int state = am.getRuntimeModelController().getState(related);
-                    if (state == ManagedElement.UNMANAGED) {
-                        am.getRuntimeModelController().getRuntimeModel().manage(related);
-                        changed = true;
+
+                    ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(related);
+                    if (me != null) {
+                        if (me.getAutonomicManager() != null && !me.getAutonomicManager().equalsIgnoreCase(am.getUri())) {
+                            // should be in another am!
+                            // 1. add to remote hash map
+                            am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(related, me.getAutonomicManager());
+                            // 2. prepare table of references/ams - to be sent with the ME
+                            // 3. move the ME
+                            moveManagedElement(me, me.getAutonomicManager());
+                            // 4. remove local instance
+                            am.getRuntimeModelController().removeManagedElement(related);
+
+                            System.out.println("#### this instance "+related+" should be moved to and validated at a remote am!");
+                            //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
+
+                        } else {
+                            int state = am.getRuntimeModelController().getState(related);
+                            if (state == ManagedElement.UNMANAGED) {
+                                am.getRuntimeModelController().getRuntimeModel().manage(related);
+                                changed = true;
+                            }
+                        }
                     }
+                } else {
+                    //TODO validate the instance of the remote am!
+                    System.out.println("##### This instance "+related+" should be validated at a remote am!");
                 }
             }
         }
@@ -132,6 +154,21 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// HELPERS ////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean moveManagedElement(ManagedElement me, String am_uri){
+        CMessage msg = new CMessage();
+        msg.setTo(am_uri);
+        msg.setReplyTo(am.getUri());
+        msg.setFrom(am.getUri());
+        msg.setAttachment(me);
+        msg.setObject("resolution");
+        msg.setBody("moveManagedElement");
+        try {
+            this.am.getCommunicator().sendMessage(msg);
+        } catch (Exception e) {
+        }
+        return true;
+    }
 
     public List<String> findFromRuntimeModel(ManagedElement description) {
 
@@ -330,7 +367,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             try {
 
                 me = getAutonomicManager().getRuntimeModelController().newManagedElement(description.getNamespace(), description.getName(), p, true);
-
+                System.out.println("#### me: " + me.getDocumentation());
             } catch (NotFoundManagedElementException e) {
                 e.printStackTrace();
             } catch (InvalidNameException e) {
@@ -430,6 +467,12 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
 
         if (msg != null) {
             if (msg.getBody() != null) {
+                if (msg.getBody().toString().equalsIgnoreCase("moveManagedElement")) {
+                    ManagedElement me = msg.getAttachment();
+                    if (me != null) {
+                        am.getRuntimeModelController().addManagedElement(me);
+                    }
+                } else
                 if (msg.getBody().toString().equalsIgnoreCase("findFromRuntimeModel")) {
                     ManagedElement me = msg.getAttachment();
                     String resultat = "";

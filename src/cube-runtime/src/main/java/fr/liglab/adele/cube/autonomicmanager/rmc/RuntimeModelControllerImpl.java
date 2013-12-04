@@ -473,6 +473,22 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         }
     }
 
+
+    public boolean removeManagedElement(String uuid) {
+        if (isLocalInstance(uuid)) {
+            ManagedElement me1 = getLocalElement(uuid);
+            if (me1 != null) {
+                ((RuntimeModelImpl) am.getRuntimeModelController().getRuntimeModel()).remove(me1);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * remove from local runtime model, and remove all references to it
+     * @param managed_element_uuid
+     * @return
+     */
     public boolean destroyElement(String managed_element_uuid) {
         if (isLocalInstance(managed_element_uuid)) {
             ManagedElement me1 = getLocalElement(managed_element_uuid);

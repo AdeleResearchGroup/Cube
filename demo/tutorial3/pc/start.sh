@@ -30,10 +30,9 @@ else
 fi
 
 # copying needed bundles
-cp ../../../bin/cube-core-2.0.jar bundle
+cp ../../../bin/cube-runtime-2.0.jar bundle
 cp ../../../bin/cube-console-2.0.jar bundle
-cp ../../../bin/cube-osgi-plugin-2.0.jar bundle
-cp ../../../bin/cube-rm-monitoring-plugin-2.0.jar bundle
+cp ../../../bin/cube-rm-monitoring-extension-2.0.jar bundle
 
 cp ../../../lib/org.apache.felix.bundlerepository-1.6.2.jar bundle
 cp ../../../lib/org.apache.felix.fileinstall-3.2.0.jar bundle

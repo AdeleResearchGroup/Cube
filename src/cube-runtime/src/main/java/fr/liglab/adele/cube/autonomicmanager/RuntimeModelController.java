@@ -50,5 +50,5 @@ public interface RuntimeModelController {
     ExternalInstancesHandler getExternalInstancesHandler();
 
 
-
+    boolean removeManagedElement(String uuid);
 }

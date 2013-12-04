@@ -20,3 +20,9 @@ Go to the ''src'' directory and type:
 > mvn clean install
 
 
+TODO
+----
+
+- if component's node is remote, we should move the component to that node!
+- implements the lifeController
+- implements the cilia extension
