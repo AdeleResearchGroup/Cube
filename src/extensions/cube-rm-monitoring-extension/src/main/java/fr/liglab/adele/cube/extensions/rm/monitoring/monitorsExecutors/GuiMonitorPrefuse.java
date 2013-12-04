@@ -109,7 +109,7 @@ public class GuiMonitorPrefuse extends JFrame {
 	
 	synchronized void addNode(final ManagedElement ci) {
         try {
-            if (ci != null) {
+            if (ci != null && ci.getState() != ManagedElement.UNMANAGED) {
                 if (this.nodes.get(ci.getUri().toString()) == null) {
                     final Node N = graph.addNode();
 
