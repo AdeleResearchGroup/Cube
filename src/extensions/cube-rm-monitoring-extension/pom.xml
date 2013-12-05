@@ -34,14 +34,14 @@
 			<artifactId>lucene</artifactId>
 			<version>1.4.3</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/../../../lib/lucene-1.4.3.jar</systemPath>
+			<systemPath>${basedir}/../../../lib/prefuse/lucene-1.4.3.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>prefuse</groupId>
 			<artifactId>prefuse</artifactId>
 			<version>1.0.0</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/../../../lib/prefuse.jar</systemPath>
+			<systemPath>${basedir}/../../../lib/prefuse/prefuse.jar</systemPath>
 		</dependency>
 	</dependencies>
 
@@ -58,6 +58,8 @@
 						<Private-Package>
                             fr.liglab.adele.cube.extensions.rm.monitoring,
                             fr.liglab.adele.cube.extensions.rm.monitoring.impl,
+                            fr.liglab.adele.cube.extensions.rm.monitoring.model,
+                            fr.liglab.adele.cube.extensions.rm.monitoring.monitorsExecutors,
                         </Private-Package>
 						<Include-Resource>
 						</Include-Resource>

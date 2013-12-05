@@ -1,0 +1,5 @@
+20131205.21.19.45;cube://localhost:38002;Node;64828146;true;MedServer
+20131205.21.19.46;cube://localhost:38002;Component;229359;true;MockIndivoIntegrationAdapter
+20131205.21.19.46;cube://localhost:38002;Component;57871116;true;ContinuaTranslationMediator
+20131205.21.19.46;cube://localhost:38002;Component;61575707;true;ContinuaValidationMediator
+20131205.21.19.45;cube://localhost:38002;Component;46992987;true;HapiValidationMediator

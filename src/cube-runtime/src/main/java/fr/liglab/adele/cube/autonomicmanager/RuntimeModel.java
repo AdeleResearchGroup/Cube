@@ -11,15 +11,17 @@ import java.util.List;
  */
 public interface RuntimeModel {
 
-    //public void add(ManagedElement me);
+    public List<ManagedElement> getElements();
+
+    public List<ManagedElement> getElements(String namespace, String name);
+
+    public List<ManagedElement> getElements(int state);
+
+    public List<ManagedElement> getElements(String namespace, String name, int state);
 
     public List<ManagedElement> getManagedElements();
 
-    public List<ManagedElement> getManagedElements(String namespace, String name);
-
-    public List<ManagedElement> getManagedElements(int state);
-
-    public List<ManagedElement> getManagedElements(String namespace, String name, int state);
+    public List<ManagedElement> getUnmanagedElements();
 
     public void addListener(RuntimeModelListener listener);
 

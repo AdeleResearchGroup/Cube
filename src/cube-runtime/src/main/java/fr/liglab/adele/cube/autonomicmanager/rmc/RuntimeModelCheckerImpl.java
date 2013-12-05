@@ -65,7 +65,7 @@ public class RuntimeModelCheckerImpl implements RuntimeModelChecker, Runnable {
                     agent.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
 
 
-                    for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.INVALID)) {
+                    for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.INVALID)) {
                         agent.getArchetypeResolver().resolveUncheckedInstance(me);
                     }
 

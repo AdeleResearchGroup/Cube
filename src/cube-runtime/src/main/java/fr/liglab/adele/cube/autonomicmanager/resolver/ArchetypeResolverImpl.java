@@ -44,7 +44,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
     public void update(RuntimeModel rm, Notification notification) {
         switch (notification.getNotificationType()) {
             case RuntimeModelListener.UPDATED_RUNTIMEMODEL: {
-                for (ManagedElement me : am.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.INVALID)) {
+                for (ManagedElement me : am.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.INVALID)) {
                     resolveUncheckedInstance(me);
                 }
             } break;
@@ -212,7 +212,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 return result;
             }
             RuntimeModel rm = am.getRuntimeModelController().getRuntimeModel();
-            for (ManagedElement mes : rm.getManagedElements(description.getNamespace(), description.getName(), ManagedElement.VALID)) {
+            for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.VALID)) {
                 if (mes.isInResolution() == false) {
                     int compResult = ModelUtils.compareTwoManagedElements(description, mes);
                     if (compResult == 0) {

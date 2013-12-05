@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<cube xmlns:core="fr.liglab.adele.cube.core" cube-version="2.0">
+	<archetype id="medical" version="1.0">
+
+		<goals>	
+			<goal>				
+				<inScope s="@aggr_server" o="@lan" r="fc"/>
+				<inScope s="@med_server" o="@lan" r="fc"/>
+				<onNode s="@hl7-rest" o="@aggr_server" r="f"/>
+				<connected s="@hl7-rest" o="@hapi-filter" r="fc"/>
+				<connected s="@hapi-filter" o="@continua-validation" r="fc"/>
+				<connected s="@continua-validation" o="@continua-translation" r="fc"/>
+				<connected s="@continua-translation" o="@integration" r="fc"/>
+			</goal>
+		</goals>
+		
+		<elements>
+			<master id="master">
+				<locatedIn o="cube://localhost:38001"/>
+			</master>				
+			<scope id="lan">
+				<hasScopeId o="lan"/>				
+				<controlledBy o="@master"/>
+			</scope>		
+			<node id="aggr_server">				
+				<hasNodeType o="AServer"/>
+			</node>
+			<node id="med_server">				
+				<hasNodeType o="MedServer"/>
+			</node>
+		
+			<component id="hl7-rest">
+				<hasComponentType o="HL7-REST-MessageAdapter"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:adapter"/>
+    		    <core:hasProperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
+			</component>
+			<component id="hapi-filter">
+				<hasComponentType o="HapiValidationMediator"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:mediator"/>
+    		    <core:hasProperty o="ciliaNamespace:medical"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<component id="continua-validation">
+				<hasComponentType o="ContinuaValidationMediator"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:mediator"/>
+    		    <core:hasProperty o="ciliaNamespace:medical"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<component id="continua-translation">
+				<hasComponentType o="ContinuaTranslationMediator"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:mediator"/>
+    		    <core:hasProperty o="ciliaNamespace:medical"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<component id="integration">
+				<hasComponentType o="MockIndivoIntegrationAdapter"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:adapter"/>
+      		    <core:hasProperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<node id="mserver2">				
+				<hasNodeType o="MedServer"/>
+				<inScope o="@lan"/>
+			</node>
+		</elements>
+
+  </archetype>
+</cube>

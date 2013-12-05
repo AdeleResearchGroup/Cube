@@ -26,7 +26,6 @@ import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.Notification;
 import fr.liglab.adele.cube.metamodel.Reference;
 import fr.liglab.adele.cube.AutonomicManager;
-import fr.liglab.adele.cube.autonomicmanager.impl.AutonomicManagerImpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class LifeController implements Runnable {
 
     private void manage() {
         List<String> tmp = new ArrayList<String>();
-         for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
+         for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.VALID)) {
              for (Reference r : me.getReferences()) {
                  for (String reg : r.getReferencedElements()) {
                      String agenturi = agent.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(reg);

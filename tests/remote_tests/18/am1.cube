@@ -20,8 +20,8 @@
 		<extension id="fr.liglab.adele.cube.script">
 			<property name="1" value="newi node type=${node.type}"/>						
 		</extension>	
-
-		<extension id="fr.liglab.adele.cube.rm.monitoring"/>	
+		<extension id="fr.liglab.adele.cube.cilia"/>	
+		<!--extension id="fr.liglab.adele.cube.rm.monitoring"/-->	
 	</extensions>
 	
   </autonomic-manager>

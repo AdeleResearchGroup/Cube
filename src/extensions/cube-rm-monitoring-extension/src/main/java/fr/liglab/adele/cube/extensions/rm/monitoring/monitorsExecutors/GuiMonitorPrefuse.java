@@ -281,7 +281,7 @@ public class GuiMonitorPrefuse extends JFrame {
             graph.clear();
 
 
-            for (ManagedElement i : this.cubeInstance.getRuntimeModelController().getRuntimeModel().getManagedElements()) {
+            for (ManagedElement i : this.cubeInstance.getRuntimeModelController().getRuntimeModel().getElements()) {
                 this.addNode(i);
             }
 

@@ -86,11 +86,28 @@ public class RuntimeModelImpl implements RuntimeModel {
      * TODO: rename to getElements
      * @return
      */
+    public List<ManagedElement> getElements() {
+        List<ManagedElement> result = new ArrayList<ManagedElement>();
+        for (String key : this.elements.keySet()) {
+            result.add(this.elements.get(key));
+        }
+        for (String key : this.unmanagedElements.keySet()) {
+            result.add(this.unmanagedElements.get(key));
+        }
+        return result;
+    }
+
     public List<ManagedElement> getManagedElements() {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         for (String key : this.elements.keySet()) {
             result.add(this.elements.get(key));
         }
+
+        return result;
+    }
+
+    public List<ManagedElement> getUnmanagedElements() {
+        List<ManagedElement> result = new ArrayList<ManagedElement>();
         for (String key : this.unmanagedElements.keySet()) {
             result.add(this.unmanagedElements.get(key));
         }
@@ -103,7 +120,7 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param name
      * @return
      */
-    public List<ManagedElement> getManagedElements(String namespace, String name) {
+    public List<ManagedElement> getElements(String namespace, String name) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         for (String key : this.elements.keySet()) {
             if (this.elements.get(key).getNamespace().equalsIgnoreCase(namespace)
@@ -123,7 +140,7 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param state
      * @return
      */
-    public List<ManagedElement> getManagedElements(int state) {
+    public List<ManagedElement> getElements(int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
             for (String key : this.unmanagedElements.keySet()) {
@@ -146,7 +163,7 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param state
      * @return
      */
-    public List<ManagedElement> getManagedElements(String namespace, String name, int state) {
+    public List<ManagedElement> getElements(String namespace, String name, int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
             for (String key : this.unmanagedElements.keySet()) {

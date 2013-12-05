@@ -3,10 +3,7 @@ package fr.liglab.adele.cube.autonomicmanager.life;
 import fr.liglab.adele.cube.AutonomicManager;
 import fr.liglab.adele.cube.autonomicmanager.CMessage;
 import fr.liglab.adele.cube.autonomicmanager.ExternalInstancesHandler;
-import fr.liglab.adele.cube.autonomicmanager.RuntimeModelController;
 import fr.liglab.adele.cube.autonomicmanager.comm.CommunicationException;
-import fr.liglab.adele.cube.autonomicmanager.impl.AutonomicManagerImpl;
-import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelImpl;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.Reference;
 
@@ -108,7 +105,7 @@ public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , 
 
     private void manage() {
         List<String> tmp = new ArrayList<String>();
-        for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
+        for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.VALID)) {
             for (Reference r : me.getReferences()) {
                 for (String reg : r.getReferencedElements()) {
                     String agenturi = agent.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(reg);

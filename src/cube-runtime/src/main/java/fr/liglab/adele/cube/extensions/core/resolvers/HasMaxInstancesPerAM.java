@@ -21,9 +21,7 @@ package fr.liglab.adele.cube.extensions.core.resolvers;
 import fr.liglab.adele.cube.autonomicmanager.RuntimeModel;
 import fr.liglab.adele.cube.extensions.AbstractUnaryResolver;
 import fr.liglab.adele.cube.extensions.Extension;
-import fr.liglab.adele.cube.extensions.core.model.Component;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
-import fr.liglab.adele.cube.metamodel.Reference;
 import fr.liglab.adele.cube.util.model.ModelUtils;
 
 import java.util.List;
@@ -46,7 +44,7 @@ public class HasMaxInstancesPerAM extends AbstractUnaryResolver {
     public boolean check(ManagedElement me, String value) {
         if (me != null && value != null) {
             RuntimeModel rm = getExtension().getAutonomicManager().getRuntimeModelController().getRuntimeModel();
-            List<ManagedElement> result = rm.getManagedElements(me.getNamespace(), me.getName(), ManagedElement.VALID);
+            List<ManagedElement> result = rm.getElements(me.getNamespace(), me.getName(), ManagedElement.VALID);
             int size = 0;
             for (ManagedElement m : result) {
                 if (ModelUtils.compareAttributesOfTwoManagedElements(me, m) == 0) {

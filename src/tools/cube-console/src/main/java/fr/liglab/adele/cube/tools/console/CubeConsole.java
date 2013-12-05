@@ -135,15 +135,15 @@ public class CubeConsole {
             String msg = "--------------------------------------------------------------------------";
 
             msg += "\n------ UNMANAGED ----";
-            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.UNMANAGED)) {
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.UNMANAGED)) {
                 msg += e.getDocumentation();
             }
             msg += "\n" + "------ INVALID ----";
-            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.INVALID)) {
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.INVALID)) {
                 msg += e.getDocumentation();
             }
             msg += "\n" + "------ VALID --------";
-            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
+            for (ManagedElement e : agent.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.VALID)) {
                 msg += e.getDocumentation();
             }
 

@@ -32,6 +32,7 @@
         <!--module>cube-osgi-extension</module-->
 		<module>cube-rm-monitoring-extension</module>
         <module>cube-script-extension</module>
+        <module>cube-cilia-extension</module>
 		<!--module>cube-loadbalancing-extension</module-->
 	</modules>	
 
