@@ -34,7 +34,7 @@ public class Configuration {
     public static final String DEFAULT_HOST = "localhost";
     public static final long DEFAULT_PORT = 38000;
     public static final long DEFAULT_PULSE = 3000;
-    private static final long DEFAULT_KAINTERVAL = 5000;
+    private static final long DEFAULT_KAINTERVAL = 3000;
     private static final long DEFAULT_KARETRY = 1;
     public static final String DEFAULT_RESOLVER = "default-resolver";
     public static final String DEFAULT_COMMUNICATOR = "socket-communicator";

@@ -204,7 +204,7 @@ public class RuntimeModelImpl implements RuntimeModel {
         }
     }
 
-    synchronized void removeReferencedElement(String ref) {
+    public synchronized void removeReferencedElement(String ref) {
         if (ref != null) {
             boolean changed = false;
             for (String meuuid : this.elements.keySet()) {

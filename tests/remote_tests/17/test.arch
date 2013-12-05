@@ -7,6 +7,8 @@
 				<inScope s="@aserver" o="@lan" r="fc"/>
 				<inScope s="@mserver" o="@lan" r="fc"/>
 				<connected s="@a" o="@b" r="fc"/>
+				<connected s="@b" o="@c" r="fc"/>
+				<connected s="@c" o="@d" r="fc"/>
 			</goal>
 		</goals>
 		
@@ -33,6 +35,14 @@
 			</component>
 			<component id="b">
 				<hasComponentType o="B"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<component id="c">
+				<hasComponentType o="C"/>
+				<onNode o="@mserver2"/>
+			</component>
+			<component id="d">
+				<hasComponentType o="D"/>
 				<onNode o="@mserver2"/>
 			</component>
 		</elements>

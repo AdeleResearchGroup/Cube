@@ -98,7 +98,7 @@ public class ResolutionGraph {
             // nothing to do!
         } else if (v instanceof MultiValueVariable) {
             String newInstance = this.resolver.createUsingDescription(((MultiValueVariable) v).getDescription());
-            System.out.println("[RG] .... new instance: " + newInstance);
+            //System.out.println("[RG] .... new instance: " + newInstance);
             /// VERIFY
             if (verifyValue(newInstance, v)) {
                 ((MultiValueVariable) v).addValue(newInstance);

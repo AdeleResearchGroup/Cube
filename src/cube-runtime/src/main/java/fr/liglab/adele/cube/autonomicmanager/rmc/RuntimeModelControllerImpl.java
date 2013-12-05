@@ -18,17 +18,13 @@
 
 package fr.liglab.adele.cube.autonomicmanager.rmc;
 
-import fr.liglab.adele.cube.autonomicmanager.CMessage;
-import fr.liglab.adele.cube.autonomicmanager.NotFoundManagedElementException;
-import fr.liglab.adele.cube.autonomicmanager.comm.CommunicationException;
+import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.TimeOutException;
+import fr.liglab.adele.cube.autonomicmanager.life.ExternalInstancesHandlerImpl;
 import fr.liglab.adele.cube.extensions.ManagedElementExtensionPoint;
 import fr.liglab.adele.cube.metamodel.*;
-import fr.liglab.adele.cube.autonomicmanager.RuntimeModel;
 import fr.liglab.adele.cube.AutonomicManager;
-import fr.liglab.adele.cube.autonomicmanager.RuntimeModelController;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -44,7 +40,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
 
     private Map<String, ManagedElementExtensionPoint> factories;
 
-    private ExternalInstancesHandler externalInstancesHandler;
+
 
     private RuntimeModelControllerMessageHandler msgHandler;
 
@@ -52,7 +48,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         this.am = am;
         this.rm = new RuntimeModelImpl(am);
         this.factories = new HashMap<String, ManagedElementExtensionPoint>();
-        externalInstancesHandler = new ExternalInstancesHandler(this);
+
         msgHandler = new RuntimeModelControllerMessageHandler(this);
     }
 
@@ -67,7 +63,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 return me1.getState();
             }
         } if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -98,7 +94,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 return me1.getAttribute(name);
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -133,7 +129,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 return me1.addAttribute(name, value);
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -173,7 +169,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 return old;
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -203,7 +199,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         if (isLocalInstance(uuid)) {
             return this.getAutonomicManager().getUri();
         } else if (isRemoteInstance(uuid)) {
-            return this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(uuid);
+            return this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
         }
         return null;
     }
@@ -224,7 +220,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -243,7 +239,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                                     String amUri = tmp2[0];
                                     String elementuuid = tmp2[1];
                                     if (!amUri.equalsIgnoreCase(getAutonomicManager().getUri())) {
-                                        this.externalInstancesHandler.addExternalInstance(elementuuid, amUri);
+                                        this.am.getExternalInstancesHandler().addExternalInstance(elementuuid, amUri);
                                     }
                                     result.add(elementuuid);
                                 }
@@ -270,7 +266,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -315,7 +311,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -354,7 +350,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -429,7 +425,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
     }
 
     public boolean isRemoteInstance(String uuid) {
-        return this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(uuid) != null;
+        return this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid) != null;
     }
 
     public ManagedElement getCopyOfManagedElement(String uuid) {
@@ -444,7 +440,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
             }
         } else if (isRemoteInstance(uuid)) {
             //System.out.println("\n[RMC] getCopyOfManagedElement method is not implemented yet for remote instances!\n");
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -507,7 +503,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                             // check if it is a remote reference
                             ManagedElement me = getLocalElement(ss);
                             if (me == null) {
-                                String agent = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(ss);
+                                String agent = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(ss);
                                 if (agent != null)
                                     toBeRemovedRemotely.add(agent);
                             }
@@ -539,7 +535,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 return result != null;
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
-            String auri = this.externalInstancesHandler.getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -605,9 +601,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         return null;
     }
 
-    public ExternalInstancesHandler getExternalInstancesHandler() {
-        return externalInstancesHandler;
-    }
+
 
     public void receiveMessage(CMessage msg) {
         if (msg.getCorrelation() == waitingCorrelation) {

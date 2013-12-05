@@ -1,7 +1,6 @@
 package fr.liglab.adele.cube.autonomicmanager;
 
 import fr.liglab.adele.cube.AutonomicManager;
-import fr.liglab.adele.cube.autonomicmanager.rmc.ExternalInstancesHandler;
 import fr.liglab.adele.cube.extensions.ManagedElementExtensionPoint;
 import fr.liglab.adele.cube.metamodel.*;
 
@@ -47,7 +46,7 @@ public interface RuntimeModelController {
     void addManagedElementFactory(ManagedElementExtensionPoint exp);
     void receiveMessage(CMessage msg);
     AutonomicManager getAutonomicManager();
-    ExternalInstancesHandler getExternalInstancesHandler();
+
 
 
     boolean removeManagedElement(String uuid);

@@ -45,7 +45,7 @@ public class LifeController implements Runnable {
 
     private AutonomicManager agent;
 
-    private long maxRetry = 1;
+    private long maxRetry = 2;
 
     private long interval = 5000;
 
@@ -84,7 +84,7 @@ public class LifeController implements Runnable {
          for (ManagedElement me : agent.getRuntimeModelController().getRuntimeModel().getManagedElements(ManagedElement.VALID)) {
              for (Reference r : me.getReferences()) {
                  for (String reg : r.getReferencedElements()) {
-                     String agenturi = agent.getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(reg);
+                     String agenturi = agent.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(reg);
                      if (agenturi != null) {
                          tmp.add(agenturi);
                      }
@@ -172,7 +172,7 @@ public class LifeController implements Runnable {
             }
 
         for (String a : toBeRemoved) {
-            ((AutonomicManagerImpl)agent).getRuntimeModelController().getExternalInstancesHandler().removeExternalAgentInstances(a);
+            agent.getExternalInstancesHandler().removeExternalAutonomicManagerInstances(a);
         }
     }
 

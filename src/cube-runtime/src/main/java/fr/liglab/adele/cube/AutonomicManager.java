@@ -2,6 +2,7 @@ package fr.liglab.adele.cube;
 
 import fr.liglab.adele.cube.autonomicmanager.ArchetypeResolver;
 import fr.liglab.adele.cube.autonomicmanager.Communicator;
+import fr.liglab.adele.cube.autonomicmanager.ExternalInstancesHandler;
 import fr.liglab.adele.cube.autonomicmanager.RuntimeModelController;
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
@@ -53,6 +54,8 @@ public interface AutonomicManager {
      * @return
      */
     public ArchetypeResolver getArchetypeResolver();
+
+    public ExternalInstancesHandler getExternalInstancesHandler();
 
     public void addProperty(String name, String value);
 

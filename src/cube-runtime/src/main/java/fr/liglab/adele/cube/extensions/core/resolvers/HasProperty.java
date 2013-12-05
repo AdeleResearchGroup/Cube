@@ -28,9 +28,9 @@ import fr.liglab.adele.cube.metamodel.*;
  * Date: 4/29/13
  * Time: 2:07 AM
  */
-public class HasAttribute extends AbstractUnaryResolver {
+public class HasProperty extends AbstractUnaryResolver {
 
-    public HasAttribute(Extension extension) {
+    public HasProperty(Extension extension) {
         super(extension);
     }
 
@@ -44,8 +44,8 @@ public class HasAttribute extends AbstractUnaryResolver {
             if (value != null) {
                 String pname = null;
                 String pvalue = null;
-                if (value.toString().contains("=")) {
-                    String[] tmp = value.toString().split("=");
+                if (value.toString().contains(":")) {
+                    String[] tmp = value.toString().split(":");
                     if (tmp != null && tmp.length==2) {
                         pname = tmp[0];
                         pvalue = tmp[1];
@@ -72,8 +72,8 @@ public class HasAttribute extends AbstractUnaryResolver {
         if (me != null && value != null) {
             String pname = null;
             String pvalue = null;
-            if (value.contains("=")) {
-                String[] tmp = value.split("=");
+            if (value.contains(":")) {
+                String[] tmp = value.split(":");
                 if (tmp != null && tmp.length==2) {
                     pname = tmp[0];
                     pvalue = tmp[1];

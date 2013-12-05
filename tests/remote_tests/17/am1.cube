@@ -3,7 +3,9 @@
   <autonomic-manager>
     <host value="localhost"/>
     <port value="19001"/>
-	<debug value="true"/>
+	<debug value="false"/>
+	<keepalive-retry value="1"/>
+	<keepalive-interval value="2000"/>
     <archetypeUrl value="file:test.arch"/>
 
 	<properties>		

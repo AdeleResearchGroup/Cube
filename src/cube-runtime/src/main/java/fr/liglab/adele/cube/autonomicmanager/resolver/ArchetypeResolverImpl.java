@@ -54,7 +54,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
     public void resolveUncheckedInstance(ManagedElement instance) {
         if (instance == null) return;
         if (instance.getState() == ManagedElement.INVALID) {
-            System.out.println(getAutonomicManager().getUri()+ " resolving "+instance.getName()+" ...");
+            //System.out.println(getAutonomicManager().getUri()+ " resolving "+instance.getName()+" ...");
             info("resolving INVALID "+instance.getName()+" '"+instance.getUUID()+"'...");
 
             ResolutionGraph rg = new ResolutionGraph(this);
@@ -116,14 +116,14 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                         if (me.getAutonomicManager() != null && !me.getAutonomicManager().equalsIgnoreCase(am.getUri())) {
                             // should be in another am!
                             // 1. add to remote hash map
-                            am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(related, me.getAutonomicManager());
+                            am.getExternalInstancesHandler().addExternalInstance(related, me.getAutonomicManager());
                             // 2. prepare table of references/ams - to be sent with the ME
                             // 3. move the ME
                             moveManagedElement(me, me.getAutonomicManager());
                             // 4. remove local instance
                             am.getRuntimeModelController().removeManagedElement(related);
 
-                            System.out.println("#### this instance "+related+" should be moved to and validated at a remote am!");
+                            //System.out.println("#### this instance "+related+" should be moved to and validated at a remote am!");
                             //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
 
                         } else {
@@ -136,7 +136,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                     }
                 } else {
                     //TODO validate the instance of the remote am!
-                    System.out.println("##### This instance "+related+" should be validated at a remote am!");
+                    //System.out.println("##### This instance "+related+" should be validated at a remote am!");
                 }
             }
         }
@@ -198,7 +198,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                                     String elementuuid = tmp2[1];
                                     if (!agenturi.equalsIgnoreCase(am.getUri())) {
 
-                                        this.am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
+                                        this.am.getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
                                     }
                                     //System.out.println("************* adding "+ elementuuid);
                                     result.add(elementuuid);
@@ -238,7 +238,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 info(" WARNING! findUsingArchetypeProperty: no specific resolver was found for the archetype property '" + archetypePropertyName + "'!");
             }
         } else if (am.getRuntimeModelController().isRemoteInstance(uuid) == true) {
-            String to = getAutonomicManager().getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
+            String to = getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
             CMessage msg = new CMessage();
             msg.setTo(to);
             msg.setReplyTo(am.getUri());
@@ -260,7 +260,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                                 String agenturi = tmp2[0];
                                 String elementuuid = tmp2[1];
                                 if (!agenturi.equalsIgnoreCase(am.getUri())) {
-                                    this.am.getRuntimeModelController().getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
+                                    this.am.getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
                                 }
                                 //System.out.println("************* adding "+ elementuuid);
                                 result.add(elementuuid);
@@ -300,7 +300,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 info(" WARNING! verifyProperty: no specific resolver was found for the archetype property '" + archetypePropertyName + "'!");
             }
         } else if (am.getRuntimeModelController().isRemoteInstance(uuid) == true) {
-            String to = getAutonomicManager().getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
+            String to = getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
             CMessage msg = new CMessage();
             msg.setTo(to);
             msg.setReplyTo(am.getUri());
@@ -367,7 +367,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             try {
 
                 me = getAutonomicManager().getRuntimeModelController().newManagedElement(description.getNamespace(), description.getName(), p, true);
-                System.out.println("#### me: " + me.getDocumentation());
+                //System.out.println("#### me: " + me.getDocumentation());
             } catch (NotFoundManagedElementException e) {
                 e.printStackTrace();
             } catch (InvalidNameException e) {

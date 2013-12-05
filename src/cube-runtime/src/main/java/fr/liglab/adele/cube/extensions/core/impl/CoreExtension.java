@@ -57,7 +57,7 @@ public class CoreExtension extends AbstractExtension {
 
 
         // specific resolvers
-        extensionPointsList.add(new HasAttribute(this));
+        extensionPointsList.add(new HasProperty(this));
         extensionPointsList.add(new IsLocal(this));
         extensionPointsList.add(new HasMaxInstancesPerAM(this));
         extensionPointsList.add(new LocatedIn(this));
@@ -78,20 +78,6 @@ public class CoreExtension extends AbstractExtension {
         extensionPointsList.add(new HasScopeId(this));
         extensionPointsList.add(new ControlledBy(this));
 
-
-        /*
-        extensionPointsList.add(new HasProperty(this));
-        extensionPointsList.add(new LocatedIn(this));
-        extensionPointsList.add(new ControlledBy(this));
-        extensionPointsList.add(new HasScopeId(this));
-        extensionPointsList.add(new InScope(this));
-        extensionPointsList.add(new HasSourceComponent(this));
-        extensionPointsList.add(new OnNode(this));
-        extensionPointsList.add(new HasComponent(this));
-        extensionPointsList.add(new HasNoComponents(this));
-        extensionPointsList.add(new HasAtMaxInputComponents(this));
-        extensionPointsList.add(new OnSameNode(this));
-        */
         return extensionPointsList;
     }
 

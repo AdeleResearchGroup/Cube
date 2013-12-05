@@ -101,7 +101,7 @@ public class RuntimeModelControllerMessageHandler {
                     if (uuid != null && name != null) {
                         List<String> res = rmc.getReferencedElements(uuid.toString(), name.toString());
                         for (String r : res) {
-                            resultat += rmc.getAutonomicManager().getRuntimeModelController().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(r) + "###" + r + ",";
+                            resultat += rmc.getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(r) + "###" + r + ",";
                         }
                     }
                     CMessage resmsg = new CMessage();
@@ -127,7 +127,7 @@ public class RuntimeModelControllerMessageHandler {
 
                     boolean p = false;
                     if (uuid != null && name != null && refuuid != null) {
-                        rmc.getExternalInstancesHandler().addExternalInstance(refuuid.toString(), msg.getFrom().toString());
+                        this.rmc.getAutonomicManager().getExternalInstancesHandler().addExternalInstance(refuuid.toString(), msg.getFrom().toString());
                         p = rmc.addReferencedElement(uuid.toString(), name.toString(),
                                 onlyone.toString().equalsIgnoreCase("true")?true:false , refuuid.toString());
                     }

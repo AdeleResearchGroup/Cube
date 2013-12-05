@@ -35,5 +35,9 @@ public interface RuntimeModel {
 
     void manage(String uuid);
 
+    public void removeReferencedElements(List<String> refs);
+
+    public void removeReferencedElement(String ref);
+
     void removeUnmanagedElements();
 }

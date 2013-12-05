@@ -4,10 +4,12 @@
     <host value="localhost"/>
     <port value="19002"/>
 	<debug value="false"/>
+	<keepalive-retry value="1"/>
+	<keepalive-interval value="2000"/>
     <archetypeUrl value="file:test.arch"/>
 
 	<properties>		
-		<property name="node.type" value="AServer"/>
+		<property name="node.type" value="MServer"/>
 	</properties>
 	
 	<extensions>

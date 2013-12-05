@@ -23,6 +23,7 @@ import fr.liglab.adele.cube.AutonomicManager;
 import fr.liglab.adele.cube.Configuration;
 import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.CommunicatorImpl;
+import fr.liglab.adele.cube.autonomicmanager.life.ExternalInstancesHandlerImpl;
 import fr.liglab.adele.cube.autonomicmanager.me.MonitorExecutorImpl;
 import fr.liglab.adele.cube.autonomicmanager.resolver.ArchetypeResolverImpl;
 import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelCheckerImpl;
@@ -89,6 +90,8 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
      * Life Controller.
      */
     private LifeController lifeController;
+    private ExternalInstancesHandler externalInstancesHandler;
+
     private RuntimeModelChecker checker;
 
     /**
@@ -173,7 +176,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
 
         // Life Controller
         this.lifeController = new LifeController(this);
-
+        externalInstancesHandler = new ExternalInstancesHandlerImpl(this);
         // __resolver
         this.resolver = new ArchetypeResolverImpl(this);
 
@@ -196,7 +199,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
                                 } else if (msg.getObject().equalsIgnoreCase("runtimemodel")) {
                                     AutonomicManagerImpl.this.rmController.receiveMessage(msg);
                                 } else if (msg.getObject().equalsIgnoreCase("keepalive")) {
-                                    AutonomicManagerImpl.this.lifeController.keepAliveReceived(msg.getFrom());
+                                    AutonomicManagerImpl.this.externalInstancesHandler.keepAliveReceived(msg.getFrom());
                                 }
                             }
                         } else {
@@ -238,6 +241,10 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
 
 
 
+    }
+
+    public ExternalInstancesHandler getExternalInstancesHandler() {
+        return externalInstancesHandler;
     }
 
     private void addExtension(Extension ex) {
@@ -359,11 +366,11 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
         if (this.checker != null) {
             this.checker.start();
         }
-        /*
-        if (this.lifeController != null) {
-            this.lifeController.start();
+
+        if (this.externalInstancesHandler != null) {
+            this.externalInstancesHandler.start();
         }
-        */
+
     }
 
     public void stop() {
@@ -376,14 +383,15 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
         if (this.checker != null) {
             this.checker.stop();
         }
-        /*
-        if (this.lifeController != null) {
-            this.lifeController.stop();
+
+        if (this.externalInstancesHandler != null) {
+            this.externalInstancesHandler.stop();
         }
-        */
+
     }
 
     public void destroy() {
+        stop();
         System.out.println("[INFO] >>>>>>>>> destroying autonomic manager: " + uri.toString());
         this.working = false;
         this.destroyRequested = true;
@@ -395,10 +403,10 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
             this.checker.destroy();
         }
 
-        /*
-        if (this.lifeController != null) {
-            this.lifeController.destroy();
-        }*/
+
+        if (this.externalInstancesHandler != null) {
+            this.externalInstancesHandler.destroy();
+        }
     }
 
     public ArchetypeResolver getArchetypeResolver() {

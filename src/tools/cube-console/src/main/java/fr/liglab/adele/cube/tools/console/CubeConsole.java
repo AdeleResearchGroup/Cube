@@ -33,6 +33,7 @@ import fr.liglab.adele.cube.util.parser.ArchetypeParser;
 import org.apache.felix.ipojo.annotations.*;
 import org.apache.felix.service.command.Descriptor;
 
+import java.util.List;
 import java.util.Properties;
 
 
@@ -53,7 +54,7 @@ public class CubeConsole {
     String m_scope;
 
     @ServiceProperty(name = "osgi.command.function", value = "{}")
-    String[] m_function = new String[]{"version", "ams", "arch", "rm" , "newi" , "extensions", "update", "rmi", "delete", "test" /*, "extension"*/};
+    String[] m_function = new String[]{"version", "ams", "arch", "rm" , "newi" , "extensions", "update", "rmi", "delete", "links","test" /*, "extension"*/};
 
 
     @Descriptor("Test Cube")
@@ -372,6 +373,28 @@ public class CubeConsole {
             String msg = "--------------------------------------------------------------------------";
             cps.destroyAutonomicManager(agent.getUri());
             msg +="\n  Deleted!";
+            msg += "\n--------------------------------------------------------------------------";
+            System.out.println(msg);
+        }
+    }
+
+    @Descriptor("Show Autonomic Manager external links")
+    public void links(@Descriptor("AM local id") String aid) {
+        if (aid == null) {
+            System.out.println("You should provide which Cube Autonomic Manager you want to see its external links with other Autonomic Managers.\nType 'cube:ams' to see the list of existing Cube Autonomic Managers in this runtime.");
+            return;
+        }
+        AutonomicManager agent = cps.getAutonomicManagerByLocalId(aid);
+        if (agent == null) {
+            System.out.println("Autonomic Manager '"+aid+"' does not exist! Type 'cube:ams' to see the list of existing Cube AM in this runtime.");
+        } else {
+
+            String msg = "External Links of AM: "+agent.getUri()+"\n--------------------------------------------------------------------------";
+
+            List<String> ams = agent.getExternalInstancesHandler().getExternalAutonomicManagers();
+            for (String a : ams) {
+                msg += "\n-- " + a;
+            }
             msg += "\n--------------------------------------------------------------------------";
             System.out.println(msg);
         }
