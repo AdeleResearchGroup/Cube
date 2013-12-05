@@ -1,5 +1,4 @@
 rm -rf felix-cache 2>/dev/null
-rm -rf felix-cache 2>/dev/null
 rm -f  *.csv 2>/dev/null
 rm -rf bundle 2>/dev/null
 
