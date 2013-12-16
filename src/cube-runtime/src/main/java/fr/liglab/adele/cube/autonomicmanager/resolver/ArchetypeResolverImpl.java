@@ -137,6 +137,12 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 } else {
                     //TODO validate the instance of the remote am!
                     //System.out.println("##### This instance "+related+" should be validated at a remote am!");
+                    String am_uri = getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(related);
+                    if (am_uri != null) {
+                        refreshRemoteAM(am_uri);
+                    } else {
+                        System.out.println("WARNING: remote instance referenced but no am uri is found in the local AM!");
+                    }
                 }
             }
         }
@@ -168,6 +174,19 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         } catch (Exception e) {
         }
         return true;
+    }
+
+    public void refreshRemoteAM(String am_uri) {
+        CMessage msg = new CMessage();
+        msg.setTo(am_uri);
+        msg.setReplyTo(am.getUri());
+        msg.setFrom(am.getUri());
+        msg.setObject("resolution");
+        msg.setBody("refreshRemoteAM");
+        try {
+            this.am.getCommunicator().sendMessage(msg);
+        } catch (Exception e) {
+        }
     }
 
     public List<String> findFromRuntimeModel(ManagedElement description) {
@@ -467,6 +486,9 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
 
         if (msg != null) {
             if (msg.getBody() != null) {
+                if (msg.getBody().toString().equalsIgnoreCase("refreshRemoteAM")) {
+                    getAutonomicManager().getRuntimeModelController().getRuntimeModel().refresh();
+                } else
                 if (msg.getBody().toString().equalsIgnoreCase("moveManagedElement")) {
                     ManagedElement me = msg.getAttachment();
                     if (me != null) {
