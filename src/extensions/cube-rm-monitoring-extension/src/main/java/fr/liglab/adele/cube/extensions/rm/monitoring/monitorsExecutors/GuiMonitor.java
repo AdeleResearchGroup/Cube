@@ -17,9 +17,16 @@ public class GuiMonitor extends AbstractMonitorExecutor {
 
     GuiMonitorPrefuse gui;
 
+    boolean autoRefresh = false;
+
     public GuiMonitor(Extension extension) {
         super(extension);
         gui = new GuiMonitorPrefuse(getExtension().getAutonomicManager());
+        String ars = extension.getProperties().getProperty("auto-refresh");
+        if (ars != null) {
+            Boolean ar = new Boolean(ars);
+            this.autoRefresh = ar.booleanValue();
+        }
     }
 
     public String getName() {
@@ -48,7 +55,9 @@ public class GuiMonitor extends AbstractMonitorExecutor {
                          gui.addNode((ManagedElement)instance);
                     }
                     */
-            //gui.updateGraph();
+            if (autoRefresh == true) {
+                gui.updateGraph();
+            }
         }
     }
 }

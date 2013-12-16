@@ -24,7 +24,9 @@
 		<extension id="fr.liglab.adele.cube.cilia">
 			<property name="connectorType" value="joram"/>
 		</extension>		
-		<extension id="fr.liglab.adele.cube.rm.monitoring"/>	
+		<extension id="fr.liglab.adele.cube.rm.monitoring">
+			<property name="auto-refresh" value="false"/>
+		</extension>	
 	</extensions>
 	
   </autonomic-manager>
