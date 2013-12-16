@@ -11,6 +11,8 @@
 				<connected s="@hapi-filter" o="@continua-validation" r="fc"/>
 				<connected s="@continua-validation" o="@continua-translation" r="fc"/>
 				<connected s="@continua-translation" o="@integration" r="fc"/>
+				<connected s="@integration" o="@ack" r="fc"/>
+				<connected s="@ack" o="@hl7-rest2" r="f"/>
 			</goal>
 		</goals>
 		
@@ -63,6 +65,29 @@
       		    <core:hasProperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
 				<onNode o="@mserver2"/>
 			</component>
+			<core:Component id="ack">
+				<core:hasComponentType o="ContinuaAcknowledgementMediator"/>
+				<core:hasProperty o="isCilia:true"/>
+    		    <core:hasProperty o="kind:mediator"/>
+				<core:hasProperty o="fill_err_segment_in_ack:true" />
+				<core:hasProperty o="application_namespace_id:ContinuaConnector" />
+				<core:hasProperty o="application_universal_id:1234567890ABCDEF" />
+				<core:hasProperty o="application_universal_id_type:EUI-64" />
+				<core:hasProperty o="messageProfileIdentifier_entityIdentifier:IHE PCD ORU-R012006" />
+				<core:hasProperty o="messageProfileIdentifier_namespaceId:HL7" />
+				<core:hasProperty o="messageProfileIdentifier_universalId:2.16.840.1.113883.9.n.m" />
+				<core:hasProperty o="messageProfileIdentifier_universalIdType:HL7" />
+    		    <core:hasProperty o="ciliaNamespace:medical"/>
+    		    <onNode o="@mserver2"/>
+			</core:Component>
+			<component id="hl7-rest2">
+				<hasComponentType o="HL7-REST-MessageAdapter"/>
+				<onNode o="@aserver2"/>
+			</component>
+			<node id="aserver2">				
+				<hasNodeType o="AServer"/>
+				<inScope o="@lan"/>
+			</node>
 			<node id="mserver2">				
 				<hasNodeType o="MedServer"/>
 				<inScope o="@lan"/>
