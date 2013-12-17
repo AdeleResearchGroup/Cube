@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_Igof0GKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ide.application" bindingContexts="_Igof2WKIEeOTacIahXWo8Q">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_Igof0WKIEeOTacIahXWo8Q" label="Archetype Designer" width="1000" height="600">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_Igof8GKIEeOTacIahXWo8Q">
+      <children xsi:type="advanced:Perspective" xmi:id="_Igof8WKIEeOTacIahXWo8Q" label="Designer">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_Igof8mKIEeOTacIahXWo8Q" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_Igof82KIEeOTacIahXWo8Q" containerData="75">
+            <children xsi:type="basic:Part" xmi:id="_IgpG4GKIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.parts.diagrampart" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.DiagramPart" label="Editor"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_bmLn0GKdEeOTacIahXWo8Q" elementId="archetypedesigner.partstack.0" containerData="25">
+            <children xsi:type="basic:Part" xmi:id="_WkVl8GULEeO9-_T5dNh-uw" elementId="archetypedesigner.part.value" containerData="" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.ValuePart" label="Value"/>
+            <children xsi:type="basic:Part" xmi:id="_aytq4GULEeO9-_T5dNh-uw" elementId="archetypedesigner.part.element" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.ElementPart" label="Element Description"/>
+            <children xsi:type="basic:Part" xmi:id="_cvgHsGULEeO9-_T5dNh-uw" elementId="archetypedesigner.part.property" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.PropertyPart" label="Description Property"/>
+            <children xsi:type="basic:Part" xmi:id="_e1EGAGULEeO9-_T5dNh-uw" elementId="archetypedesigner.part.goal" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.GoalPart" label="Goal Property"/>
+            <children xsi:type="basic:Part" xmi:id="_k325cGUMEeO9-_T5dNh-uw" elementId="archetypedesigner.part.archetype" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.parts.ArchetypePart" label="Archetype"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <trimBars xmi:id="_IgpG4WKIEeOTacIahXWo8Q" side="Left">
+      <children xsi:type="menu:ToolBar" xmi:id="_IgpG4mKIEeOTacIahXWo8Q" elementId="toolbar:org.eclipse.ui.main.toolbar">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_LgmfsGQvEeOYfq7nOZJE1Q" elementId="" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/new.png" command="_wryl4GTdEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_IgpG42KIEeOTacIahXWo8Q" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/open.png" command="_Igof4GKIEeOTacIahXWo8Q"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_IgpG5GKIEeOTacIahXWo8Q" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/save_edit.png" command="_Igof42KIEeOTacIahXWo8Q"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_Gq-CEGKxEeOTacIahXWo8Q" elementId="archetypedesigner.toolbarseparator.0"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_rRi_AGTCEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.0" label="" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/component.gif" tooltip="Add Component Description" command="_9KS-sGTBEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_yQUH8GTCEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.1" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/node.gif" tooltip="Add Node Description" command="__lHbUGTBEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_yoWNcGTCEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.2" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/scope.gif" tooltip="Add Scope Description" command="_AqJJsGTCEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_y7bhgGTCEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.3" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/master.gif" tooltip="Add Master Description" command="_Bw_dAGTCEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Xu3iMGTFEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.4" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/addvalue.png" tooltip="Add Value" command="_VAWtgGTFEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_6RLmUGQuEeOYfq7nOZJE1Q" elementId="archetypedesigner.toolbarseparator.1"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_mYU5MGS1EeOaLvsQO-EaFw" elementId="archetypedesigner.addgoalhandler" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/addgoal.png" tooltip="Add Goal" enabled="false" type="Check" command="_gNcrUGS1EeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_TQhrcGTBEeOaLvsQO-EaFw" elementId="archetypedesigner.addpropertyhandler" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/addproperty.png" tooltip="Add Property" type="Check" command="_uBfB8GTAEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_cf_7cGSwEeO8Y7HHuih9EQ" elementId="archetypedesigner.toolbarseparator.3"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_6tr8IGQuEeOYfq7nOZJE1Q" elementId="" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/delete.png" tooltip="Delete" enabled="false" command="_uRKDYGTFEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_U-P_sGRMEeO-dJ2NUdQiug" elementId="archetypedesigner.toolbarseparator.2"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_E_CnMGTfEeOaLvsQO-EaFw" elementId="archetypedesigner.handledtoolitem.5" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/sample.png" tooltip="Change Layout" command="_Htsl0GTfEeOaLvsQO-EaFw"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_3wHm0GU2EeO2YcOwQDlX9w" elementId="archetypedesigner.handledtoolitem.6" label="" iconURI="platform:/plugin/fr.liglab.adele.cube.archetype.designer/icons/sample.png" tooltip="Hide Detail" command="_f6ICEGU2EeO2YcOwQDlX9w"/>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_Igof3WKIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.handler.quit" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.QuitHandler" command="_Igof3GKIEeOTacIahXWo8Q"/>
+  <handlers xmi:id="_Igof4WKIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.handler.open" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.OpenHandler" command="_Igof4GKIEeOTacIahXWo8Q"/>
+  <handlers xmi:id="_Igof5GKIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.handler.save" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.SaveHandler" command="_Igof42KIEeOTacIahXWo8Q"/>
+  <handlers xmi:id="_Igof52KIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.handler.about" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AboutHandler" command="_Igof5mKIEeOTacIahXWo8Q"/>
+  <handlers xmi:id="_dyg58GS1EeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addgoal" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddGoalHandler" command="_gNcrUGS1EeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_xZL9kGTAEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addproperty" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddPropertyHandler" command="_uBfB8GTAEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_UgawkGTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addcomponent" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddComponentHandler" command="_9KS-sGTBEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_a7NCsGTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addnode" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddNodeHandler" command="__lHbUGTBEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_bSln8GTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addscope" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddScopeHandler" command="_AqJJsGTCEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_cKqfcGTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addmaster" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddMasterHandler" command="_Bw_dAGTCEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_SApbIGTFEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.addvalue" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.AddValueHandler" command="_VAWtgGTFEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_zBHycGTFEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.delete" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.DeleteHandler" command="_uRKDYGTFEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_ukrIYGTdEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.newarchetype" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.NewHandler" command="_wryl4GTdEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_KskKsGTfEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.handler.changelayout" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.ChangeLayoutHandler" command="_Htsl0GTfEeOaLvsQO-EaFw"/>
+  <handlers xmi:id="_lh6xAGU2EeO2YcOwQDlX9w" elementId="fr.liglab.adele.cube.archetype.designer.handler.hidedetail" contributionURI="bundleclass://fr.liglab.adele.cube.archetype.designer/fr.liglab.adele.cube.archetype.designer.handlers.HideDetailHandler" command="_f6ICEGU2EeO2YcOwQDlX9w"/>
+  <bindingTables xmi:id="_Igof3mKIEeOTacIahXWo8Q" bindingContext="_Igof2WKIEeOTacIahXWo8Q">
+    <bindings xmi:id="_Igof32KIEeOTacIahXWo8Q" keySequence="M1+Q" command="_Igof3GKIEeOTacIahXWo8Q"/>
+    <bindings xmi:id="_Igof4mKIEeOTacIahXWo8Q" keySequence="M1+O" command="_Igof4GKIEeOTacIahXWo8Q"/>
+    <bindings xmi:id="_Igof5WKIEeOTacIahXWo8Q" keySequence="M1+S" command="_Igof42KIEeOTacIahXWo8Q"/>
+    <bindings xmi:id="_Igof6GKIEeOTacIahXWo8Q" keySequence="M1+A" command="_Igof5mKIEeOTacIahXWo8Q"/>
+  </bindingTables>
+  <rootContext xmi:id="_Igof2WKIEeOTacIahXWo8Q" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog and Windows">
+    <children xmi:id="_Igof2mKIEeOTacIahXWo8Q" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_Igof22KIEeOTacIahXWo8Q" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
+  <commands xmi:id="_Igof3GKIEeOTacIahXWo8Q" elementId="org.eclipse.ui.file.exit" commandName="quitCommand"/>
+  <commands xmi:id="_Igof4GKIEeOTacIahXWo8Q" elementId="fr.liglab.adele.cube.archetype.designer.open" commandName="openCommand"/>
+  <commands xmi:id="_Igof42KIEeOTacIahXWo8Q" elementId="org.eclipse.ui.file.save" commandName="saveCommand"/>
+  <commands xmi:id="_Igof5mKIEeOTacIahXWo8Q" elementId="org.eclipse.ui.help.aboutAction" commandName="aboutCommand"/>
+  <commands xmi:id="_gNcrUGS1EeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addgoal" commandName="addGoal"/>
+  <commands xmi:id="_uBfB8GTAEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addproperty" commandName="addProperty"/>
+  <commands xmi:id="_9KS-sGTBEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addcomponent" commandName="addComponent"/>
+  <commands xmi:id="__lHbUGTBEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addnode" commandName="addNode"/>
+  <commands xmi:id="_AqJJsGTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addscope" commandName="addScope"/>
+  <commands xmi:id="_Bw_dAGTCEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addmaster" commandName="addMaster"/>
+  <commands xmi:id="_VAWtgGTFEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.addvalue" commandName="addValue"/>
+  <commands xmi:id="_uRKDYGTFEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.delete" commandName="delete"/>
+  <commands xmi:id="_wryl4GTdEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.newarchetype" commandName="newArchetype"/>
+  <commands xmi:id="_Htsl0GTfEeOaLvsQO-EaFw" elementId="fr.liglab.adele.cube.archetype.designer.changelayout" commandName="changeLayout"/>
+  <commands xmi:id="_f6ICEGU2EeO2YcOwQDlX9w" elementId="fr.liglab.adele.cube.archetype.designer.hidedetail" commandName="hideDetail"/>
+  <addons xmi:id="_Igof0mKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_Igof02KIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_Igof1GKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_Igof1WKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_Igof1mKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_Igof12KIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_Igof2GKIEeOTacIahXWo8Q" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+</application:Application>

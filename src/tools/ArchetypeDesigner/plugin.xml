@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            name="Archetype Designer"
+            application="org.eclipse.e4.ui.workbench.swt.E4Application">
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/fr.liglab.adele.cube.archetype.designer/css/default.css">
+         </property>
+         <property
+               name="appName"
+               value="Archetype Designer">
+         </property>
+      </product>
+   </extension>
+
+</plugin>
