@@ -11,8 +11,6 @@ Thumbs.db
 
 # Eclipse and other IDE files #
 .settings/
-.project
-.classpath
 classes
 target
 *.log
