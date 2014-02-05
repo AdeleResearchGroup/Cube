@@ -30,7 +30,11 @@ import java.util.Properties;
  * Date: 4/26/13
  * Time: 4:57 PM
  */
-public abstract class AbstractExtension implements Extension {
+public abstract class AbstractExtension implements Extension, Runnable {
+
+    Thread t;
+    private boolean working = false;
+    private boolean destroyRequested = false;
 
     private String uri = null;
 
@@ -47,6 +51,7 @@ public abstract class AbstractExtension implements Extension {
                 this.properties.put(key, properties.get(key));
             }
         }
+        t = new Thread(this);
     }
 
     public String getUri() {
@@ -69,6 +74,34 @@ public abstract class AbstractExtension implements Extension {
         }
         //return this.properties;
         return p;
+    }
+
+    public void run() {
+        while(working == false) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        starting();
+    }
+
+    public void start() {
+        //System.out.println("starting extension "+this.getExtensionFactory().getFullName()+ " ...");
+        this.working = true;
+        this.destroyRequested = false;
+        t.start();
+    }
+
+    public void stop() {
+        this.working = false;
+        this.destroyRequested = false;
+    }
+
+    public void destroy() {
+        this.working = false;
+        this.destroyRequested = true;
     }
 
     public abstract List<ExtensionPoint> getExtensionPoints();

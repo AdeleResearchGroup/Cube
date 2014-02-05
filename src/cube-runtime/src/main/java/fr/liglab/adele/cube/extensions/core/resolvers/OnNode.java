@@ -66,17 +66,18 @@ public class OnNode extends AbstractResolver {
                 try {
                     r = me.addReference(Component.CORE_COMPONENT_NODE, true);
                     RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
+
                     rmc.addReferencedElement(value, Node.CORE_NODE_COMPONENTS, me.getUUID());
+
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
                 }
             }
             // TODO update AM URI of the ME to be the same as the node instance
-
             String amUri = getExtension().getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(value);
             if (amUri != null && !amUri.equalsIgnoreCase(getExtension().getAutonomicManager().getUri())) {
                 me.setAutonomicManager(amUri);
-            } 
+            }
             r.addReferencedElement(value);
             return true;
         }
@@ -96,7 +97,6 @@ public class OnNode extends AbstractResolver {
                 }
             }
         }
-        //System.out.println("\n[OnNode] find method does not take into consideration the description parameter!");
         return result;
     }
 

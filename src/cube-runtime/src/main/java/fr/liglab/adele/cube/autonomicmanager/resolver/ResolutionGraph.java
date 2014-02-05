@@ -58,9 +58,8 @@ public class ResolutionGraph {
                         List<String> result = findValues(c.getObject());
                         info("find..."+result.size());
                         if (result.size() == 0) {
-
-                            createValue(c.getObject());
                             info("create...1");
+                            createValue(c.getObject());
                         }
                     } break;
                     case Create: {
@@ -94,6 +93,7 @@ public class ResolutionGraph {
      * @param v
      */
     private void createValue(Variable v) {
+        info("Creating value for variable "+v.getId()+"...");
         if (v instanceof PrimitiveVariable) {
             // nothing to do!
         } else if (v instanceof MultiValueVariable) {
@@ -172,6 +172,7 @@ public class ResolutionGraph {
         return r;
     }
 
+
     private boolean performConstraints(Variable v) {
         // try first by checking if there is a constraint with no possible values.
         // If so, return false, Which mean that the instance will remain INVALID
@@ -223,7 +224,7 @@ public class ResolutionGraph {
                         info("there were problem while performing constraint '"+c.getArchetypePropertyName()+"' between '"+uuid_subject+"' and '"+uuid_object+"'");
                         if (c instanceof GoalConstraint) {
                             if (((GoalConstraint) c).isOptional()) {
-                               continue;
+                                continue;
                             }
                         }
                     }
@@ -269,6 +270,81 @@ public class ResolutionGraph {
         //info("instance "+((MultiValueVariable)v).getValues().get(0)+" is resolved!");
         return true;
     }
+/*
+    private boolean performConstraints(Variable v) {
+        // try first by checking if there is a constraint with no possible values.
+        // If so, return false, Which mean that the instance will remain INVALID
+        for (Constraint c : v.getConstraints()) {
+            if (c.getObject() instanceof MultiValueVariable) {
+                if (((MultiValueVariable) c.getObject()).getValues().size()==0) {
+                    if (c instanceof GoalConstraint){
+                        if (((GoalConstraint) c).isOptional() == false) {
+                            info("constraint "+c.getArchetypePropertyName()+" is not resolved for instance '"+((MultiValueVariable) c.getObject()).getDescription().getName()+"'!");
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        List<ConstraintDetail> toBePerformed = new ArrayList<ConstraintDetail>();
+        // perform constraints
+        for (Constraint c : v.getConstraints()) {
+            if (c.getObject() instanceof PrimitiveVariable) {
+                if (((MultiValueVariable)v).getValues().size()>0) {
+                    String me1 = ((MultiValueVariable)v).getValues().get(0);
+                    //this.resolver.performProperty(c.getArchetypePropertyName(), me1, ((PrimitiveVariable) c.getObject()).getValue());
+                    toBePerformed.add(new ConstraintDetail(c, me1, ((PrimitiveVariable) c.getObject()).getValue()));
+
+                }
+            } else if (c.getObject() instanceof MultiValueVariable) {
+                List<String> possibleValues = ((MultiValueVariable) c.getObject()).getValues();
+                info("finding "+possibleValues.size()+" possible solution(s) for goal '"+c.getArchetypePropertyName()+"'");
+                for (String pv : possibleValues){
+                    info("--- "+pv);
+                }
+                if (possibleValues.size()>0) {
+
+                    String uuid_subject = c.getCurrentProblem();
+                    info("We only perform the first found solution!");
+                    String uuid_object = possibleValues.get(0);
+
+                    toBePerformed.add(new ConstraintDetail(c, uuid_subject, uuid_object));
+
+                } else {
+                    if (c instanceof GoalConstraint) {
+                        if (((GoalConstraint)c).isOptional()==true)
+                            return true;
+                    }
+                    return false;
+                }
+            }
+        }
+        // performing the toBePerformed Constraints
+        info("Performing the constraints...");
+        for (ConstraintDetail cd : toBePerformed) {
+            if (isUnmanaged(cd.getValue())) {
+                if (performConstraints(cd.getConstraint().getObject()) == false) {
+                    return false;
+                }
+            }
+            if (this.resolver.performProperty(cd.getConstraint().getArchetypePropertyName(), cd.getSubject(), cd.getValue())==true) {
+                info("performing constraint '"+cd.getConstraint().getArchetypePropertyName()+"' between '"+cd.getSubject()+"' and '"+cd.getValue()+"'");
+                if (cd.getConstraint() instanceof GoalConstraint) {
+                    ((GoalConstraint) cd.getConstraint()).setCurrentSolution(cd.getValue());
+                }
+            } else {
+                info("there were problem while performing constraint '"+cd.getConstraint().getArchetypePropertyName()+"' between '"+cd.getSubject()+"' and '"+cd.getValue()+"'");
+                if (cd.getConstraint() instanceof GoalConstraint) {
+                    if (((GoalConstraint) cd.getConstraint()).isOptional()) {
+                        continue;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+*/
 
     private boolean verifyValue(String uuid, Variable v) {
         boolean verified = true;

@@ -124,10 +124,11 @@ public class RuntimeModelControllerMessageHandler {
                     Object name = msg.getHeader("name");
                     Object onlyone = msg.getHeader("onlyone");
                     Object refuuid = msg.getHeader("refuuid");
-
+                    Object refamuri = msg.getHeader("refamuri");
                     boolean p = false;
                     if (uuid != null && name != null && refuuid != null) {
-                        this.rmc.getAutonomicManager().getExternalInstancesHandler().addExternalInstance(refuuid.toString(), msg.getFrom().toString());
+                        this.rmc.getAutonomicManager().getExternalInstancesHandler().addExternalInstance(
+                                    refuuid.toString(), msg.getFrom().toString());
                         p = rmc.addReferencedElement(uuid.toString(), name.toString(),
                                 onlyone.toString().equalsIgnoreCase("true")?true:false , refuuid.toString());
                     }

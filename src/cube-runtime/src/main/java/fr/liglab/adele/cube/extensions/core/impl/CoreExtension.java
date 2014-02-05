@@ -81,7 +81,7 @@ public class CoreExtension extends AbstractExtension {
         return extensionPointsList;
     }
 
-    public void start() {
+    public void starting() {
         if (comm != null) comm.start();
         Object master = getProperties().get("master");
         if (master != null) {
@@ -93,11 +93,11 @@ public class CoreExtension extends AbstractExtension {
         }
     }
 
-    public void stop() {
+    public void stopping() {
         if (comm != null) comm.stop();
     }
 
-    public void destroy() {
+    public void destroying() {
         if (comm != null) comm.destroy();
         comm = null;
     }

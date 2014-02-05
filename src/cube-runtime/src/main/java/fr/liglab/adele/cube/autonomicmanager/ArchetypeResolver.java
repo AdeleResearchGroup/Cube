@@ -33,6 +33,6 @@ public interface ArchetypeResolver extends RuntimeModelListener {
     ResolverExtensionPoint getResolver(String fullname);
     void addSpecificResolver(ResolverExtensionPoint specificResolver);
     void receiveMessage(CMessage msg);
-
+    public void refreshRemoteAM(String am_uri);
 
 }

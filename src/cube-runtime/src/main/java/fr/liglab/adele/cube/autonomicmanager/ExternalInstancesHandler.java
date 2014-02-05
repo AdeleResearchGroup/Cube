@@ -21,5 +21,7 @@ public interface ExternalInstancesHandler {
 
     public void removeExternalAutonomicManagerInstances(String agent_uri);
 
+    public void removeExternalInstance(String uuid);
+
     public List<String> getExternalAutonomicManagers();
 }

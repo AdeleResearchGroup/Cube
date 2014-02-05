@@ -43,11 +43,12 @@ public class RuntimeModelImpl implements RuntimeModel {
      * value: ManagedElement
      */
     Map<String, ManagedElement> elements = new HashMap<String, ManagedElement>();
+
     private Map<String, ManagedElement> unmanagedElements = new HashMap<String, ManagedElement>();
 
 
-    public RuntimeModelImpl(AutonomicManager agent) {
-        this.am = agent;
+    public RuntimeModelImpl(AutonomicManager autonomicManager) {
+        this.am = autonomicManager;
         listeners = new Vector<RuntimeModelListener>();
     }
 
@@ -58,26 +59,35 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param element Managed ElementDescription instance to be added.
      */
 
-    synchronized void add(ManagedElement element, int state) {
+     void add(ManagedElement element, int state) {
         if (element != null) {
-            element.updateState(state);
-            if (state == ManagedElement.UNMANAGED) {
-                this.unmanagedElements.put(element.getUUID(), element);
-            } else {
-                this.elements.put(element.getUUID(), element);
+            synchronized (element) {
+                element.updateState(state);
+                if (state == ManagedElement.UNMANAGED) {
+                    synchronized (this.unmanagedElements) {
+                        this.unmanagedElements.put(element.getUUID(), element);
+                    }
+                } else {
+                    synchronized (this.elements) {
+                        this.elements.put(element.getUUID(), element);
+                    }
+                }
             }
         }
     }
 
-    public synchronized void manage(String uuid) {
-        ManagedElement me = this.unmanagedElements.get(uuid) ;
+    public void manage(String uuid) {
+        ManagedElement me = null;
+        synchronized (this.unmanagedElements) {
+            me = this.unmanagedElements.get(uuid) ;
+        }
         if (me != null && me.getState() == ManagedElement.UNMANAGED) {
             add(me, ManagedElement.INVALID);
             removeUnmanaged(me);
         }
     }
 
-    public synchronized void refresh() {
+    public void refresh() {
         setChanged();
         notifyListeners(new Notification(RuntimeModelListener.UPDATED_RUNTIMEMODEL, this));
     }
@@ -88,28 +98,35 @@ public class RuntimeModelImpl implements RuntimeModel {
      */
     public List<ManagedElement> getElements() {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
-        for (String key : this.elements.keySet()) {
-            result.add(this.elements.get(key));
+        synchronized (this.elements) {
+            for (String key : this.elements.keySet()) {
+                result.add(this.elements.get(key));
+            }
         }
-        for (String key : this.unmanagedElements.keySet()) {
-            result.add(this.unmanagedElements.get(key));
+        synchronized (this.unmanagedElements) {
+            for (String key : this.unmanagedElements.keySet()) {
+                result.add(this.unmanagedElements.get(key));
+            }
         }
         return result;
     }
 
     public List<ManagedElement> getManagedElements() {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
-        for (String key : this.elements.keySet()) {
-            result.add(this.elements.get(key));
+        synchronized (this.elements) {
+            for (String key : this.elements.keySet()) {
+                result.add(this.elements.get(key));
+            }
         }
-
         return result;
     }
 
     public List<ManagedElement> getUnmanagedElements() {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
-        for (String key : this.unmanagedElements.keySet()) {
-            result.add(this.unmanagedElements.get(key));
+        synchronized (this.unmanagedElements) {
+            for (String key : this.unmanagedElements.keySet()) {
+                result.add(this.unmanagedElements.get(key));
+            }
         }
         return result;
     }
@@ -122,15 +139,19 @@ public class RuntimeModelImpl implements RuntimeModel {
      */
     public List<ManagedElement> getElements(String namespace, String name) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
-        for (String key : this.elements.keySet()) {
-            if (this.elements.get(key).getNamespace().equalsIgnoreCase(namespace)
-                    && this.elements.get(key).getName().equalsIgnoreCase(name))
-                result.add(this.elements.get(key));
+        synchronized (this.elements) {
+            for (String key : this.elements.keySet()) {
+                if (this.elements.get(key).getNamespace().equalsIgnoreCase(namespace)
+                        && this.elements.get(key).getName().equalsIgnoreCase(name))
+                    result.add(this.elements.get(key));
+            }
         }
-        for (String key : this.unmanagedElements.keySet()) {
-            if (this.unmanagedElements.get(key).getNamespace().equalsIgnoreCase(namespace)
-                    && this.unmanagedElements.get(key).getName().equalsIgnoreCase(name))
-                result.add(this.unmanagedElements.get(key));
+        synchronized (this.unmanagedElements) {
+            for (String key : this.unmanagedElements.keySet()) {
+                if (this.unmanagedElements.get(key).getNamespace().equalsIgnoreCase(namespace)
+                        && this.unmanagedElements.get(key).getName().equalsIgnoreCase(name))
+                    result.add(this.unmanagedElements.get(key));
+            }
         }
         return result;
     }
@@ -140,16 +161,20 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param state
      * @return
      */
-    public List<ManagedElement> getElements(int state) {
+    public  List<ManagedElement> getElements(int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
-            for (String key : this.unmanagedElements.keySet()) {
-                result.add(this.unmanagedElements.get(key));
+            synchronized (this.unmanagedElements) {
+                for (String key : this.unmanagedElements.keySet()) {
+                    result.add(this.unmanagedElements.get(key));
+                }
             }
         } else {
-            for (String key : this.elements.keySet()) {
-                if (this.elements.get(key).getState() == state) {
-                    result.add(this.elements.get(key));
+            synchronized (this.elements) {
+                for (String key : this.elements.keySet()) {
+                    if (this.elements.get(key).getState() == state) {
+                        result.add(this.elements.get(key));
+                    }
                 }
             }
         }
@@ -166,21 +191,24 @@ public class RuntimeModelImpl implements RuntimeModel {
     public List<ManagedElement> getElements(String namespace, String name, int state) {
         List<ManagedElement> result = new ArrayList<ManagedElement>();
         if (state == ManagedElement.UNMANAGED) {
-            for (String key : this.unmanagedElements.keySet()) {
-                if (this.unmanagedElements.get(key).getNamespace().equalsIgnoreCase(namespace)
-                        && this.unmanagedElements.get(key).getName().equalsIgnoreCase(name)
-                        )
-                    result.add(this.unmanagedElements.get(key));
+            synchronized (this.unmanagedElements) {
+                for (String key : this.unmanagedElements.keySet()) {
+                    if (this.unmanagedElements.get(key).getNamespace().equalsIgnoreCase(namespace)
+                            && this.unmanagedElements.get(key).getName().equalsIgnoreCase(name)
+                            )
+                        result.add(this.unmanagedElements.get(key));
+                }
             }
         } else {
-            for (String key : this.elements.keySet()) {
-                if (this.elements.get(key).getNamespace().equalsIgnoreCase(namespace)
-                        && this.elements.get(key).getName().equalsIgnoreCase(name)
-                        && this.elements.get(key).getState() == state)
-                    result.add(this.elements.get(key));
+            synchronized (this.elements) {
+                for (String key : this.elements.keySet()) {
+                    if (this.elements.get(key).getNamespace().equalsIgnoreCase(namespace)
+                            && this.elements.get(key).getName().equalsIgnoreCase(name)
+                            && this.elements.get(key).getState() == state)
+                        result.add(this.elements.get(key));
+                }
             }
         }
-
         return result;
     }
 
@@ -190,49 +218,65 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @return
      */
     public ManagedElement getManagedElement(String uuid) {
-        ManagedElement result = this.elements.get(uuid);
-        if (result != null) return result; else return this.unmanagedElements.get(uuid);
-    }
-
-    public synchronized void removeReferencedElements(List<String> refs) {
-        if (refs != null) {
-            boolean changed = false;
-            for (String meuuid : this.elements.keySet()) {
-
-                ManagedElement me = this.elements.get(meuuid);
-                if (me != null) {
-                    for (String ref : refs) {
-                        changed = me.removeReferencedElement(ref);
-                    }
-                }
-                ManagedElement me2 = this.unmanagedElements.get(meuuid);
-                if (me2 != null) {
-                    for (String ref : refs) {
-                        changed = me2.removeReferencedElement(ref);
-                    }
-                }
+        ManagedElement result = null;
+        synchronized (this.elements) {
+            result = this.elements.get(uuid);
+        }
+        if (result != null) return result; else {
+            synchronized (this.unmanagedElements) {
+                return this.unmanagedElements.get(uuid);
             }
-            /*
-            if (changed == true) {
-                setChanged();
-                notifyListeners(new Notification(RuntimeModelListener.UPDATED_RUNTIMEMODEL, this));
-            }
-            */
         }
     }
 
-    public synchronized void removeReferencedElement(String ref) {
+    public void removeReferencedElements(List<String> refs) {
+        //System.out.println("------------ removeReferencedElements ... ");
+        if (refs != null) {
+            boolean changed = false;
+            synchronized (this.elements) {
+                for (String meuuid : this.elements.keySet()) {
+                    //System.out.println("------------ analysing : " + meuuid);
+                    ManagedElement me = this.elements.get(meuuid);
+                    if (me != null) {
+                        synchronized (me) {
+                            for (String ref : refs) {
+                                changed = me.removeReferencedElement(ref);
+                            }
+                        }
+                    }
+                    ManagedElement me2 = null;
+                    synchronized (this.unmanagedElements) {
+                        me2 = this.unmanagedElements.get(meuuid);
+                    }
+                    if (me2 != null) {
+                        synchronized (me2) {
+                            for (String ref : refs) {
+                                changed = me2.removeReferencedElement(ref);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void removeReferencedElement(String ref) {
         if (ref != null) {
             boolean changed = false;
-            for (String meuuid : this.elements.keySet()) {
+            synchronized (this.elements) {
+                for (String meuuid : this.elements.keySet()) {
+                    ManagedElement me = this.elements.get(meuuid);
+                    if (me != null) {
+                        changed = me.removeReferencedElement(ref);
+                    }
 
-                ManagedElement me = this.elements.get(meuuid);
-                if (me != null) {
-                    changed = me.removeReferencedElement(ref);
-                }
-                ManagedElement me2 = this.unmanagedElements.get(meuuid);
-                if (me2 != null) {
-                    changed = me2.removeReferencedElement(ref);
+                    ManagedElement me2 = null;
+                    synchronized (this.unmanagedElements) {
+                        me2 = this.unmanagedElements.get(meuuid);
+                    }
+                    if (me2 != null) {
+                        changed = me2.removeReferencedElement(ref);
+                    }
                 }
             }
             if (changed == true) {
@@ -243,50 +287,51 @@ public class RuntimeModelImpl implements RuntimeModel {
     }
 
     private void removeUnmanaged(ManagedElement me1) {
-        Set set2 = this.unmanagedElements.keySet();
-        Iterator itr2 = set2.iterator();
-        while (itr2.hasNext())
-        {
-            Object o2 = itr2.next();
-            if (o2.toString().equalsIgnoreCase(me1.getUUID())) {
-                itr2.remove(); //remove the pair if key length is less then 3
-                return;
+        synchronized (this.unmanagedElements) {
+            Set set2 = this.unmanagedElements.keySet();
+            Iterator itr2 = set2.iterator();
+            while (itr2.hasNext())
+            {
+                Object o2 = itr2.next();
+                if (o2.toString().equalsIgnoreCase(me1.getUUID())) {
+                    itr2.remove(); //remove the pair if key length is less then 3
+                    return;
+                }
             }
         }
     }
 
     private void removeManaged(ManagedElement me1) {
-        Set set = this.elements.keySet();
-        Iterator itr = set.iterator();
-        while (itr.hasNext())
-        {
-            Object o = itr.next();
-            if (o.toString().equalsIgnoreCase(me1.getUUID())) {
-                itr.remove(); //remove the pair if key length is less then 3
-                return;
+        synchronized (this.elements) {
+            Set set = this.elements.keySet();
+            Iterator itr = set.iterator();
+            while (itr.hasNext())
+            {
+                Object o = itr.next();
+                if (o.toString().equalsIgnoreCase(me1.getUUID())) {
+                    itr.remove(); //remove the pair if key length is less then 3
+                    return;
+                }
             }
         }
     }
 
-    public synchronized void remove(ManagedElement me1) {
+    public void remove(ManagedElement me1) {
         if (me1 == null) return;
         removeManaged(me1);
         removeUnmanaged(me1);
-        /*
-        ManagedElement result = this.unmanagedElements.remove(me1.getUUID());
-        if (result != null) return result; else return this.elements.remove(me1.getUUID());
-        */
     }
 
-    public synchronized void removeUnmanagedElements() {
+    public void removeUnmanagedElements() {
         List<String> tmp = new ArrayList<String>();
-        for (String me : this.unmanagedElements.keySet()) {
-            tmp.add(me);
+        synchronized (this.unmanagedElements) {
+            for (String me : this.unmanagedElements.keySet()) {
+                tmp.add(me);
+            }
         }
         for (String t : tmp) {
             this.am.getRuntimeModelController().destroyElement(t);
         }
-        //this.unmanagedElements.clear();
     }
 
     /**
@@ -302,11 +347,13 @@ public class RuntimeModelImpl implements RuntimeModel {
      * @param  listener   a Runtime Model Listener to be added.
      * @throws NullPointerException  if the parameter o is null.
      */
-     public synchronized void addListener(RuntimeModelListener listener) {
+     public void addListener(RuntimeModelListener listener) {
          if (listener == null)
             throw new NullPointerException();
-         if (!this.listeners.contains(listener)) {
-            listeners.addElement(listener);
+         synchronized (this.listeners) {
+             if (!this.listeners.contains(listener)) {
+                listeners.addElement(listener);
+             }
          }
      }
 
@@ -315,15 +362,19 @@ public class RuntimeModelImpl implements RuntimeModel {
      * Passing <CODE>null</CODE> to this method will have no effect.
      * @param   listener   the listener to be deleted.
      */
-     public synchronized void deleteListener(RuntimeModelListener listener) {
-        this.listeners.removeElement(listener);
+     public void deleteListener(RuntimeModelListener listener) {
+        synchronized (this.listeners) {
+            this.listeners.removeElement(listener);
+        }
      }
 
     /**
      * Clears the listeners list so that this object no longer has any observers.
      */
-     public synchronized void deleteListeners() {
-         this.listeners.removeAllElements();
+     public void deleteListeners() {
+         synchronized (this.listeners) {
+            this.listeners.removeAllElements();
+         }
      }
 
     /**
@@ -347,7 +398,7 @@ public class RuntimeModelImpl implements RuntimeModel {
          */
          Object[] arrLocal;
 
-         synchronized (this) {
+         synchronized (this.listeners) {
              /* We don't want the Observer doing callbacks into
               * arbitrary code while holding its own Monitor.
               * The code where we extract each Observable from

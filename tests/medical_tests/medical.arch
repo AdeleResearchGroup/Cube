@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cube>
+<archetype id="medical" version="1.0" >
+<goals>
+<goal id="mygoal" description="generated from Archetype Designer">
+<inscope s="@aggr_server" o="@lan" r="fc" />
+<inscope s="@med_server" o="@lan" r="fc" />
+<connected s="@continua-validation" o="@continua-translation" r="fc" />
+<connected s="@continua-translation" o="@integration" r="fc" />
+<connected s="@integration" o="@ack" r="fc" />
+<connected s="@ack" o="@hl7-rest2" r="f" />
+<holdcomponent s="@aggr_server" o="@hl7-rest" r="FC" />
+<Connected s="@hl7-rest" o="@hapi-filter" r="FC" />
+</goal>
+</goals>
+<elements>
+<node id="aggr_server">
+<hasnodetype o="AServer"/>
+</node>
+<node id="med_server">
+<hasnodetype o="MedServer"/>
+</node>
+<node id="aserver2">
+<inscope o="@lan"/>
+<hasnodetype o="AServer"/>
+</node>
+<node id="mserver2">
+<inscope o="@lan"/>
+<hasnodetype o="MedServer"/>
+</node>
+<scope id="lan">
+<hasscopeid o="lan"/>
+<controlledby o="@master"/>
+</scope>
+<component id="joram">
+<hascomponenttype o="Joram"/>
+</component>
+<component id="hl7-rest">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:adapter"/>
+<hasproperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
+<hascomponenttype o="HL7-REST-MessageAdapter"/>
+</component>
+<component id="hapi-filter">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<onnode o="@mserver2"/>
+<hascomponenttype o="HapiValidationMediator"/>
+</component>
+<component id="hapi-filter2">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<hascomponenttype o="HapiValidationMediator"/>
+</component>
+<component id="continua-validation">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<hascomponenttype o="ContinuaValidationMediator"/>
+<onnode o="@mserver2"/>
+</component>
+<component id="continua-translation">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<hascomponenttype o="ContinuaTranslationMediator"/>
+<onnode o="@mserver2"/>
+</component>
+<component id="integration">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:adapter"/>
+<hasproperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
+<hascomponenttype o="MockIndivoIntegrationAdapter"/>
+<onnode o="@mserver2"/>
+</component>
+<component id="ack">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="fill_err_segment_in_ack:true"/>
+<hasproperty o="application_namespace_id:ContinuaConnector"/>
+<hasproperty o="application_universal_id:1234567890ABCDEF"/>
+<hasproperty o="application_universal_id_type:EUI-64"/>
+<hasproperty o="messageProfileIdentifier_entityIdentifier:IHE PCD ORU-R012006"/>
+<hasproperty o="messageProfileIdentifier_namespaceId:HL7"/>
+<hasproperty o="messageProfileIdentifier_universalId:2.16.840.1.113883.9.n.m"/>
+<hasproperty o="messageProfileIdentifier_universalIdType:HL7"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<hascomponenttype o="ContinuaAcknowledgementMediator"/>
+<onnode o="@mserver2"/>
+</component>
+<component id="hl7-rest2">
+<hascomponenttype o="HL7-REST-MessageAdapter"/>
+<onnode o="@aserver2"/>
+</component>
+<master id="master">
+<locatedin o="cube://localhost:38000"/>
+</master>
+</elements>
+</archetype>
+</cube>
+

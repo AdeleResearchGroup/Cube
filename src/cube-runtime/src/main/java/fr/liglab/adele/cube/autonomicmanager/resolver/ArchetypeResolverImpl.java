@@ -51,57 +51,21 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         }
     }
 
-    public void resolveUncheckedInstance(ManagedElement instance) {
+    public synchronized void resolveUncheckedInstance(ManagedElement instance) {
+
         if (instance == null) return;
         if (instance.getState() == ManagedElement.INVALID) {
-            //System.out.println(getAutonomicManager().getUri()+ " resolving "+instance.getName()+" ...");
-            info("resolving INVALID "+instance.getName()+" '"+instance.getUUID()+"'...");
-
-            ResolutionGraph rg = new ResolutionGraph(this);
-
-            MultiValueVariable root = new MultiValueVariable(rg);
-            rg.setRoot(root);
-
-            try {
-                ManagedElement desc = (ManagedElement) instance.clone();
-                root.setDescription(desc);
-                root.addValue(instance.getUUID());
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
-            ResolutionMeasure m = new ResolutionMeasure(getAutonomicManager().getUri(), instance.getName());
-            if (instance.getName().equalsIgnoreCase(Component.NAME)) {
-                m.setComment(instance.getAttribute(Component.CORE_COMPONENT_TYPE));
-            } else if (instance.getName().equalsIgnoreCase(Node.NAME)) {
-                m.setComment(instance.getAttribute(Node.CORE_NODE_TYPE));
-            } else if (instance.getName().equalsIgnoreCase(Scope.NAME)) {
-                m.setComment(instance.getAttribute(Scope.CORE_SCOPE_ID));
-            } else if (instance.getName().equalsIgnoreCase(Master.NAME)) {
-                m.setComment(instance.getAttribute(Master.NAME));
-            }
-            m.start();
-            if (rg.resolve()) {
-                m.end();
-                m.setResolved(true);
-                info(instance.getName()+" '"+instance.getUUID()+"' is resolved!");
-                if (validateSolution(rg)) {
-                    //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
-                    //am.getRuntimeModelController().getRuntimeModel().refresh();
-                    am.getRuntimeModelController().getRuntimeModel().refresh();
+            synchronized (this) {
+                if (instance.isInResolution() == false) {
+                    instance.setInResolution(true);
+                    info("resolving INVALID "+instance.getName()+" '"+instance.getUUID()+"'...");
+                    Resolution res = new Resolution(this, instance);
+                    res.resolve();
                 }
-            } else {
-                m.end();
-                m.setResolved(false);
-                //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
-                info("no solution found for "+instance.getName()+": " + instance.getUUID());
             }
-            m.calculate();
-            getAutonomicManager().getAdministrationService().getPerformanceChecker().addResolutionMeasure(m);
-            //instance.setInResolution(false);
-            //am.getRuntimeModelController().getRuntimeModel().refresh();
         }
     }
-
+    /*
     private boolean validateSolution(ResolutionGraph rg) {
         // TODO should check "am" attribute to check if it should added here or in another runtime model part
         Variable root = rg.getRoot();
@@ -155,7 +119,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             }
         }
         return changed;
-    }
+    }*/
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// HELPERS ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,6 +131,14 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         msg.setReplyTo(am.getUri());
         msg.setFrom(am.getUri());
         msg.setAttachment(me);
+        String links="";
+        for (Reference r : me.getReferences()) {
+            for (String ref : r.getReferencedElements()) {
+                String am = getAutonomicManager().getRuntimeModelController().getAutonomicManagerOf(ref);
+                links+=ref+"@@"+am+"####";
+            }
+        }
+        msg.addHeader("links", links);
         msg.setObject("resolution");
         msg.setBody("moveManagedElement");
         try {
@@ -189,7 +161,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         }
     }
 
-    public List<String> findFromRuntimeModel(ManagedElement description) {
+    public synchronized List<String> findFromRuntimeModel(ManagedElement description) {
 
         List<String> result = new ArrayList<String>();
         if (description != null) {
@@ -211,12 +183,11 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                         if (resultmsg.getBody() != null) {
                             String[] tmp = resultmsg.getBody().toString().split(",");
                             for (int i=0; i<tmp.length; i++) {
-                                if (tmp[i] != null && tmp[i].length()>0) {
+                                if (tmp[i] != null && tmp[i].length()>0 && tmp[i].contains("###")) {
                                     String[] tmp2 = tmp[i].split("###");
                                     String agenturi = tmp2[0];
                                     String elementuuid = tmp2[1];
                                     if (!agenturi.equalsIgnoreCase(am.getUri())) {
-
                                         this.am.getExternalInstancesHandler().addExternalInstance(elementuuid, agenturi);
                                     }
                                     //System.out.println("************* adding "+ elementuuid);
@@ -231,6 +202,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 return result;
             }
             RuntimeModel rm = am.getRuntimeModelController().getRuntimeModel();
+
             for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.VALID)) {
                 if (mes.isInResolution() == false) {
                     int compResult = ModelUtils.compareTwoManagedElements(description, mes);
@@ -490,9 +462,26 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                     getAutonomicManager().getRuntimeModelController().getRuntimeModel().refresh();
                 } else
                 if (msg.getBody().toString().equalsIgnoreCase("moveManagedElement")) {
+
                     ManagedElement me = msg.getAttachment();
                     if (me != null) {
                         am.getRuntimeModelController().addManagedElement(me);
+                    }
+                    Object links = msg.getHeader("links");
+                    if (links != null) {
+                        String[] tmp = links.toString().split("####");
+                        if (tmp != null) {
+                            for (int i=0; i<tmp.length;i++) {
+                                String[] refs = tmp[i].split("@@");
+                                if (refs != null && refs.length == 2) {
+                                    String a1 = refs[0];
+                                    String a2 = refs[1];
+                                    if (a2 != null && !a2.equalsIgnoreCase(this.getAutonomicManager().getUri())) {
+                                        getAutonomicManager().getExternalInstancesHandler().addExternalInstance(a1, a2);
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else
                 if (msg.getBody().toString().equalsIgnoreCase("findFromRuntimeModel")) {

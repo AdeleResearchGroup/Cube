@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cube>
+<archetype id="net.debbabi.cube.test" version="1.0" >
+<goals>
+<goal id="mygoal" description="generated from Archetype Designer">
+<InScope s="@PC" o="@lan" r="FC" />
+<InScope s="@Smartphone" o="@lan" r="FC" />
+</goal>
+</goals>
+<elements>
+<master id="master">
+<locatedin o="cube://localhost:38001"/>
+</master>
+<Scope id="lan">
+<ControlledBy o="@master"/>
+<HasScopeId o="LAN"/>
+</Scope>
+<Node id="PC">
+<HasNodeType o="pc"/>
+</Node>
+<Node id="Smartphone">
+<HasNodeType o="android"/>
+</Node>
+</elements>
+</archetype>
+</cube>
+

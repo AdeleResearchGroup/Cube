@@ -86,7 +86,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * Gets the instance current state.
      * @return
      */
-    public int getState() {
+    public synchronized int getState() {
         return this.state;
     }
 
@@ -95,7 +95,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      *
      * @return
      */
-    public String getStateAsString() {
+    public synchronized String getStateAsString() {
         switch (this.state) {
             case UNMANAGED:
                 return "UNMANAGED";
@@ -127,7 +127,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
             setAutonomicManager(autonomicManagerUri);
     }
 
-    public int updateState(int newState) {
+    public synchronized int updateState(int newState) {
         int oldState = this.state;
         this.state = newState;
         if (newState == VALID) {
@@ -137,15 +137,15 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         return oldState;
     }
 
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         this.name = name;
     }
 
-    public void setNamespace(String namespace) {
+    public synchronized void setNamespace(String namespace) {
         this.namespace = namespace;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         /*
         try {
             throw new Exception("getName() function of ManagedElement should be implemented!");
@@ -155,7 +155,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         return this.name;
     }
 
-    public String getNamespace() {
+    public synchronized String getNamespace() {
         /*
         try {
             throw new Exception("getName() function of ManagedElement should be implemented!");
@@ -166,19 +166,19 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
     }
 
 
-    public String getFullname() {
+    public synchronized String getFullname() {
         return this.getNamespace()+":"+getName();
     }
 
-    public String getAutonomicManager() {
+    public synchronized String getAutonomicManager() {
         return this.am;
     }
 
-    public void setAutonomicManager(String uri) {
+    public synchronized void setAutonomicManager(String uri) {
         this.am = uri;
     }
 
-    public String getUUID() {
+    public synchronized String getUUID() {
         return this.uuid;
     }
 
@@ -186,7 +186,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * Gets the URI of the current Managed ElementDescription.
      * @return
      */
-    public String getUri() {
+    public synchronized String getUri() {
         return getAutonomicManager() + "/" + getUUID();
     }
 
@@ -194,8 +194,8 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * Get Managed ElementDescription Properties
      * @return
      */
-    public synchronized List<Attribute> getAttributes() {
-        return this.attributes;
+    public List<Attribute> getAttributes() {
+        synchronized (this.attributes) { return this.attributes; }
     }
 
     /**
@@ -206,9 +206,11 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
     private Attribute _getAttribute(String name) {
 
         if (name != null && name.length() > 0) {
-            for (Attribute p : this.getAttributes()) {
-                if (p.getName() != null && p.getName().equalsIgnoreCase(name.toLowerCase())) {
-                    return p;
+            synchronized (this.attributes) {
+                for (Attribute p : this.attributes) {
+                    if (p.getName() != null && p.getName().equalsIgnoreCase(name.toLowerCase())) {
+                        return p;
+                    }
                 }
             }
         }
@@ -220,7 +222,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name
      * @return NULL if 'name' is null or no property found with 'name' name; the value of the found property other else
      */
-    public synchronized String getAttribute(String name) {
+    public String getAttribute(String name) {
         if (name != null && name.length() > 0) {
             Attribute p = _getAttribute(name);
             if (p != null) {
@@ -236,11 +238,13 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name Attribute name
      * @return TRUE if it has the provided property.
      */
-    public synchronized  boolean hasAttribute(String name) {
+    public   boolean hasAttribute(String name) {
         if (name != null) {
-            for(Attribute p : this.attributes) {
-                if (p.getName().equalsIgnoreCase(name)) {
-                    return true;
+            synchronized (this.attributes) {
+                for(Attribute p : this.attributes) {
+                    if (p.getName().equalsIgnoreCase(name)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -254,18 +258,22 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @return TRUE if the property added; FALSE other else.
      * @throws PropertyExistException
      */
-    public synchronized boolean addAttribute(String name, String value) throws PropertyExistException, InvalidNameException {
+    public boolean addAttribute(String name, String value) throws PropertyExistException, InvalidNameException {
         if (name == null || name.length() == 0) {
             return false;
         }
         if (_getAttribute(name.toLowerCase()) != null) {
             throw new PropertyExistException("You are trying to add an existing property '"+name+"'!");
         }
-        return this.attributes.add(new Attribute(name.toLowerCase(), value));
+        synchronized (this.attributes) {
+            return this.attributes.add(new Attribute(name.toLowerCase(), value));
+        }
     }
 
-    public synchronized boolean addAttribute(Attribute a) {
-        return this.attributes.add(a);
+    public boolean addAttribute(Attribute a) {
+        synchronized (this.attributes) {
+            return this.attributes.add(a);
+        }
     }
 
     /**
@@ -288,7 +296,7 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         return null;
     }
 
-    public int validate() {
+    public synchronized int validate() {
         int old = updateState(VALID);
         setChanged();
         notifyObservers();
@@ -299,8 +307,10 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * Get Managed ElementDescription References
      * @return
      */
-    public synchronized List<Reference> getReferences() {
-        return this.references;
+    public List<Reference> getReferences() {
+        synchronized (this.references) {
+            return this.references;
+        }
     }
 
     /**
@@ -308,11 +318,15 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name
      * @return
      */
-    public synchronized Reference getReference(String name) {
+    public Reference getReference(String name) {
         if (name != null && name.length() > 0) {
-            for (Reference r : this.getReferences()) {
-                if (r.getName() != null && r.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
-                    return r;
+            synchronized (this.references) {
+                for (Reference r : this.references) {
+                    synchronized (r) {
+                        if (r.getName() != null && r.getName().toLowerCase().equalsIgnoreCase(name.toLowerCase())) {
+                            return r;
+                        }
+                    }
                 }
             }
         }
@@ -325,38 +339,46 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      * @param name Reference name
      * @return TRUE if it has the provided reference name.
      */
-    public synchronized boolean hasReference(String name) {
+    public boolean hasReference(String name) {
         if (name != null) {
-            for (Reference r : getReferences()) {
-                if (r.getName().equalsIgnoreCase(name)) {
-                    return true;
+            synchronized (this.references) {
+                for (Reference r : this.references) {
+                    synchronized (r) {
+                        if (r.getName().equalsIgnoreCase(name)) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
         return false;
     }
 
-    public synchronized Reference addReference(String name, boolean onlyOne) throws InvalidNameException {
+    public Reference addReference(String name, boolean onlyOne) throws InvalidNameException {
         Reference r = getReference(name);
-        if (getReference(name) == null) {
+        if (r == null) {
             r = new Reference(name, onlyOne);
-            this.references.add(r);
+            synchronized (this.references) {
+                this.references.add(r);
+            }
         }
         return r;
     }
 
-    public synchronized void addReference(Reference r) {
-        if (getReference(r.getName()) == null) {
-            this.references.add(r);
+    public void addReference(Reference r) {
+        synchronized (this.references) {
+            if (getReference(r.getName()) == null) {
+                this.references.add(r);
+            }
         }
     }
 
-    public void setState(int state) {
+    public synchronized void setState(int state) {
         this.state = state;
     }
 
 
-    public void setUUID(String uuid) {
+    public synchronized void setUUID(String uuid) {
         this.uuid = uuid;
     }
 
@@ -365,67 +387,87 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
      *
      * @return
      */
-    public String getDocumentation() {
+    public synchronized String getDocumentation() {
         String msg = "";
         msg += "\n + " + this.getUri();
         msg += "\n    | namespace: " + getNamespace();
         msg += "\n    | name: " + getName();
-        if (this.getAttributes().size() > 0) {
-            msg += "\n    | ATTRIBUTES";
-            for (Attribute p : this.getAttributes()) {
-                msg += "\n    |   " + p.getName() + "=" + p.getValue();
+        synchronized (this.attributes) {
+            if (this.attributes.size() > 0) {
+                msg += "\n    | ATTRIBUTES";
+                for (Attribute p : this.getAttributes()) {
+                    synchronized (p) {
+                        msg += "\n    |   " + p.getName() + "=" + p.getValue();
+                    }
+                }
             }
         }
-        if (this.getReferences().size() > 0) {
-            msg += "\n    | REFERENCES";
-            for (Reference r : this.getReferences()) {
-                msg += "\n    |   " + r.getName() + ":";
-                for (String s : r.getReferencedElements()) {
-                    msg += "\n    |     " + s;
+        synchronized (this.references) {
+            if (this.references.size() > 0) {
+                msg += "\n    | REFERENCES";
+                for (Reference r : this.getReferences()) {
+                    synchronized (r) {
+                        msg += "\n    |   " + r.getName() + ":";
+                        for (String s : r.getReferencedElements()) {
+                            msg += "\n    |     " + s;
+                        }
+                    }
                 }
             }
         }
         return msg;
     }
 
-    public String getHTMLDocumentation() {
+    public synchronized String getHTMLDocumentation() {
         String msg = "<html>";
         msg += "<br/> <b>" + this.getUUID() + "</b><br/><hr/>";
         msg += "<p><b>MANAGED ELEMENT</b><br/><ul>";
         msg += "<li> " + this.getName() + "</li>";
         msg += "</ul>";
-        if (this.getAttributes().size() > 0) {
-            msg += "<p><b>ATTRIBUTES</b><br/><ul>";
-            for (Attribute p : this.getAttributes()) {
-                msg += "<li> " + p.getName() + "=" + p.getValue() + "</li>";
-            }
-            msg += "</ul></p>";
-        }
-        if (this.getReferences().size() > 0) {
-            msg += "<p><b>REFERENCES</b><ul>";
-            for (Reference r : this.getReferences()) {
-                msg += "<li>" + r.getName() + ":<br/>";
-                msg += "<ul>";
-                for (String s : r.getReferencedElements()) {
-                    msg += "<li>" + s + "</li>";
+        synchronized (this.attributes) {
+            if (this.attributes.size() > 0) {
+                msg += "<p><b>ATTRIBUTES</b><br/><ul>";
+                for (Attribute p : this.attributes) {
+                    synchronized (p) {
+                        msg += "<li> " + p.getName() + "=" + p.getValue() + "</li>";
+                    }
                 }
-                msg += "</ul>";
-                msg += "</li>";
+                msg += "</ul></p>";
             }
-            msg += "</ul></p>";
+        }
+        synchronized (this.references) {
+            if (this.references.size() > 0) {
+                msg += "<p><b>REFERENCES</b><ul>";
+                for (Reference r : this.references) {
+                    synchronized (r) {
+                        msg += "<li>" + r.getName() + ":<br/>";
+                        msg += "<ul>";
+                        for (String s : r.getReferencedElements()) {
+                            msg += "<li>" + s + "</li>";
+                        }
+                    }
+                    msg += "</ul>";
+                    msg += "</li>";
+                }
+                msg += "</ul></p>";
+            }
         }
         return msg + "</html>";
     }
 
-    public synchronized  boolean removeReferencedElement(String ref) {
+    public boolean removeReferencedElement(String ref) {
         boolean changed = false;
         if (ref != null) {
             List<Reference> toBeRemoved = new ArrayList<Reference>();
-            for (Reference r : this.references) {
-                if (r.removeReferencedElement(ref) == true) {
-                    changed = true;
-                    if (r.getReferencedElements().size() == 0) {
-                        toBeRemoved.add(r);
+            synchronized (this.references) {
+                for (Reference r : this.references) {
+                    synchronized (r) {
+                        if (r.removeReferencedElement(ref) == true) {
+                            changed = true;
+                            if (r.getReferencedElements().size() == 0) {
+                                toBeRemoved.add(r);
+                            }
+                        }
                     }
                 }
             }
@@ -440,43 +482,53 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         return changed;
     }
 
-    public synchronized boolean removeEmptyAttributes() {
+    public boolean removeEmptyAttributes() {
         List<Attribute> toBeRemoved = new ArrayList<Attribute>();
-        for (Attribute p : getAttributes()) {
-            if (p.getValue() == null) {
-                toBeRemoved.add(p);
+        synchronized (this.attributes) {
+            for (Attribute p : this.attributes) {
+                synchronized (p) {
+                    if (p.getValue() == null) {
+                        toBeRemoved.add(p);
+                    }
+                }
             }
-
         }
         boolean changed = false;
         for (Attribute p : toBeRemoved) {
-            this.attributes.remove(p);
+            synchronized (this.attributes) {
+                this.attributes.remove(p);
+            }
             changed = true;
         }
         return changed;
     }
 
-    public synchronized boolean removeEmptyReferences() {
+    public boolean removeEmptyReferences() {
         List<Reference> toBeRemoved = new ArrayList<Reference>();
-        for (Reference r : getReferences()) {
-            if (r.getReferencedElements().size() == 0) {
-                toBeRemoved.add(r);
+        synchronized (this.references) {
+            for (Reference r : this.references) {
+                synchronized (r) {
+                    if (r.getReferencedElements().size() == 0) {
+                        toBeRemoved.add(r);
+                    }
+                }
             }
-
         }
         boolean changed = false;
         for (Reference r : toBeRemoved) {
-            this.references.remove(r);
+            synchronized (this.references) {
+                this.references.remove(r);
+            }
             changed = true;
         }
         return changed;
     }
 
-    public boolean isInResolution() {
+    public synchronized boolean isInResolution() {
         return inResolution;
     }
 
-    public void setInResolution(boolean inResolution) {
+    public synchronized void setInResolution(boolean inResolution) {
         this.inResolution = inResolution;
     }
 
@@ -490,13 +542,15 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
         me.setInResolution(isInResolution());
         me.setState(getState());
         me.setUUID(getUUID());
-
-        for (Attribute a : getAttributes()) {
-            me.addAttribute((Attribute)a.clone());
+        synchronized (this.attributes) {
+            for (Attribute a : this.attributes) {
+                me.addAttribute((Attribute)a.clone());
+            }
         }
-
-        for (Reference r : getReferences()) {
-            me.addReference((Reference) r.clone());
+        synchronized (this.references) {
+            for (Reference r : this.references) {
+                me.addReference((Reference) r.clone());
+            }
         }
         return me;
     }

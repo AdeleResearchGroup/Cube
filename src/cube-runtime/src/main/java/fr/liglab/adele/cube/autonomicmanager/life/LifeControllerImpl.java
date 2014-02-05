@@ -8,10 +8,7 @@ import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.Reference;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -20,7 +17,7 @@ import static java.lang.Thread.sleep;
  * Date: 9/22/13
  * Time: 6:31 PM
  */
-public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , Runnable {
+public class LifeControllerImpl implements ExternalInstancesHandler , Runnable {
 
 
     private AutonomicManager agent;
@@ -47,7 +44,7 @@ public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , 
      */
     Map<String , String> externalInstances;
 
-    public ExternalInstancesHandlerImpl(AutonomicManager am) {
+    public LifeControllerImpl(AutonomicManager am) {
 
         // life controller
         this.agent = am;
@@ -71,28 +68,62 @@ public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , 
         }
     }
 
-    public synchronized String getAutonomicManagerOfExternalInstance(String uuid) {
-        return this.externalInstances.get(uuid);
+    public String getAutonomicManagerOfExternalInstance(String uuid) {
+        synchronized (this.externalInstances) {
+            return this.externalInstances.get(uuid);
+        }
     }
 
-    public synchronized void removeExternalAutonomicManagerInstances(String agent_uri) {
-        List<String> toBeRemoved = new ArrayList<String>();
-        if (this.externalInstances.containsValue(agent_uri)) {
-            for (String uuid : this.externalInstances.keySet()) {
-                String agent = this.externalInstances.get(uuid);
-                if (agent != null && agent.equalsIgnoreCase(agent_uri)) {
-                    toBeRemoved.add(uuid);
+    public void removeExternalInstance(String uuid) {
+        if (uuid != null) {
+            Set set = this.externalInstances.keySet();
+            Iterator itr = set.iterator();
+            while (itr.hasNext())
+            {
+                Object o = itr.next();
+                if (o.toString().equalsIgnoreCase(uuid)) {
+                    itr.remove();
+                    return;
                 }
             }
         }
-        this.agent.getRuntimeModelController().getRuntimeModel().removeReferencedElements(toBeRemoved);
     }
 
-    public synchronized List<String> getExternalAutonomicManagers() {
+    public void removeExternalAutonomicManagerInstances(String agent_uri) {
+        List<String> toBeRemoved = new ArrayList<String>();
+        synchronized (this.externalInstances) {
+            if (this.externalInstances.containsValue(agent_uri)) {
+                for (String uuid : this.externalInstances.keySet()) {
+                    String agent = this.externalInstances.get(uuid);
+                    if (agent != null && agent.equalsIgnoreCase(agent_uri)) {
+                        toBeRemoved.add(uuid);
+                    }
+                }
+            }
+        }
+
+        this.agent.getRuntimeModelController().getRuntimeModel().removeReferencedElements(toBeRemoved);
+        for (String uuid : toBeRemoved) {
+            Set set = this.externalInstances.keySet();
+            Iterator itr = set.iterator();
+            while (itr.hasNext())
+            {
+                Object o = itr.next();
+                if (o.toString().equalsIgnoreCase(uuid)) {
+                    itr.remove(); //remove the pair if key length is less then 3
+                    return;
+                }
+            }
+        }
+    }
+
+    public List<String> getExternalAutonomicManagers() {
         List<String> result = new ArrayList<String>();
-        for (String a :this.externalInstances.values()) {
-            if (!result.contains(a)) {
-                result.add(a);
+        synchronized (this.externalInstances) {
+            for (String a :this.externalInstances.values()) {
+                if (!result.contains(a)) {
+                    result.add(a);
+                }
             }
         }
         return result;
@@ -156,7 +187,7 @@ public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , 
                     this.monitoredAMs.remove(a);
                 }
                 toBeRemoved.add(a);
-                System.out.println("[WARNING] autonomicmanager '"+a+"' is not connected!");
+                System.out.println("[LC:"+this.agent.getUri()+":work] autonomicmanager '"+a+"' is maybe not connected!");
             } else {
                 // send message
                 CMessage msg = new CMessage();
@@ -166,6 +197,7 @@ public class ExternalInstancesHandlerImpl implements ExternalInstancesHandler , 
                 msg.setObject("keepalive");
                 try {
                     this.agent.getCommunicator().sendMessage(msg);
+                   // System.out.println("[LC:"+this.agent.getUri()+":keepAliveSent to ] "+a);
                 } catch (CommunicationException e) {
                     //e.printStackTrace();
                 } catch (IOException e) {

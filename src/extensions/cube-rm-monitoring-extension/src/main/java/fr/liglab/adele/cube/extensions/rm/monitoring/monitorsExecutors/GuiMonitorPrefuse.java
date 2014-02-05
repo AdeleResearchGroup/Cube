@@ -107,35 +107,37 @@ public class GuiMonitorPrefuse extends JFrame {
 		
 	}
 	
-	synchronized void addNode(final ManagedElement ci) {
+    void addNode(final ManagedElement ci) {
         try {
             if (ci != null && ci.getState() != ManagedElement.UNMANAGED) {
-                if (this.nodes.get(ci.getUri().toString()) == null) {
-                    final Node N = graph.addNode();
+                synchronized (nodes) {
+                    if (this.nodes.get(ci.getUri().toString()) == null) {
+                        final Node N = graph.addNode();
 
-                    String name = ci.getName();
-                    N.set(ID, ci.getUUID());
-                    if (ci.getName().equalsIgnoreCase(Component.NAME))
-                        N.set(LABEL, "Comp ("+((Component)ci).getComponentType() + ")");
-                    else if (ci.getName().equalsIgnoreCase(fr.liglab.adele.cube.extensions.core.model.Node.NAME))
-                        N.set(LABEL, "Node ("+((fr.liglab.adele.cube.extensions.core.model.Node)ci).getNodeType() + ")");
-                    else if (ci.getName().equalsIgnoreCase(Scope.NAME))
-                        N.set(LABEL, "Scope ("+((Scope)ci).getScopeId() + ")");
-                    else
-                        N.set(LABEL, ci.getName());
-                    N.set(DESCRIPTION, ci.getHTMLDocumentation());
-                    N.set(STATE, ci.getState());
-                    //synchronized (nodes){
-                        nodes.put(ci.getUUID(), N);
-                    //}
-                    for (Reference r : ci.getReferences()) {
-                        for (String ref : r.getReferencedElements()) {
-                            //synchronized (nodes){
-                                Node n2 = this.nodes.get(ref);
-                                if (n2 != null) {
-                                    graph.addEdge(N, n2);
-                                }
-                            //}
+                        String name = ci.getName();
+                        N.set(ID, ci.getUUID());
+                        if (ci.getName().equalsIgnoreCase(Component.NAME))
+                            N.set(LABEL, "Comp ("+((Component)ci).getComponentType() + ")");
+                        else if (ci.getName().equalsIgnoreCase(fr.liglab.adele.cube.extensions.core.model.Node.NAME))
+                            N.set(LABEL, "Node ("+((fr.liglab.adele.cube.extensions.core.model.Node)ci).getNodeType() + ")");
+                        else if (ci.getName().equalsIgnoreCase(Scope.NAME))
+                            N.set(LABEL, "Scope ("+((Scope)ci).getScopeId() + ")");
+                        else
+                            N.set(LABEL, ci.getName());
+                        N.set(DESCRIPTION, ci.getHTMLDocumentation());
+                        N.set(STATE, ci.getState());
+                        //synchronized (nodes){
+                            nodes.put(ci.getUUID(), N);
+                        //}
+                        for (Reference r : ci.getReferences()) {
+                            for (String ref : r.getReferencedElements()) {
+                                //synchronized (nodes){
+                                    Node n2 = this.nodes.get(ref);
+                                    if (n2 != null) {
+                                        graph.addEdge(N, n2);
+                                    }
+                                //}
+                            }
                         }
                     }
                 }
@@ -273,18 +275,18 @@ public class GuiMonitorPrefuse extends JFrame {
 		return d;
 	}
 
-	public synchronized void updateGraph() {
+	public void updateGraph() {
 		//System.out.println("udpdating graph..");
         try {
-            nodes.clear();
-            nodes = new Hashtable();
-            graph.clear();
+            synchronized (nodes) {
+                nodes.clear();
+                nodes = new Hashtable();
+                graph.clear();
 
-
-            for (ManagedElement i : this.cubeInstance.getRuntimeModelController().getRuntimeModel().getElements()) {
-                this.addNode(i);
+                for (ManagedElement i : this.cubeInstance.getRuntimeModelController().getRuntimeModel().getElements()) {
+                    this.addNode(i);
+                }
             }
-
             if (this.cubeInstance != null) {
                 setTitle(this.cubeInstance.getUri().toString());
 

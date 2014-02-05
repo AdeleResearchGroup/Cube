@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<cube>
+  <autonomic-manager>
+    <host value="localhost"/>
+    <port value="38005"/>
+    <archetypeUrl value="file:../medical.arch"/>
+	<debug value="false"/>
+	<rmcheck-interval value="3000"/>
+    <keepalive-retry value="2"/>
+    <keepalive-interval value="3000"/>
+    
+	<properties>		
+		<property name="node.type" value="MedServer"/>
+	</properties>
+	
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core"/>
+		
+		<extension id="fr.liglab.adele.cube.script">
+			<property name="1" value="newi node type=${node.type}"/>	
+		</extension>	
+		<extension id="fr.liglab.adele.cube.rm.monitoring"/>
+		<!--
+		<extension id="fr.liglab.adele.cube.cilia">
+			<property name="connectorType" value="joram"/>
+		</extension>	
+		-->
+	</extensions>
+  </autonomic-manager>
+</cube>
+
+
+
+

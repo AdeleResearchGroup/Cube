@@ -22,6 +22,9 @@ public interface Extension {
     public void start();
     public void stop();
     public void destroy();
+    public void starting();
+    public void stopping();
+    public void destroying();
 
 
 }

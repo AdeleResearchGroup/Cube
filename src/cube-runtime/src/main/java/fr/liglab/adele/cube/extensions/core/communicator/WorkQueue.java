@@ -35,6 +35,10 @@ public class WorkQueue {
 		public WorkQueue(String name, int nThread) {
 			this.m_name = name;
 			this.m_size = nThread;
+            this.queue = new LinkedList();
+            this.threads = new ArrayList(m_size);
+            this.m_priority = Thread.NORM_PRIORITY;
+            this.maxJobQueued = 0;
 			start();
 		}
 
@@ -43,11 +47,7 @@ public class WorkQueue {
 		 * 
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#start()
 		 */
-		public synchronized void start() {
-			this.queue = new LinkedList();
-			this.threads = new ArrayList(m_size);
-			this.m_priority = Thread.NORM_PRIORITY;
-			this.maxJobQueued = 0;
+		public void start() {
 			for (int i = 0; i < m_size; i++) {
 				addThread(i);
 			}
@@ -60,7 +60,10 @@ public class WorkQueue {
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#stop()
 		 */
 		public synchronized void stop() {
-			int size = threads.size();
+            int size = 0;
+            synchronized (threads) {
+			    size = threads.size();
+            }
 			for (int i = 0; i < size; i++) {
 				removeThread();
 			}
@@ -68,7 +71,9 @@ public class WorkQueue {
 
 		private void addThread(int i) {
 			Worker worker = new Worker();
-			threads.add(worker);
+            synchronized (threads) {
+			    threads.add(worker);
+            }
 			worker.setDaemon(true) ;
 			worker.setName(m_name + "-" + i);
 			worker.setPriority(m_priority);
@@ -78,15 +83,17 @@ public class WorkQueue {
 
 		private void removeThread() {
 			Worker worker;
-			if (threads.size() > 0) {
-				/* extract the worker thread in the list of pool thread */
-				worker = (Worker) threads.get(0);
-				threads.remove(0);
-				worker.stopped = true;
-				synchronized (queue) {
-					queue.notify();
-				}
-			}
+            synchronized (this.threads) {
+                if (threads.size() > 0) {
+                    /* extract the worker thread in the list of pool thread */
+                    worker = (Worker) threads.get(0);
+                    threads.remove(0);
+                    worker.stopped = true;
+                    synchronized (queue) {
+                        queue.notify();
+                    }
+                }
+            }
 		}
 
 		/*
@@ -101,10 +108,11 @@ public class WorkQueue {
 				//logger.error(msg);
 				throw new IllegalArgumentException(msg);
 			}
-
-			for (int i = 0; i < threads.size(); i++) {
-				((Worker) threads.get(i)).setPriority(newPriority);
-			}
+            synchronized (this.threads) {
+                for (int i = 0; i < threads.size(); i++) {
+                    ((Worker) threads.get(i)).setPriority(newPriority);
+                }
+            }
 			/*
 			if (logger.isDebugEnabled()) {
 				logger.debug(this.m_name + " priority =" + newPriority);
@@ -116,7 +124,7 @@ public class WorkQueue {
 		 * 
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#getPriority()
 		 */
-		public int getPriority() {
+		public synchronized int getPriority() {
 			return this.m_priority;
 		}
 
@@ -126,7 +134,9 @@ public class WorkQueue {
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#size()
 		 */
 		public int size() {
-			return threads.size();
+			synchronized (threads) {
+                return threads.size();
+            }
 		}
 
 		/*
@@ -146,13 +156,8 @@ public class WorkQueue {
 						removeThread();
 					}
 				}
-			}
-			/*
-			if (logger.isDebugEnabled()) {
-				logger.debug(this.m_name + " size =" + newSize);
-			}*/
-
-			return threads.size();
+			    return threads.size();
+            }
 		}
 
 		/*
@@ -161,7 +166,9 @@ public class WorkQueue {
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#sizeJobQueued()
 		 */
 		public int sizeJobQueued() {
-			return queue.size();
+            synchronized (queue) {
+			    return queue.size();
+            }
 		}
 
 		/*
@@ -184,7 +191,7 @@ public class WorkQueue {
 		 * 
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#getMaxjobQueued()
 		 */
-		public int sizeMaxjobQueued() {
+		public synchronized int sizeMaxjobQueued() {
 			return maxJobQueued;
 		}
 
@@ -193,7 +200,7 @@ public class WorkQueue {
 		 * 
 		 * @see fr.liglab.adele.cilia.framework.utils.WorkQueue#resetMaxJobQueued()
 		 */
-		public void resetMaxJobQueued() {
+		public synchronized void resetMaxJobQueued() {
 			maxJobQueued = 0;
 		}
 

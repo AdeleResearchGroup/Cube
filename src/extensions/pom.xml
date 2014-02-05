@@ -33,6 +33,7 @@
 		<module>cube-rm-monitoring-extension</module>
         <module>cube-script-extension</module>
         <module>cube-cilia-extension</module>
+        <module>cube-joram-extension</module>
 		<!--module>cube-loadbalancing-extension</module-->
 	</modules>	
 

@@ -23,19 +23,18 @@ import fr.liglab.adele.cube.AutonomicManager;
 import fr.liglab.adele.cube.Configuration;
 import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.CommunicatorImpl;
-import fr.liglab.adele.cube.autonomicmanager.life.ExternalInstancesHandlerImpl;
+import fr.liglab.adele.cube.autonomicmanager.life.LifeControllerImpl;
 import fr.liglab.adele.cube.autonomicmanager.me.MonitorExecutorImpl;
 import fr.liglab.adele.cube.autonomicmanager.resolver.ArchetypeResolverImpl;
 import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelCheckerImpl;
 import fr.liglab.adele.cube.extensions.*;
 import fr.liglab.adele.cube.archetype.Archetype;
 import fr.liglab.adele.cube.archetype.ArchetypeException;
-import fr.liglab.adele.cube.autonomicmanager.life.LifeController;
+//import fr.liglab.adele.cube.autonomicmanager.life.LifeController;
 import fr.liglab.adele.cube.autonomicmanager.rmc.RuntimeModelControllerImpl;
 import fr.liglab.adele.cube.util.parser.ArchetypeParser;
 import fr.liglab.adele.cube.util.parser.ArchetypeParsingException;
 import fr.liglab.adele.cube.util.parser.ParseException;
-import fr.liglab.adele.cube.util.perf.PerformanceChecker;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -89,7 +88,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
     /**
      * Life Controller.
      */
-    private LifeController lifeController;
+    //private LifeController lifeController;
     private ExternalInstancesHandler externalInstancesHandler;
 
     private RuntimeModelChecker checker;
@@ -135,8 +134,6 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
      */
     public AutonomicManagerImpl(AdministrationService admin, Configuration config) throws AutonomicManagerException {
 
-
-
         this.adminService = admin;
         this.config = config;
         this.localId = "" + index++;
@@ -175,8 +172,8 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
         this.rmController = new RuntimeModelControllerImpl(this);
 
         // Life Controller
-        this.lifeController = new LifeController(this);
-        externalInstancesHandler = new ExternalInstancesHandlerImpl(this);
+        //this.lifeController = new LifeController(this);
+        externalInstancesHandler = new LifeControllerImpl(this);
         // __resolver
         this.resolver = new ArchetypeResolverImpl(this);
 
@@ -215,7 +212,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
 
         checker = new RuntimeModelCheckerImpl(this);
 
-        lifeController = new LifeController(this);
+        //lifeController = new LifeController(this);
 
 
     }
@@ -377,7 +374,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
         System.out.println("[INFO] >>>>>>>>> stopping autonomic manager: " + uri.toString());
         this.working = false;
         for (Extension ex: this.getExtensions()) {
-            ex.stop();
+            ex.stopping();
         }
 
         if (this.checker != null) {
@@ -396,7 +393,7 @@ public class AutonomicManagerImpl implements AutonomicManager, Runnable {
         this.working = false;
         this.destroyRequested = true;
         for (Extension ex: this.getExtensions()) {
-            ex.destroy();
+            ex.destroying();
         }
 
         if (this.checker != null) {

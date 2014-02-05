@@ -20,16 +20,10 @@ package fr.liglab.adele.cube.extensions.script.impl;
 
 
 import fr.liglab.adele.cube.AutonomicManager;
-import fr.liglab.adele.cube.autonomicmanager.NotFoundManagedElementException;
 import fr.liglab.adele.cube.extensions.AbstractExtension;
 import fr.liglab.adele.cube.extensions.ExtensionFactoryService;
 import fr.liglab.adele.cube.extensions.ExtensionPoint;
-import fr.liglab.adele.cube.extensions.core.CoreExtensionFactory;
-import fr.liglab.adele.cube.extensions.core.model.Master;
 import fr.liglab.adele.cube.extensions.script.monitorsExecutors.Scripter;
-import fr.liglab.adele.cube.metamodel.InvalidNameException;
-import fr.liglab.adele.cube.metamodel.ManagedElement;
-import fr.liglab.adele.cube.metamodel.PropertyExistException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +40,6 @@ public class ScriptExtension extends AbstractExtension {
 
     public ScriptExtension(AutonomicManager am, ExtensionFactoryService factory, Properties properties) {
         super(am, factory, properties);
-        s = new Scripter(this);
     }
 
     @Override
@@ -58,16 +51,18 @@ public class ScriptExtension extends AbstractExtension {
         return extensionPointsList;
     }
 
-    public void start() {
+    public void starting() {
+        System.out.println("[INFO] Starting script extension..");
+        s = new Scripter(this);
         s.start();
     }
 
 
-    public void stop() {
+    public void stopping() {
         System.out.println("[INFO] Stopping script extension..");
     }
 
-    public void destroy() {
+    public void destroying() {
 
     }
 

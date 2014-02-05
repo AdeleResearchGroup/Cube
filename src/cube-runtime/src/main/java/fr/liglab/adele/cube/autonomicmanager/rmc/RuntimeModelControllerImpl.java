@@ -20,7 +20,6 @@ package fr.liglab.adele.cube.autonomicmanager.rmc;
 
 import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.TimeOutException;
-import fr.liglab.adele.cube.autonomicmanager.life.ExternalInstancesHandlerImpl;
 import fr.liglab.adele.cube.extensions.ManagedElementExtensionPoint;
 import fr.liglab.adele.cube.metamodel.*;
 import fr.liglab.adele.cube.AutonomicManager;
@@ -161,7 +160,6 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
         if (isLocalInstance(managed_element_uuid)){
             ManagedElement me1 = getLocalElement(managed_element_uuid);
             if (me1 != null) {
-                //System.out.println("updating instance property! "+name+"="+newValue);
                 String old = me1.updateAttribute(name, newValue);
                 if (old != null && !old.equalsIgnoreCase(newValue)) {
                     me1.updateState(ManagedElement.INVALID);
@@ -299,6 +297,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
     }
 
     public boolean addReferencedElement(String managed_element_uuid, String reference_name, boolean onlyone, String referenced_element_uuid) throws InvalidNameException {
+
         if (isLocalInstance(managed_element_uuid)) {
             ManagedElement me1 = getLocalElement(managed_element_uuid);
             if (me1 != null) {
@@ -311,7 +310,10 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(managed_element_uuid)) {
+
             String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(managed_element_uuid);
+            String refamuri = this.getAutonomicManagerOf(referenced_element_uuid);
+
             if (auri != null) {
                 CMessage msg = new CMessage();
                 msg.setTo(auri);
@@ -321,6 +323,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 msg.addHeader("name", reference_name);
                 msg.addHeader("onlyone", onlyone==true?"true":"false");
                 msg.addHeader("refuuid", referenced_element_uuid);
+                msg.addHeader("refamuri", auri);
                 try {
                     CMessage resultmsg = sendAndWait(msg);
                     if (resultmsg != null) {
@@ -439,7 +442,6 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 }
             }
         } else if (isRemoteInstance(uuid)) {
-            //System.out.println("\n[RMC] getCopyOfManagedElement method is not implemented yet for remote instances!\n");
             String auri = this.am.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
             if (auri != null) {
                 CMessage msg = new CMessage();
@@ -450,7 +452,6 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                 try {
                     CMessage resultmsg = sendAndWait(msg);
                     if (resultmsg != null) {
-                        //System.out.println("getCopyOfManagedElement...return:\n"+msg.toString());
                         return resultmsg.getAttachment();
                     }
                 } catch (TimeOutException e) {
@@ -466,6 +467,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
     public void addManagedElement(ManagedElement managedElement) {
         if (managedElement != null) {
             ((RuntimeModelImpl)this.rm).add(managedElement, ManagedElement.INVALID);
+            am.getExternalInstancesHandler().removeExternalInstance(managedElement.getUUID());
         }
     }
 

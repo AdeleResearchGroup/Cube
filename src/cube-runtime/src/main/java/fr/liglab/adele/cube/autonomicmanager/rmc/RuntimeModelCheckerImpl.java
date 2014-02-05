@@ -40,7 +40,7 @@ public class RuntimeModelCheckerImpl implements RuntimeModelChecker, Runnable {
 
     public RuntimeModelCheckerImpl(AutonomicManager agent) {
         this.agent = agent;
-        //this.pulse = agent.getConfiguration().getPulse();
+        this.pulse = agent.getConfiguration().getPulse();
         t = new Thread(this);
         t.start();
     }

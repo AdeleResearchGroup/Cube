@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<cube>
+  <autonomic-manager>
+    <host value="localhost"/>
+    <port value="38002"/>
+    <keepalive-retry value="2"/>
+	<keepalive-interval value="2000"/>
+	<debug value="false"/>
+    <archetypeUrl value="file:test.arch"/>
+
+	<extensions>
+		<extension id="fr.liglab.adele.cube.core"/>
+		<extension id="fr.liglab.adele.cube.script">
+			<property name="1" value="newi node type=android"/>
+		</extension>
+		<extension id="fr.liglab.adele.cube.rm.monitoring">
+			<property name="auto-refresh" value="true"/>
+		</extension>
+	</extensions>
+	
+  </autonomic-manager>
+</cube>
+
+
+
+

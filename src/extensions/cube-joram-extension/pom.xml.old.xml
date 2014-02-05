@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	
+	<parent>
+		<groupId>fr.liglab.adele.cube</groupId>
+		<artifactId>extensions</artifactId>
+		<version>2.0</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.liglab.adele.cube.extensions</groupId>
+	<artifactId>cube-joram-extension</artifactId>
+	<version>2.0</version>
+	<name>Cube Joram Plugin</name>
+	<packaging>bundle</packaging>
+
+
+	<properties>
+		<bin-dir>../../../bin</bin-dir>
+	</properties>
+
+	<dependencies>
+<!--		<dependency>
+			<groupId>fr.liglab.adele.cube</groupId>
+			<artifactId>cube-core</artifactId>
+			<version>2.0</version>
+		</dependency>-->
+		<dependency>
+			<groupId>fr.liglab.adele.cube</groupId>
+			<artifactId>cube-runtime</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.apache.felix.ipojo.annotations</artifactId>
+			<version>1.6.0</version>
+		</dependency>
+	<dependency>
+		<groupId>org.ow2.joram</groupId>
+		<artifactId>a3-rt</artifactId>
+		<version>5.8.0</version>
+	</dependency>
+			<dependency>
+            <groupId>org.ow2.spec.ee</groupId>
+            <artifactId>ow2-jms-2.0-spec</artifactId>
+			<version>1.0.0</version>
+	</dependency>
+    <dependency>
+		<groupId>org.objectweb.joram</groupId>
+		<artifactId>joram-client-jms</artifactId>
+		<version>5.9.0</version>
+		<scope>system</scope>
+	   <systemPath>${basedir}/../../../lib/joram-adapter/joram-client-jms-5.9.0.jar</systemPath>
+	</dependency>        
+	<dependency>
+	<groupId>org.glassfish.main.javaee-api</groupId>
+	<artifactId>javax.jms</artifactId>
+	<version>3.1.2.2</version>
+</dependency>
+            
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+<!--						<Embed-Dependency>lucene, prefuse</Embed-Dependency> -->
+						<Private-Package>
+                            fr.liglab.adele.cube.plugins.joram,
+                            fr.liglab.adele.cube.plugins.joram.impl,
+                        </Private-Package>
+						<Include-Resource>
+						</Include-Resource>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-ipojo-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>ipojo-bundle</goal>
+						</goals>
+						<configuration>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.0.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<copy todir="${bin-dir}" preservelastmodified="true">
+									<fileset
+										file="${project.build.directory}/${project.build.finalName}.jar" />
+								</copy>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>

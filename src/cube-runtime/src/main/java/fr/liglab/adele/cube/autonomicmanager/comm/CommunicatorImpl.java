@@ -63,7 +63,8 @@ public class CommunicatorImpl implements Communicator {
 
     public void receiveMessage(CMessage msg) {
         notifyMessageArrival(msg);
-        //System.out.println("[INFO"+am.getUri()+"] Receive message:\n" + msg.toString());
+        //if (am.getUri().equalsIgnoreCase("cube://localhost:38000"))
+        //    System.out.println("[INFO"+am.getUri()+"] Receive message:\n" + msg.toString());
     }
 
     private void notifyMessageArrival(CMessage msg) {

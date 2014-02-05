@@ -38,23 +38,25 @@ import java.util.Properties;
 public class CiliaExtension extends AbstractExtension {
 
     CiliaMonitorExecutor ce;
-
+    CiliaContext cc;
     public CiliaExtension(AutonomicManager am, ExtensionFactoryService factory, Properties properties, CiliaContext cc) {
         super(am, factory, properties);
-        ce = new CiliaMonitorExecutor(this, cc);
+        this.cc = cc;
     }
 
     @Override
     public List<ExtensionPoint> getExtensionPoints() {
         List<ExtensionPoint> extensionPointsList = new ArrayList<ExtensionPoint>();
 
-        extensionPointsList.add(ce);
+	// poll periodic -> pas besoin de s'enregistrer
+//        extensionPointsList.add(ce);
 
         return extensionPointsList;
     }
 
-    public void start() {
+    public void starting() {
         System.out.println("[INFO] Starting cilia extension..");
+        ce = new CiliaMonitorExecutor(this, cc);
         if (ce != null) {
             String connectorType =  (String) getProperties().get("connectorType");
             if (connectorType!=null){
@@ -66,12 +68,12 @@ public class CiliaExtension extends AbstractExtension {
         }
     }
 
-    public void stop() {
+    public void stopping() {
         System.out.println("[INFO] Stopping cilia extension..");
         if (ce != null) ce.stop();
     }
 
-    public void destroy() {
+    public void destroying() {
         if (ce != null) ce.destroy();
     }
 

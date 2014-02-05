@@ -18,10 +18,12 @@ import fr.liglab.adele.cube.extensions.core.model.Component;
 import fr.liglab.adele.cube.metamodel.Attribute;
 import fr.liglab.adele.cube.metamodel.ManagedElement;
 import fr.liglab.adele.cube.metamodel.Notification;
+import fr.liglab.adele.cilia.model.MediatorComponent;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.lang.Thread ;
 
 /**
  * User: debbabi
@@ -47,6 +49,30 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
     private Object commLock;
     private ArrayList<CiliaBinding> bindings;
     private String connectorType;
+    
+    
+	private class MonitorThread extends Thread{
+		private CiliaMonitorExecutor executor ;
+		public MonitorThread(CiliaMonitorExecutor e){
+			this.executor =e;
+		}
+		
+		public void run(){	
+			try{        	
+				while(true){						
+					this.executor.updateCilia();
+					Thread.currentThread().sleep(30*1000) ;
+				}
+		    }catch (InterruptedException e1){
+    	    	this.executor.info(" interrupt exception");
+   		 	}catch(CiliaException e2){
+   		 		this.executor.info("ciliaException");
+    		}
+		}
+	
+	}
+
+	private MonitorThread pollingForUpdateThread ;
 
     public CiliaMonitorExecutor(Extension extension, CiliaContext cContext) {
         super(extension);
@@ -112,11 +138,15 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
         } catch (CiliaIllegalStateException e) {
             e.printStackTrace();
         }
+
+        //start polling()
+       	this.pollingForUpdateThread = new MonitorThread(this);
+       	pollingForUpdateThread.start(); 
+  
     }
 
     public void stop() {
-
-
+		this.pollingForUpdateThread.stop();
     }
 
     public void destroy() {
@@ -153,13 +183,8 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
                 try {
                     if (comp.getAttribute("isCilia")!=null){
                         info( comp.getInputComponents().size() + " input components, " +  comp.getOutputComponents().size() + " output components");
-                        for (String outCompID : comp.getOutputComponents()) {
-                            this.connectToOutputComponent(comp, outCompID, chain);
-                        }
-                        for (String inCompID : comp.getInputComponents()) {
-                            this.connectToInputComponent(comp, inCompID, chain);
-                        }
-                    }
+						connectComponent(comp, chain);
+                    }                    
                 }catch(CiliaException e){
                     info("problem with component " + elem.getAttribute("type"));
                 }
@@ -216,67 +241,145 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
         return CiliaProp;
 
     }
+    
+    
+    private void connectComponent(Component comp,  Architecture chain)throws CiliaException{
+	    String 	compID= comp.getUUID();
+	    
+	    ArrayList<CiliaBinding> outputBindings  = getBindings(compID , true);
+		for (String outCompID : comp.getOutputComponents()) {
+			CiliaBinding binding  = new CiliaBinding(compID, outCompID );	
+			if(!this.bindings.contains(binding)){	
+				info("new binding " + binding);
+				info(bindings.toString());	
+            	this.connectToOutputComponent(comp, outCompID, chain, binding);
+            }else{
+            	info("binding already exists " +binding);
+            	info(" size outputbindings " + outputBindings.size());
+            	outputBindings.remove(binding);
+            	info(" size outputbindings " + outputBindings.size());
 
-    private void connectToOutputComponent(Component comp, String outCompID, Architecture chain) throws CiliaException{
+            }
+         }
+			         
+         if (outputBindings.size() >0){
+         	info("some existing bindings are out of date");
+         	for(CiliaBinding b : outputBindings){
+//         		this.bindings.remove(b);
+         		if (b.isDistant){
+	        		info("distant binding");
+    				if(this.connectorType.equals("joram")){
+    					String bridgeAdapterName = compID + "-out-joram-adapter-"+b.to;
+	        			chain.unbind().from( compID + ":out").to( bridgeAdapterName +":unique") ;
+						chain.remove().adapter().id(bridgeAdapterName);
+    				}else{
+    					String bridgeAdapterName = b.from +"-out-socket-adapter-"+b.to;
+	        			chain.unbind().from( compID + ":out").to( bridgeAdapterName +":in");
+						chain.remove().adapter().id(bridgeAdapterName);
+
+	    			}    					
+            		this.bindings.remove(b);
+         		}else{
+/*    	    		info("local binding "+ b.from + " " +b.to);
+	        		chain.unbind().from( compID + ":out" ).to(b.to + ":in");				
+	         		this.bindings.remove(b); */
+    	    	}
+	        }
+         }
+         
+        ArrayList<CiliaBinding> inputBindings  = getBindings(compID , false);
+        for (String inCompID : comp.getInputComponents()) {
+        CiliaBinding binding  = new CiliaBinding( inCompID,compID );	
+			if(!this.bindings.contains(binding)){	
+				info("new binding " + binding);	
+	            this.connectToInputComponent(comp, inCompID, chain, binding);
+            }else{
+            	info("binding already exists " +binding);
+   	            	info(" size inputbindings " + inputBindings.size());
+	            	inputBindings.remove(binding);
+	            	info(" size inputbindings " + inputBindings.size());
+	        }
+    	} 
+	
+		 if (inputBindings.size() >0){
+			info("some existing bindings are out of date");
+			for(CiliaBinding b : inputBindings){
+    			if (b.isDistant){
+					info("distant binding");
+					 if(this.connectorType.equals("joram")){
+						String bridgeAdapterName = b.from + "-in-joram-adapter-"+b.to;
+						chain.unbind().from(bridgeAdapterName +":unique" ).to(compID + ":in");
+						chain.remove().adapter().id(bridgeAdapterName);
+					}else{
+						String bridgeAdapterName = b.from +"-in-socket-adapter-"+b.to ;
+						chain.unbind().from(bridgeAdapterName +":out").to( compID + ":in") ;
+						chain.remove().adapter().id(bridgeAdapterName);
+					}    									     		
+					this.bindings.remove(b);
+				}else{
+    /*	    		info("remove local binding "+ b.from + " " +b.to);
+					chain.unbind().from(b.to + ":out").to(compID + ":in" );				
+					this.bindings.remove(b); */
+				}
+			}		
+	   	}
+    } 
+
+    private void connectToOutputComponent(Component comp, String outCompID, Architecture chain , CiliaBinding b) throws CiliaException{
         info("connection to output component");
         Component outComp = (Component) getCubeAgent().getRuntimeModelController().getRuntimeModel().getManagedElement(outCompID) ;
+		Chain mchain = this.ciliaContext.getApplicationRuntime().getChain(chainId);
 
-        CiliaBinding binding  = new CiliaBinding(comp.getUUID(), outCompID );
-
-        if(!this.bindings.contains(binding)){
-
-            info("new binding " + binding);
-//				info("existing bindings " + this.bindings);
-            Chain mchain = this.ciliaContext.getApplicationRuntime().getChain(chainId);
-
-            if (outComp !=null)
-            {
-                // outComponent is hosted locally
-                if (this.instanciatedComponents.containsKey(outCompID)){
-                    if(mchain.getMediator(outCompID) != null || mchain.getAdapter(outCompID) != null){
-                        String outCompInputPort = outComp.getAttribute("input");
-                        if (outCompInputPort ==null ){
-                            info("standart input");
-                            outCompInputPort="in";
-                        }
-                        String CompOutputPort = comp.getAttribute("output");
-                        if (CompOutputPort ==null ){
-                            info("standart output");
-                            CompOutputPort="out";
-                        }
-                        chain.bind().from(comp.getUUID()+":"+CompOutputPort).to(outCompID +":"+ outCompInputPort);
-                        this.bindings.add(binding);
-
-                    }
-                }else{
-                    info("output component not yet instantiated");
-                }
-            }else{
-                try{
-                    this.remoteOutput(comp, outCompID, chain);
-                    this.bindings.add(binding);
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }else{
-            info("binding already exists");
-        }
+		if (outComp !=null)
+		{
+			// outComponent is hosted locally
+			if (this.instanciatedComponents.containsKey(outCompID)){
+				if(mchain.getMediator(outCompID) != null || mchain.getAdapter(outCompID) != null){
+					String outCompInputPort = outComp.getAttribute("input");
+					if (outCompInputPort ==null ){
+						info("standart input");
+						outCompInputPort="in";
+					}
+					String CompOutputPort = comp.getAttribute("output");
+					if (CompOutputPort ==null ){
+						info("standart output");
+						CompOutputPort="out";
+					}
+	 				info("avant bind");
+					chain.bind().from(comp.getUUID()+":"+CompOutputPort).to(outCompID +":"+ outCompInputPort);
+	 				info("avant add to nindings");
+					info(bindings.toString());
+	 				this.bindings.add(b);
+					info("apres add to bindings");
+					info(bindings.toString());
+				}
+			}else{
+				info("output component not yet instantiated");
+			}
+		}else{
+			try{
+				this.remoteOutput(comp, outCompID, chain);
+				b.isDistant=true;
+ 				this.bindings.add(b);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
     }
 
     private void remoteOutput(Component comp, String outCompID, Architecture chain)throws InterruptedException, CiliaException{
 
         if(connectorType.equals("joram")){
 
-            String queueID = "queue:" + comp.getUUID() +"-"+ outCompID ;
+//            String queueID = "queue:" + comp.getUUID() +"-"+ outCompID ;
+            String queueID = "queue:" + comp.getUUID();
             info("joram : connect using queue " + queueID );
 
-            String adapterID= comp.getUUID() +"-out-joram-adapter" ;
-//			chain.create().adapter().type("JMS2-out-adapter").namespace("fr.liglab.adele.cilia").id(adapterID);
-//			chain.configure().adapter().id(adapterID).key("jms.dest").value(queueID);
-            chain.create().adapter().type("JMS2-out-adapter").namespace("fr.liglab.adele.cilia").id(adapterID).configure().key("jms.dest").value(queueID);
-
+            String adapterID= comp.getUUID() +"-out-joram-adapter-"+outCompID  ;
+			MediatorComponent component =  this.ciliaContext.getApplicationRuntime().getChain(chainId).getAdapter(adapterID);
+			if (component == null){
+	            chain.create().adapter().type("JMS2-out-adapter").namespace("fr.liglab.adele.cilia").id(adapterID).configure().key("jms.dest").value(queueID);
+			}
             String CompOutputPort = comp.getAttribute("output");
             if (CompOutputPort ==null ){
                 info("standart output");
@@ -305,7 +408,7 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
             // Create adapter
             String auri = agent.getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(outCompID);
             info("default : connect using sockets to " + auri + " "+ msg.getHeader("port"));
-            String adapterID= comp.getUUID() +"-out-socket-adapter" ;
+            String adapterID= comp.getUUID() +"-out-socket-adapter-"+outCompID ;
             chain.create().adapter().type("tcp-out-adapter").id(adapterID);
             chain.configure().adapter().id(adapterID).key("port").value(msg.getHeader("port"));
             chain.configure().adapter().id(adapterID).key("hostname").value(auri);
@@ -320,48 +423,38 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
         }
     }
 
-    private void connectToInputComponent( Component comp,  String inCompID, Architecture chain) throws CiliaException {
+    private void connectToInputComponent( Component comp,  String inCompID, Architecture chain,  CiliaBinding b) throws CiliaException {
         info("connecting to input components");
         Component inComp = (Component) getCubeAgent().getRuntimeModelController().getRuntimeModel().getManagedElement(inCompID) ;
+		Chain mchain = this.ciliaContext.getApplicationRuntime().getChain(chainId);
+		if  (inComp != null) {
+			info(" local components");
+			if  (this.instanciatedComponents.containsKey(inCompID)){
+				if(mchain.getMediator(inCompID) != null || mchain.getAdapter(inCompID) != null) {
+					//in Component is hosted locally
+					String inCompOutputPort = inComp.getAttribute("output");
+					if (inCompOutputPort ==null ){
+						info("standart output");
+						inCompOutputPort="out";
+					}
+					String CompInputPort = comp.getAttribute("input");
+					if (CompInputPort == null ){
+						info("standart input");
+						CompInputPort="in";
+					}
+					chain.bind().from(inCompID+":"+inCompOutputPort).to(comp.getUUID()+":"+CompInputPort);
+	 				this.bindings.add(b);
+				}
+			} else{
+				info ("input component not yet instanciated");
+			}
+		} else{
+			//intComponent is hosted on a distant host
+			remoteInput(comp, inCompID, chain);
+			b.isDistant=true;
+			this.bindings.add(b);
+		}
 
-        CiliaBinding binding  = new CiliaBinding(inCompID,comp.getUUID());
-
-        if(!this.bindings.contains(binding)){
-
-            info("new binding " + binding);
-//				info("existing bindings " + this.bindings);
-
-
-            Chain mchain = this.ciliaContext.getApplicationRuntime().getChain(chainId);
-            if  (inComp != null) {
-                info(" local components");
-                if  (this.instanciatedComponents.containsKey(inCompID)){
-                    if(mchain.getMediator(inCompID) != null || mchain.getAdapter(inCompID) != null) {
-                        //in Component is hosted locally
-                        String inCompOutputPort = inComp.getAttribute("output");
-                        if (inCompOutputPort ==null ){
-                            info("standart output");
-                            inCompOutputPort="out";
-                        }
-                        String CompInputPort = comp.getAttribute("input");
-                        if (CompInputPort == null ){
-                            info("standart input");
-                            CompInputPort="in";
-                        }
-                        chain.bind().from(inCompID+":"+inCompOutputPort).to(comp.getUUID()+":"+CompInputPort);
-                        this.bindings.add(binding);
-                    }
-                } else{
-                    info ("input component not yet instanciated");
-                }
-            } else{
-                //intComponent is hosted on a distant host
-                remoteInput(comp, inCompID, chain);
-                this.bindings.add(binding);
-            }
-        }else{
-            info("binding already exists");
-        }
     }
 
     private void remoteInput(Component comp,  String inCompID, Architecture chain) throws CiliaException{
@@ -369,12 +462,15 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
 
         if(this.connectorType.equals("joram")){
             info("connect using joram");
-            String adapterID = comp.getUUID()+"-in-joram-adapter"  ;
-            String queueID = "queue:" + inCompID + "-" + comp.getUUID();
-//			chain.create().adapter().type("JMS2-in-adapter").namespace("fr.liglab.adele.cilia").id(adapterID);
-//			chain.configure().adapter().id(adapterID).key("jms.dest").value(queueID);
-            chain.create().adapter().type("JMS2-in-adapter").namespace("fr.liglab.adele.cilia").id(adapterID).configure().key("jms.dest").value(queueID);
-
+            String adapterID = inCompID +"-in-joram-adapter-" + comp.getUUID() ;
+ //           String adapterID = "in-joram-adapter-" + comp.getUUID() ;
+//            String adapterID = inCompID +"-in-joram-adapter";
+//            String queueID = "queue:" + inCompID + "-" + comp.getUUID();
+            String queueID = "queue:" + inCompID;
+			MediatorComponent component =  this.ciliaContext.getApplicationRuntime().getChain(chainId).getAdapter(adapterID);
+			if (component == null){
+	            chain.create().adapter().type("JMS2-in-adapter").namespace("fr.liglab.adele.cilia").id(adapterID).configure().key("jms.dest").value(queueID);
+			}
 
             String CompInputPort = comp.getAttribute("input");
             if (CompInputPort == null ){
@@ -386,7 +482,8 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
             // create  a listener socket adapter
             info("default - connect using socket");
             int port =this.getNextPortNumber();
-            String  adapterID = comp.getUUID()+"-in-socket-adapter"  ;
+            
+            String  adapterID = inCompID+"-in-socket-adapter-"+comp.getUUID()  ;
             chain.create().adapter().type("tcp-in-adapter").id(adapterID);
             chain.configure().adapter().id(adapterID).key("port").value(port);
 
@@ -449,9 +546,27 @@ public class CiliaMonitorExecutor extends AbstractMonitorExecutor implements Mes
 
         }
     }
+    
+    private ArrayList<CiliaBinding> getBindings(String compID, boolean isInput){
+	   	ArrayList<CiliaBinding> res = new ArrayList<CiliaBinding>() ;
+		if(isInput){
+			for(CiliaBinding b: this.bindings){
+				if(b.from.equals(compID)){
+					res.add(b);		
+				}
+			}
+		}else{
+			for(CiliaBinding b:  this.bindings){
+				if(b.to.equals(compID)){
+					res.add(b);		
+				}
+			}
+		}
+		return res;
+    }
 
 
     private void info(String s){
-        System.out.println("[CILIA EXECUTOR] "+ s);
+       System.out.println("[CILIA EXECUTOR] "+ s);
     }
 }

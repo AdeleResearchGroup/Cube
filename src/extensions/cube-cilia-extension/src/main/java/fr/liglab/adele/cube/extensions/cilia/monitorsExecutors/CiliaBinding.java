@@ -6,7 +6,8 @@ public class  CiliaBinding {
 
 	public String from ;
 	public String to ;
-	
+	public boolean isDistant = false;
+		
 	public CiliaBinding(String from, String to){
 		this.from=from ;
 		this.to=to;

@@ -20,14 +20,10 @@ package fr.liglab.adele.cube.extensions.rm.monitoring.impl;
 
 
 import fr.liglab.adele.cube.AutonomicManager;
-import fr.liglab.adele.cube.autonomicmanager.RuntimeModel;
-import fr.liglab.adele.cube.autonomicmanager.RuntimeModelListener;
 import fr.liglab.adele.cube.extensions.AbstractExtension;
 import fr.liglab.adele.cube.extensions.ExtensionFactoryService;
 import fr.liglab.adele.cube.extensions.ExtensionPoint;
 import fr.liglab.adele.cube.extensions.rm.monitoring.monitorsExecutors.GuiMonitor;
-import fr.liglab.adele.cube.extensions.rm.monitoring.monitorsExecutors.GuiMonitorPrefuse;
-import fr.liglab.adele.cube.metamodel.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +36,11 @@ import java.util.Properties;
  */
 public class RMMonitoringExtension extends AbstractExtension {
 
-    GuiMonitor guimonitor = new GuiMonitor(this);
+    GuiMonitor guimonitor = null;
 
     public RMMonitoringExtension(AutonomicManager am, ExtensionFactoryService factory, Properties properties) {
         super(am, factory, properties);
-
-
+        guimonitor = new GuiMonitor(this);
     }
 
     @Override
@@ -57,18 +52,21 @@ public class RMMonitoringExtension extends AbstractExtension {
         return extensionPointsList;
     }
 
-    public void start() {
+    public void starting() {
         System.out.println("[INFO] Starting gui-monitor..");
-        guimonitor.start();
+        if (guimonitor != null)
+            guimonitor.start();
     }
 
-    public void stop() {
+    public void stopping() {
         System.out.println("[INFO] Stopping gui-monitor..");
-        guimonitor.stop();
+        if (guimonitor != null)
+            guimonitor.stop();
     }
 
-    public void destroy() {
-        guimonitor.destroy();
+    public void destroying() {
+        if (guimonitor != null)
+            guimonitor.destroy();
     }
 
 }
