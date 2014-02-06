@@ -68,7 +68,6 @@ public class HoldComponent extends AbstractResolver {
     }
 
     public boolean perform(ManagedElement me, String value) {
-        System.out.println("\n@@@@@ ---> performing holdComponent between node "+me.getUUID()+" and component "+ value + "\n");
         if (me != null && value != null) {
             Reference r = me.getReference(Node.CORE_NODE_COMPONENTS);
             if (r == null) {
@@ -80,7 +79,6 @@ public class HoldComponent extends AbstractResolver {
             }
             r.addReferencedElement(value);
             RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
-            System.out.println("\n@@@@@ ===> adding node "+me.getUUID()+" to component "+ value + "\n");
             try {
                 rmc.addReferencedElement(value, Component.CORE_COMPONENT_NODE, me.getUUID());
             } catch (InvalidNameException e) {

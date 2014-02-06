@@ -1,9 +1,7 @@
-20140206.15.39.33;cube://localhost:38000;Master;65000;true;null
-20140206.15.39.33;cube://localhost:38002;Node;55852000;true;android
-20140206.15.39.33;cube://localhost:38002;Scope;54000;true;LAN
-20140206.15.39.33;cube://localhost:38001;Node;61668000;true;pc
-20140206.15.39.33;cube://localhost:38001;Component;127000;true;Streamer
-20140206.15.39.33;cube://localhost:38001;Scope;98000;true;LAN
-20140206.15.39.33;cube://localhost:38001;Component;1308000;true;Player
-20140206.15.39.42;cube://localhost:38002;Scope;443000;true;LAN
-20140206.15.39.48;cube://localhost:38000;Master;546000;true;null
+20140206.15.51.16;cube://localhost:38000;Master;48000;true;null
+20140206.15.51.16;cube://localhost:38002;Node;34610000;true;android
+20140206.15.51.16;cube://localhost:38002;Scope;38000;true;LAN
+20140206.15.51.16;cube://localhost:38001;Node;52169000;true;pc
+20140206.15.51.16;cube://localhost:38001;Scope;91000;true;LAN
+20140206.15.51.16;cube://localhost:38001;Component;123000;true;Streamer
+20140206.15.51.16;cube://localhost:38001;Component;978000;true;Player

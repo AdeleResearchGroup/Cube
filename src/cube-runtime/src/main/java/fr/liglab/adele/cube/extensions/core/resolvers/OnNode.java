@@ -65,9 +65,6 @@ public class OnNode extends AbstractResolver {
             if (r == null) {
                 try {
                     r = me.addReference(Component.CORE_COMPONENT_NODE, true);
-                    RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
-
-                    rmc.addReferencedElement(value, Node.CORE_NODE_COMPONENTS, me.getUUID());
 
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
@@ -79,6 +76,12 @@ public class OnNode extends AbstractResolver {
                 me.setAutonomicManager(amUri);
             }
             r.addReferencedElement(value);
+            RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
+            try {
+                rmc.addReferencedElement(value, Node.CORE_NODE_COMPONENTS, me.getUUID());
+            } catch (InvalidNameException e) {
+                e.printStackTrace();
+            }
             return true;
         }
         return false;
