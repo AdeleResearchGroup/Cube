@@ -64,11 +64,16 @@ public class HasSourceComponent extends AbstractResolver {
             if (r == null) {
                 try {
                     r = me.addReference(Component.CORE_COMPONENT_INPUTS, false);
-                    RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
-                    rmc.addReferencedElement(value, Component.CORE_COMPONENT_OUTPUTS, me.getUUID());
+
                 } catch (InvalidNameException e) {
                     e.printStackTrace();
                 }
+            }
+            RuntimeModelController rmc = getExtension().getAutonomicManager().getRuntimeModelController();
+            try {
+                rmc.addReferencedElement(value, Component.CORE_COMPONENT_OUTPUTS, me.getUUID());
+            } catch (InvalidNameException e) {
+                e.printStackTrace();
             }
             r.addReferencedElement(value);
             return true;

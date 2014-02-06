@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cube>
+<archetype id="net.debbabi.hassourcecomponent" description="HasSourceComponent Archetype" version="1.0" >
+<goals>
+<goal id="mygoal" description="generated from Archetype Designer">
+<InScope s="@pc" o="@lan" r="FC" />
+<InScope s="@smartphone" o="@lan" r="FC" />
+<HoldComponent s="@pc" o="@streamer" r="FC" />
+<HoldComponent s="@pc" o="@player" r="FC" />
+<HasSourceComponent s="@player" o="@streamer" r="F" />
+</goal>
+</goals>
+<elements>
+<Node id="pc">
+<HasNodeType o="PC"/>
+</Node>
+<Scope id="lan">
+<HasScopeId o="LAN"/>
+<ControlledBy o="@master"/>
+</Scope>
+<Master id="master">
+<LocatedIn o="cube://localhost:38000"/>
+</Master>
+<Node id="smartphone">
+<HasNodeType o="android"/>
+</Node>
+<Component id="streamer">
+<HasComponentType o="Streamer"/>
+</Component>
+<Component id="player">
+<HasComponentType o="Player"/>
+</Component>
+</elements>
+</archetype>
+</cube>
+
