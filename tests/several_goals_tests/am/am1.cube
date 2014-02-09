@@ -2,22 +2,21 @@
 <cube>
   <autonomic-manager>
     <host value="localhost"/>
-    <port value="38002"/>
+    <port value="38001"/>
     <keepalive-retry value="2"/>
 	<keepalive-interval value="2000"/>
-	<debug value="false"/>
+	<debug value="true"/>
     <archetypeUrl value="file:../test.arch"/>
 
 	<extensions>
 		<extension id="fr.liglab.adele.cube.core"/>
 		<extension id="fr.liglab.adele.cube.script">
-			<property name="1" value="newi node type=android"/>
+			<property name="1" value="newi node type=pc"/>
 		</extension>
 		<extension id="fr.liglab.adele.cube.rm.monitoring">
 			<property name="auto-refresh" value="false"/>
 		</extension>	
 	</extensions>
-	
   </autonomic-manager>
 </cube>
 

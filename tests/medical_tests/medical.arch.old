@@ -5,13 +5,11 @@
 <goal id="mygoal" description="generated from Archetype Designer">
 <inscope s="@aggr_server" o="@lan" r="fc" />
 <inscope s="@med_server" o="@lan" r="fc" />
-<connected s="@hapi-filter" o="@continua-validation" r="fc" />
 <connected s="@continua-validation" o="@continua-translation" r="fc" />
 <connected s="@continua-translation" o="@integration" r="fc" />
 <connected s="@integration" o="@ack" r="fc" />
 <connected s="@ack" o="@hl7-rest2" r="f" />
-<HoldComponent s="@aggr_server" o="@joram" r="FC" />
-<HoldComponent s="@aggr_server" o="@hl7-rest" r="FC" />
+<holdcomponent s="@aggr_server" o="@hl7-rest" r="FC" />
 <Connected s="@hl7-rest" o="@hapi-filter" r="FC" />
 </goal>
 </goals>
@@ -47,8 +45,14 @@
 <hasproperty o="isCilia:true"/>
 <hasproperty o="kind:mediator"/>
 <hasproperty o="ciliaNamespace:medical"/>
-<hascomponenttype o="HapiValidationMediator"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="HapiValidationMediator"/>
+</component>
+<component id="hapi-filter2">
+<hasproperty o="isCilia:true"/>
+<hasproperty o="kind:mediator"/>
+<hasproperty o="ciliaNamespace:medical"/>
+<hascomponenttype o="HapiValidationMediator"/>
 </component>
 <component id="continua-validation">
 <hasproperty o="isCilia:true"/>

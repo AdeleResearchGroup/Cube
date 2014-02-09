@@ -31,11 +31,15 @@ public class ResolutionGraph {
     }
 
     public boolean resolve() {
+        info("........Constructing Resolution Graph............", true);
         retrieveGoalsFromArchetype();
         print();
+        info("........Resolving Constraints....................", true);
         for (Constraint c : root.getConstraints()) {
+            info("..............Resolving Constraint ["+c.getArchetypePropertyName()+"]", true);
             resolveConstraint(c, root.getValues().get(0));
         }
+        info("........Performing Constraints...................", true);
         return performConstraints(this.root);
     }
 
@@ -370,7 +374,7 @@ public class ResolutionGraph {
         for (GoalProperty gp : am.getArchetype().getGoalProperties()) {
             Element subject = gp.getSubject();
             if (checkForGoalSubjects((ElementDescription) subject, root) == true) {
-                info(">> we will add the goal '"+gp.getName()+"' to the Resolution Graph!");
+                //info(">> we will add the goal '"+gp.getName()+"' to the Resolution Graph!");
                 addGoal(gp);
                 //System.out.println("[RESOLVER] adding goal: "+gp.getFullname());
             } else {
@@ -464,7 +468,7 @@ public class ResolutionGraph {
     }
 
     public void print() {
-        String out = "-------------------------------------------------------------------------------------\n";
+        String out = "\n-------------------------------------------------------------------------------------\n";
         out += root.getDescription().getName();
         for (Constraint c : root.getConstraints()) {
             out += "\n" + c.print("    ");
@@ -477,6 +481,15 @@ public class ResolutionGraph {
     void info(String msg) {
         if (this.am.getConfiguration().isDebug() == true) {
             System.out.println("[RG:"+this.am.getUri()+":"+this.hashCode()+"] " + msg);
+        }
+    }
+
+    void info(String msg, boolean wide) {
+        if (this.am.getConfiguration().isDebug() == true) {
+            if (wide == false)
+                System.out.println("[RG:"+this.am.getUri()+":"+this.hashCode()+"] " + msg);
+            else
+                System.out.println("\n[RG:"+this.am.getUri()+":"+this.hashCode()+"] " + msg + "\n");
         }
     }
 }

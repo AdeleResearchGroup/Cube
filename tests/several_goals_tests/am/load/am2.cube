@@ -13,7 +13,9 @@
 		<extension id="fr.liglab.adele.cube.script">
 			<property name="1" value="newi node type=android"/>
 		</extension>
-		
+		<extension id="fr.liglab.adele.cube.rm.monitoring">
+			<property name="auto-refresh" value="false"/>
+		</extension>	
 	</extensions>
 	
   </autonomic-manager>

@@ -6,8 +6,8 @@
 <InScope s="@pc" o="@lan" r="FC" />
 <InScope s="@smartphone" o="@lan" r="FC" />
 <HoldComponent s="@pc" o="@streamer" r="FC" />
-<HoldComponent s="@pc" o="@player" r="FC" />
-<HasSourceComponent s="@player" o="@streamer" r="F" />
+<HoldComponent s="@smartphone" o="@player" r="FC" />
+<HasSourceComponent s="@player" o="@streamer2" r="F" />
 </goal>
 </goals>
 <elements>
@@ -30,6 +30,14 @@
 <Component id="player">
 <HasComponentType o="Player"/>
 </Component>
+<Component id="streamer2">
+<HasComponentType o="Streamer"/>
+<OnNode o="@pc2"/>
+</Component>
+<Node id="pc2">
+<HasNodeType o="PC"/>
+<InScope o="@lan"/>
+</Node>
 </elements>
 </archetype>
 </cube>
