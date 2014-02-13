@@ -202,7 +202,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 return result;
             }
             RuntimeModel rm = am.getRuntimeModelController().getRuntimeModel();
-
+            int size = result.size();
             for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.VALID)) {
                 if (mes.isInResolution() == false) {
                     int compResult = ModelUtils.compareTwoManagedElements(description, mes);
@@ -211,6 +211,18 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                     } else {
 
                     }
+                }
+            }
+            if (size == result.size()){
+                for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.INVALID)) {
+                    //if (mes.isInResolution() == false) {
+                    int compResult = ModelUtils.compareTwoManagedElements(description, mes);
+                    if (compResult == 0) {
+                        result.add(mes.getUUID());
+                    } else {
+
+                    }
+                    //}
                 }
             }
         }
@@ -283,6 +295,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         info( archetypePropertyName + ".verify("+uuid+", "+value+")...");
         boolean result = false;
         if (am.getRuntimeModelController().isLocalInstance(uuid) == true) {
+            info("verify local Property... "+archetypePropertyName);
             ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
             ResolverExtensionPoint r = am.getArchetypeResolver().getResolver(archetypePropertyName);
             if (r != null) {
@@ -291,6 +304,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
                 info(" WARNING! verifyProperty: no specific resolver was found for the archetype property '" + archetypePropertyName + "'!");
             }
         } else if (am.getRuntimeModelController().isRemoteInstance(uuid) == true) {
+            info("verify remote Property... "+archetypePropertyName);
             String to = getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(uuid);
             CMessage msg = new CMessage();
             msg.setTo(to);

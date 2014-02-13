@@ -7,7 +7,8 @@ rm -rf am/load 2>/dev/null
 rm -rf am/*.arch 2>/dev/null 
 
 mkdir am/load
-cp -rf 1/amMaster.cube am/load/
+cp -rf 1/amAggr.cube am/load/
+cp -rf 1/amMed1.cube am/load/
 #cp -rf $1/am*.cube am/load/
 
 mkdir am/bundle

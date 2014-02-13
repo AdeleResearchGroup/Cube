@@ -45,6 +45,9 @@ public class LocatedIn extends AbstractUnaryResolver {
             if (me.getAutonomicManager() == null)
                 return false;
             else {
+                System.out.println("me.am="+me.getAutonomicManager());
+                System.out.println("value="+value);
+                System.out.println("equal?"+me.getAutonomicManager().equalsIgnoreCase(value));
                 return me.getAutonomicManager().equalsIgnoreCase(value);
             }
         }

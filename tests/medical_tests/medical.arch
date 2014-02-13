@@ -9,9 +9,9 @@
 <connected s="@continua-validation" o="@continua-translation" r="fc" />
 <connected s="@continua-translation" o="@integration" r="fc" />
 <connected s="@integration" o="@ack" r="fc" />
-<connected s="@ack" o="@hl7-rest2" r="f" />
-<HoldComponent s="@aggr_server" o="@joram" r="FC" />
-<HoldComponent s="@aggr_server" o="@hl7-rest" r="FC" />
+<holdcomponent s="@aggr_server" o="@joram" r="FC" />
+<holdcomponent s="@aggr_server" o="@hl7-rest" r="FC" />
+<Connected s="@ack" o="@hl7-rest2" r="F" />
 <Connected s="@hl7-rest" o="@hapi-filter" r="FC" />
 </goal>
 </goals>
@@ -47,29 +47,29 @@
 <hasproperty o="isCilia:true"/>
 <hasproperty o="kind:mediator"/>
 <hasproperty o="ciliaNamespace:medical"/>
-<hascomponenttype o="HapiValidationMediator"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="HapiValidationMediator"/>
 </component>
 <component id="continua-validation">
 <hasproperty o="isCilia:true"/>
 <hasproperty o="kind:mediator"/>
 <hasproperty o="ciliaNamespace:medical"/>
-<hascomponenttype o="ContinuaValidationMediator"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="ContinuaValidationMediator"/>
 </component>
 <component id="continua-translation">
 <hasproperty o="isCilia:true"/>
 <hasproperty o="kind:mediator"/>
 <hasproperty o="ciliaNamespace:medical"/>
-<hascomponenttype o="ContinuaTranslationMediator"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="ContinuaTranslationMediator"/>
 </component>
 <component id="integration">
 <hasproperty o="isCilia:true"/>
 <hasproperty o="kind:adapter"/>
 <hasproperty o="ciliaNamespace:fr.liglab.adele.cilia"/>
-<hascomponenttype o="MockIndivoIntegrationAdapter"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="MockIndivoIntegrationAdapter"/>
 </component>
 <component id="ack">
 <hasproperty o="isCilia:true"/>
@@ -83,12 +83,12 @@
 <hasproperty o="messageProfileIdentifier_universalId:2.16.840.1.113883.9.n.m"/>
 <hasproperty o="messageProfileIdentifier_universalIdType:HL7"/>
 <hasproperty o="ciliaNamespace:medical"/>
-<hascomponenttype o="ContinuaAcknowledgementMediator"/>
 <onnode o="@mserver2"/>
+<hascomponenttype o="ContinuaAcknowledgementMediator"/>
 </component>
 <component id="hl7-rest2">
-<hascomponenttype o="HL7-REST-MessageAdapter"/>
 <onnode o="@aserver2"/>
+<hascomponenttype o="HL7-REST-MessageAdapter"/>
 </component>
 <master id="master">
 <locatedin o="cube://localhost:38000"/>
