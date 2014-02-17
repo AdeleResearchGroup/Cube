@@ -5,13 +5,8 @@ import fr.liglab.adele.cube.autonomicmanager.*;
 import fr.liglab.adele.cube.autonomicmanager.comm.CommunicationException;
 import fr.liglab.adele.cube.autonomicmanager.comm.TimeOutException;
 import fr.liglab.adele.cube.extensions.ResolverExtensionPoint;
-import fr.liglab.adele.cube.extensions.core.model.Component;
-import fr.liglab.adele.cube.extensions.core.model.Master;
-import fr.liglab.adele.cube.extensions.core.model.Node;
-import fr.liglab.adele.cube.extensions.core.model.Scope;
 import fr.liglab.adele.cube.metamodel.*;
 import fr.liglab.adele.cube.util.model.ModelUtils;
-import fr.liglab.adele.cube.util.perf.ResolutionMeasure;
 
 import java.io.IOException;
 import java.util.*;
@@ -45,6 +40,7 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
         switch (notification.getNotificationType()) {
             case RuntimeModelListener.UPDATED_RUNTIMEMODEL: {
                 for (ManagedElement me : am.getRuntimeModelController().getRuntimeModel().getElements(ManagedElement.INVALID)) {
+
                     resolveUncheckedInstance(me);
                 }
             } break;
@@ -52,74 +48,25 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
     }
 
     public synchronized void resolveUncheckedInstance(ManagedElement instance) {
-
+        System.out.println("RESOLVING INVALID INSTANCE: "+instance.getName()+" "+instance.getUUID()+ " ("+instance.getPriority()+")");
         if (instance == null) return;
+        //System.out.println("Resolving... "+instance.getFullname());
         if (instance.getState() == ManagedElement.INVALID) {
             synchronized (this) {
                 if (instance.isInResolution() == false) {
                     instance.setInResolution(true);
-                    info("resolving INVALID "+instance.getName()+" '"+instance.getUUID()+"'...");
+                    info("Resolving INVALID " + instance.getName() + " '" + instance.getUUID() + "'...");
                     Resolution res = new Resolution(this, instance);
                     res.resolve();
+                } else {
+                    //System.out.println("Can't resolve INVALID " + instance.getName() + " '" + instance.getUUID() + "'! already in resolution process!");
                 }
             }
+        } else {
+
         }
     }
-    /*
-    private boolean validateSolution(ResolutionGraph rg) {
-        // TODO should check "am" attribute to check if it should added here or in another runtime model part
-        Variable root = rg.getRoot();
-        boolean changed = false;
-        for (Constraint c : root.getConstraints()) {
-            if (c instanceof GoalConstraint) {
-                String related = ((GoalConstraint) c).getCurrentSolution();
-                if (am.getRuntimeModelController().isLocalInstance(related)) {
 
-                    ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(related);
-                    if (me != null) {
-                        if (me.getAutonomicManager() != null && !me.getAutonomicManager().equalsIgnoreCase(am.getUri())) {
-                            // should be in another am!
-                            // 1. add to remote hash map
-                            am.getExternalInstancesHandler().addExternalInstance(related, me.getAutonomicManager());
-                            // 2. prepare table of references/ams - to be sent with the ME
-                            // 3. move the ME
-                            moveManagedElement(me, me.getAutonomicManager());
-                            // 4. remove local instance
-                            am.getRuntimeModelController().removeManagedElement(related);
-
-                            //System.out.println("#### this instance "+related+" should be moved to and validated at a remote am!");
-                            //am.getRuntimeModelController().getRuntimeModel().removeUnmanagedElements();
-
-                        } else {
-                            int state = am.getRuntimeModelController().getState(related);
-                            if (state == ManagedElement.UNMANAGED) {
-                                am.getRuntimeModelController().getRuntimeModel().manage(related);
-                                changed = true;
-                            }
-                        }
-                    }
-                } else {
-                    //TODO validate the instance of the remote am!
-                    //System.out.println("##### This instance "+related+" should be validated at a remote am!");
-                    String am_uri = getAutonomicManager().getExternalInstancesHandler().getAutonomicManagerOfExternalInstance(related);
-                    if (am_uri != null) {
-                        refreshRemoteAM(am_uri);
-                    } else {
-                        System.out.println("WARNING: remote instance referenced but no am uri is found in the local AM!");
-                    }
-                }
-            }
-        }
-        String uuid = ((MultiValueVariable)root).getDescription().getUUID();
-        ManagedElement me = am.getRuntimeModelController().getRuntimeModel().getManagedElement(uuid);
-        if (me != null) {
-            if (me.getState() == ManagedElement.INVALID) {
-                me.setState(ManagedElement.VALID);
-                changed = true;
-            }
-        }
-        return changed;
-    }*/
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///// HELPERS ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,14 +151,14 @@ public class ArchetypeResolverImpl implements ArchetypeResolver {
             RuntimeModel rm = am.getRuntimeModelController().getRuntimeModel();
             int size = result.size();
             for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.VALID)) {
-                if (mes.isInResolution() == false) {
+                //if (mes.isInResolution() == false) {
+                // TODO in resolution
                     int compResult = ModelUtils.compareTwoManagedElements(description, mes);
                     if (compResult == 0) {
                         result.add(mes.getUUID());
                     } else {
-
                     }
-                }
+                //}
             }
             if (size == result.size()){
                 for (ManagedElement mes : rm.getElements(description.getNamespace(), description.getName(), ManagedElement.INVALID)) {

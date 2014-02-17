@@ -176,7 +176,7 @@ public class LifeControllerImpl implements ExternalInstancesHandler , Runnable {
                 clone.add(a);
             }
         }
-        if (!tmp.equalsIgnoreCase("")) System.out.println(tmp);
+        //if (!tmp.equalsIgnoreCase("")) System.out.println(tmp);
         for (String a : clone) {
             Integer counter = 0;
             synchronized (monitoredAMs) {
@@ -187,7 +187,7 @@ public class LifeControllerImpl implements ExternalInstancesHandler , Runnable {
                     this.monitoredAMs.remove(a);
                 }
                 toBeRemoved.add(a);
-                System.out.println("[LC:"+this.agent.getUri()+":work] autonomicmanager '"+a+"' is maybe not connected!");
+                //System.out.println("[LC:"+this.agent.getUri()+":work] autonomicmanager '"+a+"' is maybe not connected!");
             } else {
                 // send message
                 CMessage msg = new CMessage();

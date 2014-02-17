@@ -112,7 +112,7 @@ public class RuntimeModelControllerImpl implements RuntimeModelController {
                     e.printStackTrace();
                 }
             } else {
-                System.out.println(".... get property value: impossible to find autonomic manager uri of instance " + managed_element_uuid);
+                //System.out.println(".... get property value: impossible to find autonomic manager uri of instance " + managed_element_uuid);
             }
         } else {
             info("External autonomic manager of element '"+managed_element_uuid+"' not found!");

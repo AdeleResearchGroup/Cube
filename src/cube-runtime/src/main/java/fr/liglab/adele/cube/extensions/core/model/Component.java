@@ -43,12 +43,14 @@ public class Component extends ManagedElement {
 
     public Component(String amUri) {
         super(amUri);
+        setPriority(40);
     }
 
     public Component(String amUri, Properties properties) throws PropertyExistException, InvalidNameException {
         super(amUri, properties);
         setNamespace(CoreExtensionFactory.NAMESPACE);
         setName(NAME);
+        setPriority(40);
 
     }
     /**

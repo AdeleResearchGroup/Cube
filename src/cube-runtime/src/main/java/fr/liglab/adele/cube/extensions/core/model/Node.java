@@ -41,10 +41,12 @@ public class Node extends ManagedElement {
 
     public Node(String amUri) {
         super(amUri);
+        setPriority(30);
     }
 
     public Node(String amUri, Properties properties) throws PropertyExistException, InvalidNameException {
         super(amUri, properties);
+        setPriority(30);
     }
 
     /**

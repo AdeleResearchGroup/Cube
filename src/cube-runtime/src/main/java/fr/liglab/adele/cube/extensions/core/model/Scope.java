@@ -40,10 +40,12 @@ public class Scope extends ManagedElement {
 
     public Scope(String amUri) {
         super(amUri);
+        setPriority(20);
     }
 
     public Scope(String amUri, Properties properties) throws PropertyExistException, InvalidNameException {
         super(amUri, properties);
+        setPriority(20);
     }
 
     @Override

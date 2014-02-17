@@ -51,7 +51,7 @@ public class HasMaxInstancesPerAM extends AbstractUnaryResolver {
                     size = size + 1;
                 }
             }
-            System.out.println("[INFO] HasMaxInstancesPerAM: there is "+size+ " instance of "+ me.getName() + " in the local Runtime Model!");
+            //System.out.println("[INFO] HasMaxInstancesPerAM: there is "+size+ " instance of "+ me.getName() + " in the local Runtime Model!");
             return size <= new Integer(value).intValue();
         }
         return false;

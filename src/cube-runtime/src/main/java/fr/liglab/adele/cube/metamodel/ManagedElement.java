@@ -31,11 +31,13 @@ import java.util.Properties;
  * Date: 4/27/13
  * Time: 7:40 PM
  */
-public class ManagedElement extends Observable implements Cloneable, Serializable {
+public class ManagedElement extends Observable implements Cloneable, Serializable, Comparable {
 
     public static final int UNMANAGED = -1;
     public static final int INVALID = 0;
     public static final int VALID= 1;
+
+    int priority = 0;
 
     /**
      * Current state of the Managed ElementDescription.
@@ -135,6 +137,14 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
             //notifyObservers(new Notification(ManagedElementListener.CHANGED_STATE));
         }
         return oldState;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public synchronized void setName(String name) {
@@ -558,5 +568,12 @@ public class ManagedElement extends Observable implements Cloneable, Serializabl
     @Override
     public String toString() {
         return this.getDocumentation();
+    }
+
+    public int compareTo(Object o) {
+        if (o instanceof ManagedElement) {
+            return this.getPriority() - ((ManagedElement) o).getPriority();
+        }
+        return 0;
     }
 }

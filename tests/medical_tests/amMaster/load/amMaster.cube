@@ -7,7 +7,7 @@
     <rmcheck-interval value="3000"/>
     <keepalive-retry value="2"/>
     <keepalive-interval value="3000"/>
-    <debug value="true"/>
+    <debug value="false"/>
 	
 	<extensions>
 		<extension id="fr.liglab.adele.cube.core">

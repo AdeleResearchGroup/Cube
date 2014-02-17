@@ -38,6 +38,11 @@ public class Resolution implements Runnable {
     }
 
     public void resolve() {
+        try {
+            Thread.sleep(25*instance.getPriority());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         this.working = true;
     }
 
@@ -60,12 +65,13 @@ public class Resolution implements Runnable {
             m.setComment(instance.getAttribute(Master.NAME));
         }
         m.start();
+        boolean vs = false;
         if (rg.resolve()) {
             m.end();
             m.setResolved(true);
             info(instance.getName() + " '" + instance.getUUID() + "' is resolved!");
             if (validateSolution(rg)) {
-                resolver.getAutonomicManager().getRuntimeModelController().getRuntimeModel().refresh();
+                vs = true;
             }
         } else {
             m.end();
@@ -74,6 +80,10 @@ public class Resolution implements Runnable {
         }
         synchronized (resolver) {
             instance.setInResolution(false);
+        }
+        if (vs == true)
+        {
+            resolver.getAutonomicManager().getRuntimeModelController().getRuntimeModel().refresh();
         }
         m.calculate();
         resolver.getAutonomicManager().getAdministrationService().getPerformanceChecker().addResolutionMeasure(m);

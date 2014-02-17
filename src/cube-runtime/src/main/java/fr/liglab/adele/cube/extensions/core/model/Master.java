@@ -43,28 +43,8 @@ public class Master extends ManagedElement {
 
     public Master(String amUri, Properties properties) throws PropertyExistException, InvalidNameException {
         super(amUri, properties);
+        setPriority(10);
     }
-
-    /*
-    public boolean addScope(String scopeUUID) {
-        Reference r = null;
-        try {
-            r = addReference(CORE_MASTER_SCOPES, false);
-        } catch (InvalidNameException e) {
-            e.printStackTrace();
-        }
-        return r.addReferencedElement(scopeUUID);
-    }
-
-    public List<String> getScopes() {
-        Reference r = this.getReference(CORE_MASTER_SCOPES);
-        if (r != null) {
-            return r.getReferencedElements();
-        }
-        return new ArrayList<String>();
-    }
-    */
-
 
     public boolean addScopeLeader(String scope_id, String scope_uuid) {
         Reference r = this.getReference(scope_id);

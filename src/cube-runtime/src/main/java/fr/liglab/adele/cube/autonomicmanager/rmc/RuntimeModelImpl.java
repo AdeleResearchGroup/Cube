@@ -153,6 +153,7 @@ public class RuntimeModelImpl implements RuntimeModel {
                     result.add(this.unmanagedElements.get(key));
             }
         }
+
         return result;
     }
 
@@ -178,6 +179,7 @@ public class RuntimeModelImpl implements RuntimeModel {
                 }
             }
         }
+        Collections.sort(result);
         return result;
     }
 
@@ -209,6 +211,7 @@ public class RuntimeModelImpl implements RuntimeModel {
                 }
             }
         }
+        Collections.sort(result);
         return result;
     }
 
