@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20070829</version>
+            <version>20230227</version>
             <scope>system</scope>
             <systemPath>${lib-dir}/json-20090211_1.jar</systemPath>
         </dependency>
